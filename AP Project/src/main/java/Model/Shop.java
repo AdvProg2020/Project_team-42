@@ -1,5 +1,8 @@
 package Model;
 
+import Model.Logs.BuyLog;
+import Model.Logs.SellLog;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,7 +14,7 @@ public class Shop {
     private ArrayList<SellLog> allSellLogs;
     private ArrayList<BuyLog> allBuyLogs;
     private ArrayList<Discount> allDiscounts;
-    private ArrayList<Category> allCategorys;
+    private ArrayList<Category> allCategories;
     private ArrayList<Off> allOffs;
   
 }

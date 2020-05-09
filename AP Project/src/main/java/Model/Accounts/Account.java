@@ -14,50 +14,40 @@ public abstract class Account {
     private String accountType;
     private double credit;
 
-    public static Account getAccountByUserName(String userName){
-        for (Account account : allAccounts) {
-            if(account.userName.equals(userName))
-            {
-                return account;
-            }
-        }
-        return null;
-    }
-
-    public static Account getphoneNubmberByUserName(String userName){
-        for (Account account : allAccounts) {
-            if(account.userName.equals(userName))
-            {
-                return account;
-            }
-        }
-        return null;
-    }
-
-    public static Account getEmailByUserName(String userName){
-        for (Account account : allAccounts) {
-            if(account.userName.equals(userName))
-            {
-                return account;
-            }
-        }
-        return null;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
     public double getCredit() {
         return credit;
     }
 
-    public void setCredit(double credit) {
-        this.credit = credit;
+    @Override
+    public String toString() {
+        return "username : " + userName +
+                "\nfirstName : " + firstName +
+                "\nlastName : " + lastName +
+                "\nemail : " + email +
+                "\nphoneNumber : " + phoneNumber +
+                "\npassword : " + password +
+                "\naccountType : " + accountType +
+                "\ncredit : " + credit;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 }

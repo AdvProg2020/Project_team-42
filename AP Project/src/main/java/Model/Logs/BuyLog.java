@@ -16,4 +16,20 @@ public class BuyLog {
     private String receiverName;
     private String receiverPhoneNumber;
     private String receiverAddress;
+
+    public long getBuyLogId() {
+        return buyLogId;
+    }
+
+    public GregorianCalendar getDate() {
+        return date;
+    }
+
+    public String getSellerUsername() {
+        return sellerUsername;
+    }
+
+    public String getState() {
+        return state;
+    }
 }

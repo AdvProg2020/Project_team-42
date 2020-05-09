@@ -1,7 +1,9 @@
 package View;
 
+import View.Pages.AccountsPage.CustomerPage;
+import View.Pages.AccountsPage.ManagerPage;
+import View.Pages.AccountsPage.SellerPage;
 import View.Pages.*;
-import View.Pages.AccountsPage.*;
 
 public enum AllPages {
     LOGIN_REGISTER_PAGE(LoginRegisterPage.getInstance()),
@@ -13,9 +15,13 @@ public enum AllPages {
     OFFS_PAGE(OffsPage.getInstance()),
     PRODUCT_PAGE(ProductPage.getInstance());
 
-    public Page page;
+    private Page page;
 
     AllPages(Page page) {
         this.page = page;
+    }
+
+    public AllPages run () {
+        return page.run();
     }
 }
