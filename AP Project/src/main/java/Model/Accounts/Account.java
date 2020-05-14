@@ -50,4 +50,20 @@ public abstract class Account {
         this.password = password;
     }
 
+    public String getAllAccount(){
+        StringBuilder sallAccounts = new StringBuilder() ;
+        String accountUserName;
+        Account account;
+        String accountType;
+        int size = allAccounts.size();
+        for (int i = 0 ; i <= size-1 ; i++)
+        {
+            account = allAccounts.get(i);
+            accountUserName = account.userName;
+            accountType = account.accountType;
+            sallAccounts.appened(accountUserName + "  " + accountType + "/n");
+        }
+        return sallAccounts;
+    }
+
 }
