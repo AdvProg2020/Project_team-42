@@ -50,20 +50,67 @@ public abstract class Account {
         this.password = password;
     }
 
-    public String getAllAccount(){
+    public StringBuilder getAllAccount(){
         StringBuilder sallAccounts = new StringBuilder() ;
         String accountUserName;
         Account account;
-        String accountType;
+        String saccountType;
         int size = allAccounts.size();
         for (int i = 0 ; i <= size-1 ; i++)
         {
             account = allAccounts.get(i);
             accountUserName = account.userName;
-            accountType = account.accountType;
-            sallAccounts.appened(accountUserName + "  " + accountType + "/n");
+            saccountType = account.accountType;
+            sallAccounts.append(accountUserName + "  " + saccountType + "/n");
         }
         return sallAccounts;
     }
 
+    public String getAccountByUserName(String username){
+        Account account = null;
+        int i=0;
+        int size = allAccounts.size();
+        while (i<size) {
+            account = allAccounts.get(i);
+            if (equals(account.userName username)){
+                break;
+            }
+
+        }
+        return String.valueOf(account);
+    }
+
+    public String getPhoneNumberByUserName(String username){
+        String phonenumber = null;
+        Account account = null;
+        int i=0;
+        int size = allAccounts.size();
+        while (i<size) {
+            account = allAccounts.get(i);
+            if (equals(account.userName username)){
+                phonenumber = account.phoneNumber;
+                break;
+            }
+
+        }
+        return phonenumber;
+    }
+
+    public String getEmailByUserName(String username){
+        String semail = null;
+        Account account = null;
+        int i=0;
+        int size = allAccounts.size();
+        while (i<size) {
+            account = allAccounts.get(i);
+            if (equals(account.userName username)){
+                semail = account.email;
+                break;
+            }
+
+        }
+        return semail;
+    }
+
+    
 }
