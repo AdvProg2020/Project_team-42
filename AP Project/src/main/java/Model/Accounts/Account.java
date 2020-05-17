@@ -61,7 +61,7 @@ public abstract class Account {
             account = allAccounts.get(i);
             accountUserName = account.userName;
             saccountType = account.accountType;
-            sallAccounts.append(accountUserName + "  " + saccountType + "/n");
+            sallAccounts.append(saccountType + "   " + accountUserName + "/n");
         }
         return sallAccounts;
     }
@@ -72,7 +72,7 @@ public abstract class Account {
         int size = allAccounts.size();
         while (i<size) {
             account = allAccounts.get(i);
-            if (equals(account.userName username)){
+            if (account.userName . equals(username)){
                 break;
             }
 
@@ -87,7 +87,7 @@ public abstract class Account {
         int size = allAccounts.size();
         while (i<size) {
             account = allAccounts.get(i);
-            if (equals(account.userName username)){
+            if (account.userName . equals(username)){
                 phonenumber = account.phoneNumber;
                 break;
             }
@@ -103,7 +103,7 @@ public abstract class Account {
         int size = allAccounts.size();
         while (i<size) {
             account = allAccounts.get(i);
-            if (equals(account.userName username)){
+            if (account.userName . equals(username)){
                 semail = account.email;
                 break;
             }
@@ -112,5 +112,28 @@ public abstract class Account {
         return semail;
     }
 
-    
+    public void deleteUser(String username){
+        Account account = null;
+        int i=0;
+        int size = allAccounts.size();
+        while (i<size) {
+            account = allAccounts.get(i);
+            if (account.userName . equals(username)){
+                if(account.accountType . equals("manager"))
+                {
+
+                }
+                if(account.accountType . equals("customer"))
+                {
+
+                }
+                if(account.accountType . equals("seller"))
+                {
+
+                }
+            }
+
+        }
+    }
+
 }
