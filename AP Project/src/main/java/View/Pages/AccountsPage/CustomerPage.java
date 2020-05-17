@@ -27,7 +27,6 @@ public class CustomerPage extends Page {
 
     public AllPages run() {
         String input;
-        Matcher inputMatcher;
 
         while (!Commands.EXIT.getMatcher(input = scanner.nextLine().trim()).matches()) {
             if (Commands.VIEW_PERSONAL_INFO.getMatcher(input).matches())

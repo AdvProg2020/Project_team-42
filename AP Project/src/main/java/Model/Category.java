@@ -9,4 +9,12 @@ public class Category {
     private Category parentCategory;
     private ArrayList<Category> subCategories;
     private HashMap<Product, Integer> productsAndCount;
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAttribute() {
+        return attribute;
+    }
 }

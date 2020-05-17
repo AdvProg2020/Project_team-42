@@ -15,8 +15,14 @@ public enum Commands {
     VIEW_CART("(?i)view\\s+cart"),
     VIEW_ORDERS("(?i)view\\s+orders"),
     VIEW_BALANCE("(?i)view\\s+balance"),
-    VIEW_DISCOUNT_CODES("(?i)view\\s+discount\\s+codes");
-
+    VIEW_DISCOUNT_CODES("(?i)view\\s+discount\\s+codes"),
+    //product page
+    DIGEST("(?i)digest"),
+    ATTRIBUTES("(?i)attributes"),
+    COMPARE("(?i)compare\\s+(\\d+)"),
+    COMMENTS("(?i)comments"),
+    ADD_TO_CART("(?i)add\\s+to\\s+cart"),
+    ADD_COMMENT("(i?)add\\s+comment");
 
     private Pattern pattern;
 

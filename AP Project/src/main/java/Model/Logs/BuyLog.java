@@ -32,4 +32,8 @@ public class BuyLog {
     public String getState() {
         return state;
     }
+
+    public ArrayList<Product> getBoughtProducts() {
+        return boughtProducts;
+    }
 }

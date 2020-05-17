@@ -14,7 +14,7 @@ public class CustomerPageController extends AccountPageController {
 
     public void setUser(CustomerAccount user) {
         this.user = user;
-        super.user = user;
+        AccountPageController.user = user;
     }
 
     private CustomerPageController () {}
