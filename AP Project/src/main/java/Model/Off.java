@@ -10,15 +10,13 @@ public class Off {
     private OffOrProductState state;
     private GregorianCalendar begin;
     private GregorianCalendar end;
-    private int offPercentage;
+    private double offPercentage;
 
     public boolean isUsable () {
-        if ((this.state == OffOrProductState.ACCEPTED) && this.begin.getTime().before(new Date()) && this.end.getTime().after(new Date()))
-            return true;
-        return false;
+        return (this.state == OffOrProductState.ACCEPTED) && this.begin.getTime().before(new Date()) && this.end.getTime().after(new Date());
     }
 
-    public int getOffPercentage() {
+    public double getOffPercentage() {
         return offPercentage;
     }
 }

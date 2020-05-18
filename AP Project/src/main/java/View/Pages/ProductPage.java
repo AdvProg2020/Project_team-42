@@ -1,6 +1,7 @@
 package View.Pages;
 
 import Controller.AccountPagesController.AccountPageController;
+import Controller.CartPageController;
 import Controller.Exceptions;
 import Controller.ProductPageController;
 import Model.Accounts.Account;
@@ -17,7 +18,6 @@ public class ProductPage extends Page {
     private static ProductPage productPage = new ProductPage();
     private ProductPageController controller;
 
-
     private ProductPage () {
         this.controller = ProductPageController.getInstance();
     }
@@ -30,7 +30,9 @@ public class ProductPage extends Page {
         String input;
         Matcher matcher;
 
-        while (!Commands.EXIT.getMatcher(input = scanner.nextLine()).matches()) {
+        Page.pagesHistory.add(AllPages.PRODUCT_PAGE);
+
+        while (!Commands.EXIT.getMatcher(input = scanner.nextLine().trim()).matches()) {
             System.out.println("product id   : " + controller.getSelectedProduct().getProductId() +
                              "\nproduct name : " + controller.getSelectedProduct().getName());
 
@@ -46,9 +48,15 @@ public class ProductPage extends Page {
                 } catch (Exceptions.NotLogedInException e) {
                     return AllPages.LOGIN_REGISTER_PAGE;
                 }
+            } else if (Commands.HELP.getMatcher(input).matches())
+                productPageHelp();
+            else if (Commands.BACK.getMatcher(input).matches()) {
+                Page.pagesHistory.remove(Page.pagesHistory.size() - 1);
+                return Page.pagesHistory.get(Page.pagesHistory.size() - 1);
+            } else {
+                printInvalidCommandMessage();
+                productPageHelp();
             }
-            else
-                System.out.println("Invalid command format.");
         }
 
         return null;
@@ -71,10 +79,20 @@ public class ProductPage extends Page {
 
         String input;
 
-        while (!Commands.BACK.getMatcher(input = scanner.nextLine()).matches()) {
+        while (!Commands.BACK.getMatcher(input = scanner.nextLine().trim()).matches()) {
             if (Commands.ADD_TO_CART.getMatcher(input).matches())
                 addToCart();
+            else if (Commands.HELP.getMatcher(input).matches())
+                digestPageHelp();
+            else {
+                printInvalidCommandMessage();
+                digestPageHelp();
+            }
         }
+    }
+
+    private void digestPageHelp () {
+        System.out.println("Valid commands in this page are:\n\tadd to cart\n\thelp\n\tback");
     }
 
     private void addToCart () {
@@ -154,12 +172,20 @@ public class ProductPage extends Page {
 
         String input;
 
-        while (!Commands.EXIT.getMatcher(input = scanner.nextLine()).matches()) {
-            if (Commands.BACK.getMatcher(input).matches())
-                return;
-            else if (Commands.ADD_COMMENT.getMatcher(input).matches())
+        while (!Commands.BACK.getMatcher(input = scanner.nextLine().trim()).matches()) {
+            if (Commands.ADD_COMMENT.getMatcher(input).matches())
                 addComment();
+            else if (Commands.HELP.getMatcher(input).matches())
+                commentsPageHelp();
+            else {
+                printInvalidCommandMessage();
+                commentsPageHelp();
+            }
         }
+    }
+
+    private void commentsPageHelp () {
+        System.out.println("Valid commands in this page are:\n\tadd comment\n\thelp\n\tback");
     }
 
     private void addComment () throws Exceptions.NotLogedInException {
@@ -174,5 +200,9 @@ public class ProductPage extends Page {
             System.out.println(e.getMessage());
             throw e;
         }
+    }
+
+    private void productPageHelp () {
+        System.out.println("Valid commands in this page are :\n\tdigest\n\tattributes\n\tcompare (id another product)\n\tcomments\n\thelp\n\tback\n\texit");
     }
 }

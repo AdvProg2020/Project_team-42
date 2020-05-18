@@ -17,6 +17,12 @@ public class CustomerPageController extends AccountPageController {
         AccountPageController.user = user;
     }
 
+    public CustomerAccount getCustomer() throws Exceptions.NotCustomerException {
+        if (user == null)
+            throw new Exceptions.NotCustomerException();
+        return user;
+    }
+
     private CustomerPageController () {}
 
     public static CustomerPageController getInstance() {

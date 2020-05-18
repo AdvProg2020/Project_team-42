@@ -28,6 +28,8 @@ public class CustomerPage extends Page {
     public AllPages run() {
         String input;
 
+        Page.pagesHistory.add(AllPages.CUSTOMER_PAGE);
+
         while (!Commands.EXIT.getMatcher(input = scanner.nextLine().trim()).matches()) {
             if (Commands.VIEW_PERSONAL_INFO.getMatcher(input).matches())
                 viewPersonalInfo();
@@ -39,11 +41,22 @@ public class CustomerPage extends Page {
                 viewBalance();
             else if (Commands.VIEW_DISCOUNT_CODES.getMatcher(input).matches())
                 viewDiscountCodes();
-            else
-                System.out.println("Invalid command format.");
+            else if (Commands.HELP.getMatcher(input).matches())
+                customerPageHelp();
+            else if (Commands.BACK.getMatcher(input).matches()) {
+                Page.pagesHistory.remove(Page.pagesHistory.size() - 1);
+                return Page.pagesHistory.get(Page.pagesHistory.size() - 1);
+            } else {
+                printInvalidCommandMessage();
+                customerPageHelp();
+            }
         }
 
         return null;
+    }
+
+    private void customerPageHelp () {
+        System.out.println("Valid commands in this page are:\n\tview personal info\n\tview cart\n\tview orders\n\tview balance\n\tview discount codes\n\thelp\n\tback\n\texit");
     }
 
     private void viewPersonalInfo () {
@@ -60,8 +73,17 @@ public class CustomerPage extends Page {
                     System.out.println(e.getMessage());
                     System.out.println("The changeable fields are : first name, last name, email, phone number, and password");
                 }
+            } else if (Commands.HELP.getMatcher(input).matches())
+                personalInfoHelp();
+            else {
+                printInvalidCommandMessage();
+                personalInfoHelp();
             }
         }
+    }
+
+    private void personalInfoHelp () {
+        System.out.println("Valid commands in this page are:\n\tedit personal info\n\thelp\n\tback");
     }
 
     private void editPersonalInfo (String field) throws Exceptions.InvalidFormatException, Exceptions.InvalidFieldException {

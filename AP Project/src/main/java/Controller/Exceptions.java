@@ -1,5 +1,8 @@
 package Controller;
 
+import Model.Accounts.SellerAccount;
+import Model.Product;
+
 public class Exceptions {
     public static class InvalidFieldException extends Exception {
         public InvalidFieldException() {
@@ -54,6 +57,44 @@ public class Exceptions {
     public static class NoSellerByThisUserNameForProductException extends Exception {
         public NoSellerByThisUserNameForProductException () {
             super("There is no seller by this username for this product.");
+        }
+    }
+
+    public static class NoProductWithThisIdInCartException extends Exception {
+        public NoProductWithThisIdInCartException() {
+            super("There is no product with this id in cart.");
+        }
+    }
+
+    public static class NoSellerWithThisUserNameForThisProductInCartException extends Exception {
+        public NoSellerWithThisUserNameForThisProductInCartException() {
+            super("There is no seller with this username for this product in cart.");
+        }
+    }
+
+    public static class EmptyCartException extends Exception {
+        public EmptyCartException() {
+            super("Your cart is empty.");
+        }
+    }
+
+    public static class NotEnoughProductToPurchaseException extends Exception {
+        public NotEnoughProductToPurchaseException(Product product, SellerAccount seller, int existingCount) {
+            super(seller.getUserName() + " has only " + existingCount + " units of " + product.getName());
+        }
+    }
+
+    public static class StopPurchaseException extends Exception {}
+
+    public static class NoDiscountByCodeException extends Exception {
+        public NoDiscountByCodeException() {
+            super("This discount code is not valid for you.");
+        }
+    }
+
+    public static class NotUsableDiscountCodeException extends Exception {
+        public NotUsableDiscountCodeException () {
+            super("This discount code is not usable.");
         }
     }
 }

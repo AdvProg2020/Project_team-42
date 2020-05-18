@@ -37,8 +37,16 @@ public class CustomerAccount extends Account {
         return false;
     }
 
-    public void addProductToCart (Product product, SellerAccount seller) throws Exceptions.NotCustomerException {
-        this.cart.put(product, new HashMap<SellerAccount, Integer>());
+    public void addProductToCart (Product product, SellerAccount seller) {
+        this.cart.put(product, new HashMap<>());
         this.cart.get(product).put(seller, 1);
+    }
+
+    public Discount getDiscountByCode (String discountCode) throws Exceptions.NoDiscountByCodeException {
+        for (Discount discount : this.discountCodeAndUseCount.keySet()) {
+            if (discountCode.equals(discount.getDiscountCode()))
+                return discount;
+        }
+        throw new Exceptions.NoDiscountByCodeException();
     }
 }

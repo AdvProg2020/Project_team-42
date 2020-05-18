@@ -2,6 +2,7 @@ package Model;
 
 import Model.Accounts.CustomerAccount;
 
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 
@@ -9,7 +10,7 @@ public class Discount {
     private String discountCode;
     private GregorianCalendar begin;
     private GregorianCalendar end;
-    private int discountPercent;
+    private double discountPercent;
     private int discountAmountLimit;
     private int repeatCountForEachCustomer;
     private HashMap<CustomerAccount, Integer> effectingCustomersAndUsageCount;
@@ -26,7 +27,7 @@ public class Discount {
         return end;
     }
 
-    public int getDiscountPercent() {
+    public double getDiscountPercent() {
         return discountPercent;
     }
 
@@ -36,5 +37,9 @@ public class Discount {
 
     public int getRepeatCountForEachCustomer() {
         return repeatCountForEachCustomer;
+    }
+
+    public boolean isUsable () {
+        return this.begin.getTime().before(new Date()) && this.end.getTime().after(new Date());
     }
 }

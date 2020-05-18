@@ -21,7 +21,8 @@ public class Product {
     private ArrayList<Comment> comments;
     private ArrayList<Rate> rates;
 
-    public Product(String name, String brand, int price, Category category, String attribute, String description, SellerAccount firstSeller) {
+    public Product(long productId,String name, String brand, int price, Category category, String attribute, String description, SellerAccount firstSeller) {
+        this.productId = productId;
         this.name = name;
         this.brand = brand;
         this.price = price;
@@ -86,9 +87,12 @@ public class Product {
     }
 
     public double getOff(SellerAccount seller) throws Exceptions.NoOffForThisProductException {
-        if (this.sellersAndOff.get(seller) == null)
-            throw new Exceptions.NoOffForThisProductException();
-        return this.sellersAndOff.get(seller).getOffPercentage();
+        if (this.sellersAndOff.get(seller) != null) {
+            if (this.sellersAndOff.get(seller).isUsable())
+                return this.sellersAndOff.get(seller).getOffPercentage();
+            this.sellersAndOff.remove(seller);
+        }
+        throw new Exceptions.NoOffForThisProductException();
     }
 
     @Override

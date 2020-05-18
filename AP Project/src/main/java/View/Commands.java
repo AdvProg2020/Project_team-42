@@ -22,7 +22,15 @@ public enum Commands {
     COMPARE("(?i)compare\\s+(\\d+)"),
     COMMENTS("(?i)comments"),
     ADD_TO_CART("(?i)add\\s+to\\s+cart"),
-    ADD_COMMENT("(i?)add\\s+comment");
+    ADD_COMMENT("(i?)add\\s+comment"),
+    HELP("(?i)help"),
+    //cart page
+    SHOW_PRODUCTS("(?i)show\\s+products"),
+    VIEW_PRODUCT("(?i)view\\s+(\\d+)"),
+    INCREASE_PRODUCT("(?i)increase\\s+(\\d+)"),
+    DECREASE_PRODUCT("(?i)decrease\\s+(\\d+)"),
+    SHOW_TOTAL_PRICE("(?i)show\\s+total\\s+price"),
+    PURCHASE("(?i)purchase");
 
     private Pattern pattern;
 
