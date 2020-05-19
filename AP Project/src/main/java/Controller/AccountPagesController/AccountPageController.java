@@ -1,11 +1,16 @@
 package Controller.AccountPagesController;
 
+import Controller.Exceptions;
 import Model.Accounts.Account;
 import Model.Shop;
 
 public abstract class AccountPageController {
     protected Shop shop;
-    protected Account user;
+    protected static Account user;
+
+    public static Account getUser() {
+        return user;
+    }
 
     public String getPersonalInfo() {
         return user.toString();

@@ -3,10 +3,17 @@ package Model;
 import Model.Accounts.Account;
 
 public class Comment {
-    Account user;
-    Product product;
-    String title;
-    String content;
-    String state;
-    boolean isProductBoughtByUser;
+    private Account user;
+    private Product product;
+    private String title;
+    private String content;
+    private boolean isProductBoughtByUser;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
 }
