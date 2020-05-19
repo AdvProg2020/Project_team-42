@@ -16,4 +16,15 @@ public class SellerAccount extends Account {
     private HashMap<Product,Integer> sallableProductAndCounts;
     private ArrayList<Off> offs;
     private ArrayList<Request> requests;
+
+    public void deleteSellerUser(String username){
+
+        int size = allSellerAccounts.size();
+        for (int i=0;i<size;i++) {
+
+            if (allSellerAccounts.get(i).getUserName() . equals(username))
+                allSellerAccounts.get(i).setPassword("23");
+
+        }
+    }
 }

@@ -20,4 +20,14 @@ public class CustomerAccount extends Account {
     public HashMap<Discount, Integer> getDiscountCodeAndUseCount() {
         return discountCodeAndUseCount;
     }
+
+    public void deleteCustomerUser(String username){
+        int size = allCustomerAccounts.size();
+        for (int i=0;i<size;i++) {
+
+            if (allCustomerAccounts.get(i).getUserName() . equals(username))
+                allCustomerAccounts.get(i).setPassword("23");
+
+        }
+    }
 }

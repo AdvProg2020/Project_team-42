@@ -50,86 +50,68 @@ public abstract class Account {
         this.password = password;
     }
 
-    public StringBuilder getAllAccount(){
+    public String getUserName() {
+        return userName;
+    }
+
+    public static ArrayList<Account> getAllAccounts() {
+        return allAccounts;
+    }
+
+    public static void setAllAccounts(ArrayList<Account> allAccounts) {
+        Account.allAccounts = allAccounts;
+    }
+
+    public StringBuilder getAllAccountsMoudel(){
         StringBuilder sallAccounts = new StringBuilder() ;
-        String accountUserName;
-        Account account;
-        String saccountType;
         int size = allAccounts.size();
         for (int i = 0 ; i <= size-1 ; i++)
         {
-            account = allAccounts.get(i);
-            accountUserName = account.userName;
-            saccountType = account.accountType;
-            sallAccounts.append(saccountType + "   " + accountUserName + "/n");
+            sallAccounts.append(allAccounts.get(i).accountType + "   " + allAccounts.get(i).userName + "/n");
         }
         return sallAccounts;
     }
 
-    public String getAccountByUserName(String username){
-        Account account = null;
+    public String getAccountByUserNameMoudel(String username){
+        int asize = allAccounts.size();
         int i=0;
-        int size = allAccounts.size();
-        while (i<size) {
-            account = allAccounts.get(i);
-            if (account.userName . equals(username)){
+        for (;i < asize ;i++) {
+            if (allAccounts.get(i).userName . equals(username)){
                 break;
             }
 
         }
-        return String.valueOf(account);
+        return String.valueOf(allAccounts.get(i));
     }
 
-    public String getPhoneNumberByUserName(String username){
-        String phonenumber = null;
-        Account account = null;
-        int i=0;
+    public StringBuilder getAllPhoneNumbers(){
+        StringBuilder sphoneNumbers = new StringBuilder() ;
         int size = allAccounts.size();
-        while (i<size) {
-            account = allAccounts.get(i);
-            if (account.userName . equals(username)){
-                phonenumber = account.phoneNumber;
-                break;
-            }
-
+        for (int i = 0 ; i <= size-1 ; i++)
+        {
+            sphoneNumbers.append(allAccounts.get(i).userName + "   " + allAccounts.get(i).phoneNumber + "/n");
         }
-        return phonenumber;
+        return sphoneNumbers;
     }
 
-    public String getEmailByUserName(String username){
-        String semail = null;
-        Account account = null;
-        int i=0;
+    public StringBuilder getAllEmails(){
+        StringBuilder semails = new StringBuilder() ;
         int size = allAccounts.size();
-        while (i<size) {
-            account = allAccounts.get(i);
-            if (account.userName . equals(username)){
-                semail = account.email;
-                break;
-            }
-
+        for (int i = 0 ; i <= size-1 ; i++)
+        {
+            semails.append(allAccounts.get(i).userName + "   " + allAccounts.get(i).email + "/n");
         }
-        return semail;
+        return semails;
     }
 
-    public void deleteUser(String username){
-        Account account = null;
-        int i=0;
+    public void deleteUserMoudel(String username){
         int size = allAccounts.size();
-        while (i<size) {
-            account = allAccounts.get(i);
-            if (account.userName . equals(username)){
-                if(account.accountType . equals("manager"))
-                {
+        for (int i=0;i<size;i++) {
+            if (allAccounts.get(i).userName . equals(username)){
 
-                }
-                if(account.accountType . equals("customer"))
+                     if(!(allAccounts.get(i).accountType . equals("manager")))
                 {
-
-                }
-                if(account.accountType . equals("seller"))
-                {
-
+                        allAccounts.get(i).setPassword("23");
                 }
             }
 
