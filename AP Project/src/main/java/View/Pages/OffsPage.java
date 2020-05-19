@@ -23,7 +23,7 @@ public class OffsPage extends Page {
         String input;
         while(!Commands.EXIT.getMatcher(input = scanner.nextLine().trim()).matches())
         {
-            //TODO
+            if()
         }
     }
     public void showOffsProducts(){

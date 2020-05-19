@@ -7,30 +7,29 @@ import Model.Accounts.Account;
 import Model.Accounts.SellerAccount;
 import Model.Comment;
 import Model.Product;
-import View.AllPages;
 import View.Commands;
 import View.Page;
 
 import java.util.regex.Matcher;
 
 public class ProductPage extends Page {
-    private static ProductPage productPage = new ProductPage();
     private ProductPageController controller;
+    private Product product;
 
-
-    private ProductPage () {
+    public ProductPage(Product product) {
+        this.product = product;
         this.controller = ProductPageController.getInstance();
     }
 
-    public static ProductPage getInstance() {
-        return productPage;
-    }
+    public Page run() {
+        controller.setSelectedProduct(this.product);
 
-    public AllPages run() {
         String input;
         Matcher matcher;
 
-        while (!Commands.EXIT.getMatcher(input = scanner.nextLine()).matches()) {
+        Page.pagesHistory.add(this);
+
+        while (!Commands.EXIT.getMatcher(input = scanner.nextLine().trim()).matches()) {
             System.out.println("product id   : " + controller.getSelectedProduct().getProductId() +
                              "\nproduct name : " + controller.getSelectedProduct().getName());
 
@@ -44,11 +43,18 @@ public class ProductPage extends Page {
                 try {
                     showComments();
                 } catch (Exceptions.NotLogedInException e) {
-                    return AllPages.LOGIN_REGISTER_PAGE;
+                    System.out.println(e.getMessage());
+                    return LoginRegisterPage.getInstance();
                 }
+            } else if (Commands.HELP.getMatcher(input).matches())
+                productPageHelp();
+            else if (Commands.BACK.getMatcher(input).matches()) {
+                Page.pagesHistory.remove(Page.pagesHistory.size() - 1);
+                return Page.pagesHistory.get(Page.pagesHistory.size() - 1);
+            } else {
+                printInvalidCommandMessage();
+                productPageHelp();
             }
-            else
-                System.out.println("Invalid command format.");
         }
 
         return null;
@@ -71,10 +77,20 @@ public class ProductPage extends Page {
 
         String input;
 
-        while (!Commands.BACK.getMatcher(input = scanner.nextLine()).matches()) {
+        while (!Commands.BACK.getMatcher(input = scanner.nextLine().trim()).matches()) {
             if (Commands.ADD_TO_CART.getMatcher(input).matches())
                 addToCart();
+            else if (Commands.HELP.getMatcher(input).matches())
+                digestPageHelp();
+            else {
+                printInvalidCommandMessage();
+                digestPageHelp();
+            }
         }
+    }
+
+    private void digestPageHelp () {
+        System.out.println("Valid commands in this page are:\n\tadd to cart\n\thelp\n\tback");
     }
 
     private void addToCart () {
@@ -154,25 +170,34 @@ public class ProductPage extends Page {
 
         String input;
 
-        while (!Commands.EXIT.getMatcher(input = scanner.nextLine()).matches()) {
-            if (Commands.BACK.getMatcher(input).matches())
-                return;
-            else if (Commands.ADD_COMMENT.getMatcher(input).matches())
+        while (!Commands.BACK.getMatcher(input = scanner.nextLine().trim()).matches()) {
+            if (Commands.ADD_COMMENT.getMatcher(input).matches())
                 addComment();
+            else if (Commands.HELP.getMatcher(input).matches())
+                commentsPageHelp();
+            else {
+                printInvalidCommandMessage();
+                commentsPageHelp();
+            }
         }
     }
 
+    private void commentsPageHelp () {
+        System.out.println("Valid commands in this page are:\n\tadd comment\n\thelp\n\tback");
+    }
+
     private void addComment () throws Exceptions.NotLogedInException {
-        try {
-            Account user = AccountPageController.getUser();
-            System.out.println("Title :");
-            String title = scanner.nextLine();
-            System.out.println("Content :");
-            String content = scanner.nextLine();
-            controller.addComment(user, title, content);
-        } catch (Exceptions.NotLogedInException e) {
-            System.out.println(e.getMessage());
-            throw e;
-        }
+        Account user = AccountPageController.getUser();
+        if (user == null)
+            throw new Exceptions.NotLogedInException();
+        System.out.println("Title :");
+        String title = scanner.nextLine();
+        System.out.println("Content :");
+        String content = scanner.nextLine();
+        controller.addComment(user, title, content);
+    }
+
+    private void productPageHelp () {
+        System.out.println("Valid commands in this page are :\n\tdigest\n\tattributes\n\tcompare (id another product)\n\tcomments\n\thelp\n\tback\n\texit");
     }
 }

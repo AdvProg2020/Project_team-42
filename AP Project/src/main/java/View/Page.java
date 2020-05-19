@@ -2,12 +2,16 @@ package View;
 
 import Model.Accounts.Account;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public abstract class Page {
     protected static Scanner scanner = new Scanner(System.in);
-    protected Account user;
+    protected static ArrayList<Page> pagesHistory = new ArrayList<>();
 
+    public abstract Page run();
 
-    public abstract AllPages run();
+    protected void printInvalidCommandMessage () {
+        System.out.println("Invalid command format.");
+    }
 }

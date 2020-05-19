@@ -12,8 +12,11 @@ public enum Commands {
     EMAIL(".+@.+\\..+"),
     PHONE_NUMBER("(\\+989|09)\\d\\d\\d\\d\\d\\d\\d\\d\\d"),
     PASSWORD("\\S\\S\\S\\S\\S\\S\\S\\S+"),
+    //customer page
     VIEW_CART("(?i)view\\s+cart"),
     VIEW_ORDERS("(?i)view\\s+orders"),
+    SHOW_ORDER("(?i)show\\s+order\\s+(\\d+)"),
+    RATE_PRODUCT("(?i)rate\\s+(\\d+)\\s+(\\d+)"),
     VIEW_BALANCE("(?i)view\\s+balance"),
     VIEW_DISCOUNT_CODES("(?i)view\\s+discount\\s+codes"),
     OFF("(i?)off"),
@@ -33,7 +36,17 @@ public enum Commands {
     REMOVE_PRODUCT("(i?)remove\\s+product\\s+(\\d+)"),
     SHOW_CATEGORIES("(i?)show\\s+categories"),
     VIEW_OFFS("(i?)view\\s+offs"),
-    VIEW_BALANCEE("(i?)view\\s+balance");
+    VIEW_BALANCEE("(i?)view\\s+balance"),
+    VIEW_CATEGORIES("(i?)view\\s+categories"),
+    //cart page
+    SHOW_PRODUCTS("(?i)show\\s+products"),
+    VIEW_PRODUCT("(?i)view\\s+(\\d+)"),
+    INCREASE_PRODUCT("(?i)increase\\s+(\\d+)"),
+    DECREASE_PRODUCT("(?i)decrease\\s+(\\d+)"),
+    SHOW_TOTAL_PRICE("(?i)show\\s+total\\s+price"),
+    PURCHASE("(?i)purchase");
+
+
     private Pattern pattern;
 
     Commands(String regexPattern){

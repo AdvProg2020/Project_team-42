@@ -7,7 +7,11 @@ import java.util.ArrayList;
 
 public abstract class Account {
 
+<<<<<<< HEAD
     private static ArrayList<Account> allAccounts;
+=======
+    protected static ArrayList<Account> allAccounts;
+>>>>>>> 99105200c768de2aefb491eeb44232447e4ca44d
     protected String userName;
     protected String firstName;
     protected String lastName;
@@ -68,11 +72,74 @@ public abstract class Account {
         return userName;
     }
 
+<<<<<<< HEAD
+    public static ArrayList<Account> getAllAccounts() {
+        return allAccounts;
+    }
+
+    public static void setAllAccounts(ArrayList<Account> allAccounts) {
+        Account.allAccounts = allAccounts;
+    }
+
+    public StringBuilder getAllAccountsMoudel(){
+        StringBuilder sallAccounts = new StringBuilder() ;
+        int size = allAccounts.size();
+        for (int i = 0 ; i <= size-1 ; i++)
+        {
+            sallAccounts.append(allAccounts.get(i).accountType + "   " + allAccounts.get(i).userName + "/n");
+        }
+        return sallAccounts;
+    }
+
+    public String getAccountByUserNameMoudel(String username){
+        int asize = allAccounts.size();
+        int i=0;
+        for (;i < asize ;i++) {
+            if (allAccounts.get(i).userName . equals(username)){
+                break;
+            }
+
+        }
+        return String.valueOf(allAccounts.get(i));
+    }
+
+    public StringBuilder getAllPhoneNumbers(){
+        StringBuilder sphoneNumbers = new StringBuilder() ;
+        int size = allAccounts.size();
+        for (int i = 0 ; i <= size-1 ; i++)
+        {
+            sphoneNumbers.append(allAccounts.get(i).userName + "   " + allAccounts.get(i).phoneNumber + "/n");
+        }
+        return sphoneNumbers;
+    }
+
+    public StringBuilder getAllEmails(){
+        StringBuilder semails = new StringBuilder() ;
+        int size = allAccounts.size();
+        for (int i = 0 ; i <= size-1 ; i++)
+        {
+            semails.append(allAccounts.get(i).userName + "   " + allAccounts.get(i).email + "/n");
+        }
+        return semails;
+    }
+
+    public void deleteUserMoudel(String username){
+        int size = allAccounts.size();
+        for (int i=0;i<size;i++) {
+            if (allAccounts.get(i).userName . equals(username)){
+
+                     if(!(allAccounts.get(i).accountType . equals("manager")))
+                {
+                        allAccounts.get(i).setPassword("23");
+                }
+            }
+
+        }
+    }
+
+=======
     public boolean hasBoughtProduct (Product product) {
         return false;
     }
-
-    public void addProductToCart (Product product, SellerAccount seller) throws Exceptions.NotCustomerException {
-        throw new Exceptions.NotCustomerException();
-    }
+>>>>>>> dee7658a4f0eb2a03f87d05969f0773a2f70e5a1
 }

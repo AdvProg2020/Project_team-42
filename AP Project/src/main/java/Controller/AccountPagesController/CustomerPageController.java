@@ -4,6 +4,8 @@ import Controller.Exceptions;
 import Model.Accounts.CustomerAccount;
 import Model.Discount;
 import Model.Logs.BuyLog;
+import Model.Product;
+import Model.Rate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +17,10 @@ public class CustomerPageController extends AccountPageController {
     public void setUser(CustomerAccount user) {
         this.user = user;
         AccountPageController.user = user;
+    }
+
+    public CustomerAccount getCustomer() {
+        return user;
     }
 
     private CustomerPageController () {}
@@ -39,5 +45,20 @@ public class CustomerPageController extends AccountPageController {
         if ((discountsAndUseCount = this.user.getDiscountCodeAndUseCount()).isEmpty())
             throw new Exceptions.NoDiscountCodeException();
         return discountsAndUseCount;
+    }
+
+    public BuyLog getBuyLogById (long id) throws Exceptions.NoBuyLogByIdException {
+        for (BuyLog buyLog : user.getBuyLogs()) {
+            if (buyLog.getBuyLogId() == id)
+                return buyLog;
+        }
+        throw new Exceptions.NoBuyLogByIdException();
+    }
+
+    public void rateProduct (long productId, int rate) throws Exceptions.NotBoughtProductByIdException, Exceptions.RateOutOfRangeException {
+        Product product = user.getProductFromBuyLogsById(productId);
+        if (rate < 1 || rate > 5)
+            throw new Exceptions.RateOutOfRangeException();
+        product.addRate(new Rate(user, product, rate));
     }
 }
