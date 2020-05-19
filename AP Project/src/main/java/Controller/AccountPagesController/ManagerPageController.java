@@ -22,7 +22,7 @@ public class ManagerPageController extends AccountPageController {
     public void deleteUserController(String userName){
 
             user.deleteUserMoudel(userName);
-            deleteManagerUser
+            //deleteManagerUser
 
     }
 }

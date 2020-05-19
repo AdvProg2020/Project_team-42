@@ -7,11 +7,7 @@ import java.util.ArrayList;
 
 public abstract class Account {
 
-<<<<<<< HEAD
-    private static ArrayList<Account> allAccounts;
-=======
     protected static ArrayList<Account> allAccounts;
->>>>>>> 99105200c768de2aefb491eeb44232447e4ca44d
     protected String userName;
     protected String firstName;
     protected String lastName;
@@ -72,7 +68,6 @@ public abstract class Account {
         return userName;
     }
 
-<<<<<<< HEAD
     public static ArrayList<Account> getAllAccounts() {
         return allAccounts;
     }
@@ -137,9 +132,7 @@ public abstract class Account {
         }
     }
 
-=======
     public boolean hasBoughtProduct (Product product) {
         return false;
     }
->>>>>>> dee7658a4f0eb2a03f87d05969f0773a2f70e5a1
 }

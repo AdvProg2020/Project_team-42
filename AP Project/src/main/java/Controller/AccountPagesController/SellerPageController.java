@@ -67,7 +67,5 @@ public class SellerPageController extends AccountPageController {
     }
 
     public void addProduct(){}
-
-    public void showCategories(){}
 }
 

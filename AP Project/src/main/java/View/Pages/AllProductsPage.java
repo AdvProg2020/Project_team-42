@@ -21,7 +21,7 @@ public class AllProductsPage extends Page {
         while (!Commands.EXIT.getMatcher(input = scanner.nextLine().trim()).matches()) {
              if (Commands.HELP.getMatcher(input).matches()) {
                 help();
-            }else if (Commands.V.getMatcher(input).matches()) {
+            }else if (Commands.HELP.getMatcher(input).matches()) {
                 help();
             }else if (Commands.HELP.getMatcher(input).matches()) {
                 help();
@@ -41,7 +41,8 @@ public class AllProductsPage extends Page {
                 help();
             }
         }
+        return null;
     }
 
-    public void help():
+    public void help() {}
 }

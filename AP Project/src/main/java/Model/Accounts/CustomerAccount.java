@@ -33,16 +33,16 @@ public class CustomerAccount extends Account {
         return discountCodeAndUseCount;
     }
 
-<<<<<<< HEAD
-    public void deleteCustomerUser(String username){
+    public void deleteCustomerUser(String username) {
         int size = allCustomerAccounts.size();
-        for (int i=0;i<size;i++) {
+        for (int i = 0; i < size; i++) {
 
-            if (allCustomerAccounts.get(i).getUserName() . equals(username))
+            if (allCustomerAccounts.get(i).getUserName().equals(username))
                 allCustomerAccounts.get(i).setPassword("23");
 
         }
-=======
+    }
+
     public boolean hasBoughtProduct(Product product) {
         for (BuyLog buyLog : this.thisCustomerBuyLogs) {
             if (buyLog.getBoughtProducts().contains(product))
@@ -72,6 +72,5 @@ public class CustomerAccount extends Account {
     public void purchaseBuyLog (BuyLog buyLog) {
         this.thisCustomerBuyLogs.add(buyLog);
         this.credit -= buyLog.getPayedMoney();
->>>>>>> dee7658a4f0eb2a03f87d05969f0773a2f70e5a1
     }
 }

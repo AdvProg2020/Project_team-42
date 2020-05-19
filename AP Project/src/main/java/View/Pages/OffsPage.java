@@ -1,11 +1,9 @@
 package View.Pages;
 
-import Model.Product;
+import Controller.AllProductsPageController;
 import Model.Shop;
-import View.AllPages;
 import View.Commands;
 import View.Page;
-import Controller.AllProductsPageController;
 public class OffsPage extends Page {
     private static OffsPage offsPage = new OffsPage();
    private Shop shop = Shop.getInstance();
@@ -18,13 +16,14 @@ public class OffsPage extends Page {
         return offsPage;
     }
 
-    public AllPages run() {
+    public Page run() {
         showOffsProducts();
         String input;
         while(!Commands.EXIT.getMatcher(input = scanner.nextLine().trim()).matches())
         {
-            if()
+
         }
+        return null;
     }
     public void showOffsProducts(){
         controller.showOFFProducts();

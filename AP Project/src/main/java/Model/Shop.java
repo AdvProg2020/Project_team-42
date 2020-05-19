@@ -9,23 +9,37 @@ import java.util.HashMap;
 
 public class Shop {
     private static Shop shop = new Shop();
-    private HashMap<Product,Integer> allProductAndCount = new HashMap<>();
-    private HashMap<Product, Integer> allProductOnOffsAndCount = new HashMap<>();
+    private HashMap<Product,Integer> allProductAndCount;
+    private HashMap<Product, Integer> allProductOnOffsAndCount;
+    private ArrayList<SellLog> allSellLogs;
+    private ArrayList<BuyLog> allBuyLogs;
+    private ArrayList<Discount> allDiscounts;
+    private ArrayList<Category> allCategories;
+    private ArrayList<Off> allOffs;
 
-<<<<<<< HEAD
+    private Shop() {
+        this.allProductAndCount = new HashMap<>();
+        this.allProductOnOffsAndCount = new HashMap<>();
+        this.allSellLogs = new ArrayList<>();
+        this.allBuyLogs = new ArrayList<>();
+        this.allDiscounts = new ArrayList<>();
+        this.allCategories = new ArrayList<>();
+        this.allOffs = new ArrayList<>();
+    }
+
     public HashMap<Product, Integer> getAllProductAndCount() {
         return allProductAndCount;
     }
 
     public HashMap<Product, Integer> getAllProductOnOffsAndCount() {
         return allProductOnOffsAndCount;
-=======
+    }
+
     public StringBuilder showAllProductsMoudel(){
         StringBuilder sallProducts = new StringBuilder();
-        int size = allProducts.size();
-        for (int i=0;i<size;i++)
-        {
-            sallProducts.append(allProducts.get(i).getName() + "   " + allProducts.get(i).getBrand() + "   " + allProducts.get(i).getProductId() + "    " + allProducts.get(i).getAverageRate() + "/n");
+        for (Product product : allProductAndCount.keySet()) {
+            sallProducts.append(product.getName() + "   " + product.getBrand() + "   " + product.getProductId()
+                    + "    " + product.getAverageRate() + "\n");
         }
         return sallProducts;
     }
@@ -40,32 +54,8 @@ public class Shop {
         return sallDiscounts;
     }
 
-    public void deleteProductMoudel(long id){
-        int size = allProducts.size();
-        for (int i =0;i<size;i++)
-        {
-            if (allProducts.get(i).getProductId() == id)
-                allProducts.get(i).value() =0;
-        }
-    }
-
-    private Shop() {
-        this.allProductAndCount = new HashMap<>();
-        this.allProductOnOffsAndCount = new HashMap<>();
-        this.allSellLogs = new ArrayList<>();
-        this.allBuyLogs = new ArrayList<>();
-        this.allDiscounts = new ArrayList<>();
-        this.allCategories = new ArrayList<>();
-        this.allOffs = new ArrayList<>();
->>>>>>> f46f3e6eddfc03b3e6eb4b37f3a86b5d1f593140
-    }
-
-    public ArrayList<SellLog> getAllSellLogs() {
-        return allSellLogs;
-    }
-
-    public ArrayList<BuyLog> getAllBuyLogs() {
-        return allBuyLogs;
+    public void deleteProductMoudel(long id) throws Exceptions.NoProductByThisIdException {
+        allProductAndCount.replace(getProductById(id), 0);
     }
 
     public ArrayList<Discount> getAllDiscounts() {
@@ -76,13 +66,7 @@ public class Shop {
         return allOffs;
     }
 
-    private ArrayList<SellLog> allSellLogs = new ArrayList<>();
-    private ArrayList<BuyLog> allBuyLogs = new ArrayList<>();
-    private ArrayList<Discount> allDiscounts = new ArrayList<>();
-    private ArrayList<Category> allCategories = new ArrayList<>();
-    private ArrayList<Off> allOffs = new ArrayList<>();
 
-    private Shop() {}
 
     public static Shop getInstance() {
         return shop;
@@ -100,5 +84,21 @@ public class Shop {
         if(allCategories.isEmpty())
            return null;
         return allCategories;
+    }
+
+    public ArrayList<SellLog> getAllSellLogs() {
+        return allSellLogs;
+    }
+
+    public ArrayList<BuyLog> getAllBuyLogs() {
+        return allBuyLogs;
+    }
+
+    public void addBuyLog (BuyLog buyLog) {
+        this.allBuyLogs.add(buyLog);
+    }
+
+    public void addSellLog (SellLog sellLog) {
+        this.allSellLogs.add(sellLog);
     }
 }

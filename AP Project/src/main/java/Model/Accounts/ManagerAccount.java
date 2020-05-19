@@ -6,6 +6,11 @@ public class ManagerAccount extends Account {
    private static ArrayList<ManagerAccount> allManagerAccounts = new ArrayList<ManagerAccount>();
     private boolean isMain;
 
+    public ManagerAccount(String userName, String firstName, String lastName, String email, String phoneNumber, String password,
+                          String accountType, boolean isMain) {
+        super(userName, firstName, lastName, email, phoneNumber, password, accountType);
+    }
+
     public void deleteManagerUser(String username){
         int allAccountsSize = getAllAccounts().size();
         int managerAccountsSize = allManagerAccounts.size();

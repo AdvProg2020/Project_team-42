@@ -1,19 +1,10 @@
 package View.Pages.AccountsPage;
 
-import Controller.AccountPagesController.CustomerPageController;
-import View.AllPages;
-import View.Page;
-import Model.Accounts.*;
 import Controller.AccountPagesController.SellerPageController;
 import Controller.Exceptions;
-import Model.Discount;
-import Model.Logs.BuyLog;
-import View.AllPages;
 import View.Commands;
+import View.Page;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.regex.Matcher;
 
 public class SellerPage extends Page {
@@ -28,7 +19,7 @@ public class SellerPage extends Page {
         return sellerPage;
     }
 
-    public AllPages run()  {
+    public Page run()  {
         String input;
         boolean isEnd;
         while (!Commands.EXIT.getMatcher(input = scanner.nextLine().trim()).matches()) {
@@ -59,6 +50,7 @@ public class SellerPage extends Page {
             }
         }
 
+        return null;
     }
 
     private void viewPersonalInfo() {

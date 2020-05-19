@@ -63,4 +63,19 @@ public class SellerAccount extends Account {
     public String getBalance(){
         return "Balance :"+String.valueOf(super.credit);
     }
+
+    public boolean hasEnoughOfProduct (Product product, int count) {
+        if (count < this.sellableProductAndCounts.get(product))
+            return true;
+        return false;
+    }
+
+    public int getCountOfProduct (Product product) {
+        return this.sellableProductAndCounts.get(product);
+    }
+
+    public void sellSellLog (SellLog sellLog) {
+        this.thisSellerAllSellLogs.add(sellLog);
+        this.sellableProductAndCounts.replace(sellLog.getSoldProduct(), this.sellableProductAndCounts.get(sellLog.getSoldProduct()) - sellLog.getCount());
+    }
 }
