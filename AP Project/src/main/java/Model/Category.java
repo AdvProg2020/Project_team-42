@@ -17,4 +17,16 @@ public class Category {
     public String getAttribute() {
         return attribute;
     }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "name='" + name + '\'' +
+                ", attribute='" + attribute + '\'' +
+                ", parentCategory=" + parentCategory +
+                ", subCategories=" + subCategories +
+                ", productsAndCount=" + productsAndCount +
+                '}';
+    }
 }
+

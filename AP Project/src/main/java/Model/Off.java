@@ -12,6 +12,27 @@ public class Off {
     private GregorianCalendar end;
     private int offPercentage;
 
+    public Off(long offId, ArrayList<Product> effectingProducts, OffOrProductState state, GregorianCalendar begin, GregorianCalendar end, int offPercentage) {
+        this.offId = offId;
+        this.effectingProducts = effectingProducts;
+        this.state = state;
+        this.begin = begin;
+        this.end = end;
+        this.offPercentage = offPercentage;
+    }
+
+    @Override
+    public String toString() {
+        return "Off{" +
+                "offId=" + offId +
+                ", effectingProducts=" + effectingProducts +
+                ", state=" + state +
+                ", begin=" + begin +
+                ", end=" + end +
+                ", offPercentage=" + offPercentage +
+                '}';
+    }
+
     public boolean isUsable () {
         if ((this.state == OffOrProductState.ACCEPTED) && this.begin.getTime().before(new Date()) && this.end.getTime().after(new Date()))
             return true;

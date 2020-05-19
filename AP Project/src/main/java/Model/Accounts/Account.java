@@ -8,14 +8,14 @@ import java.util.ArrayList;
 public abstract class Account {
 
     private static ArrayList<Account> allAccounts;
-    private String userName;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String phoneNumber;
-    private String password;
-    private String accountType;
-    private double credit;
+    protected String userName;
+    protected String firstName;
+    protected String lastName;
+    protected String email;
+    protected String phoneNumber;
+    protected String password;
+    protected String accountType;
+    protected double credit;
 
     public Account(String userName, String firstName, String lastName, String email, String phoneNumber, String password, String accountType) {
         this.userName = userName;

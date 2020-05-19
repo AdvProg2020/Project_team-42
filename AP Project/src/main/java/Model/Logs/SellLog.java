@@ -15,4 +15,21 @@ public class SellLog {
     private String receiverName;
     private String receiverPhoneNumber;
     private String receiverAddress;
+
+
+    @Override
+    public String toString() {
+        return "SellLog{" +
+                "sellLogId=" + sellLogId +
+                ", date=" + date +
+                ", receivedMoney=" + receivedMoney +
+                ", offPercent=" + offPercent +
+                ", soldProduct=" + soldProduct +
+                ", buyerUsername='" + buyerUsername + '\'' +
+                ", state='" + state + '\'' +
+                ", receiverName='" + receiverName + '\'' +
+                ", receiverPhoneNumber='" + receiverPhoneNumber + '\'' +
+                ", receiverAddress='" + receiverAddress + '\'' +
+                '}';
+    }
 }
