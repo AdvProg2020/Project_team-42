@@ -2,6 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
+=======
+      <module fileurl="file://$PROJECT_DIR$/AP Project/AP Project.iml" filepath="$PROJECT_DIR$/AP Project/AP Project.iml" />
+>>>>>>> f46f3e6eddfc03b3e6eb4b37f3a86b5d1f593140
       <module fileurl="file://$PROJECT_DIR$/.idea/Project_team-42.iml" filepath="$PROJECT_DIR$/.idea/Project_team-42.iml" />
     </modules>
   </component>

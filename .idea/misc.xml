@@ -3,5 +3,16 @@
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="ES6" />
   </component>
+<<<<<<< HEAD
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK" />
+=======
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/AP Project/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_14" project-jdk-name="openjdk-14" project-jdk-type="JavaSDK" />
+>>>>>>> f46f3e6eddfc03b3e6eb4b37f3a86b5d1f593140
 </project>
