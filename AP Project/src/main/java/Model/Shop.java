@@ -18,7 +18,6 @@ public class Shop {
     private ArrayList<Category> allCategories;
     private ArrayList<Off> allOffs;
 
-<<<<<<< HEAD
     public StringBuilder showAllProductsMoudel(){
         StringBuilder sallProducts = new StringBuilder();
         int size = allProducts.size();
@@ -47,8 +46,7 @@ public class Shop {
                 allProducts.get(i).value() =0;
         }
     }
-  
-=======
+
     private Shop() {
         this.allProductAndCount = new HashMap<>();
         this.allProductOnOffsAndCount = new HashMap<>();
@@ -86,5 +84,4 @@ public class Shop {
     public void addSellLog (SellLog sellLog) {
         this.allSellLogs.add(sellLog);
     }
->>>>>>> dee7658a4f0eb2a03f87d05969f0773a2f70e5a1
 }
