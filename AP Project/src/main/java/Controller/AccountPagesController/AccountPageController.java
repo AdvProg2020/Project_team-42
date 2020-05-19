@@ -8,9 +8,7 @@ public abstract class AccountPageController {
     protected Shop shop;
     protected static Account user;
 
-    public static Account getUser() throws Exceptions.NotLogedInException {
-        if (user == null)
-            throw new Exceptions.NotLogedInException();
+    public static Account getUser() {
         return user;
     }
 

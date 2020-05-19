@@ -7,9 +7,9 @@ import java.util.Scanner;
 
 public abstract class Page {
     protected static Scanner scanner = new Scanner(System.in);
-    protected static ArrayList<AllPages> pagesHistory = new ArrayList<>();
+    protected static ArrayList<Page> pagesHistory = new ArrayList<>();
 
-    public abstract AllPages run();
+    public abstract Page run();
 
     protected void printInvalidCommandMessage () {
         System.out.println("Invalid command format.");

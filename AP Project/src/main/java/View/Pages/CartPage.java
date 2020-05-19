@@ -3,11 +3,9 @@ package View.Pages;
 import Controller.AccountPagesController.CustomerPageController;
 import Controller.CartPageController;
 import Controller.Exceptions;
-import Controller.ProductPageController;
 import Model.Accounts.CustomerAccount;
 import Model.Accounts.SellerAccount;
 import Model.Product;
-import View.AllPages;
 import View.Commands;
 import View.Page;
 
@@ -26,11 +24,11 @@ public class CartPage extends Page {
         return cartPage;
     }
 
-    public AllPages run() {
+    public Page run() {
         String input;
         Matcher matcher;
 
-        Page.pagesHistory.add(AllPages.CART_PAGE);
+        Page.pagesHistory.add(this);
 
         while (!Commands.EXIT.getMatcher(input = scanner.nextLine()).matches()) {
             if (Commands.SHOW_PRODUCTS.getMatcher(input).matches())
@@ -51,8 +49,7 @@ public class CartPage extends Page {
             }
             else if ((matcher = Commands.VIEW_PRODUCT.getMatcher(input)).matches()) {
                 try {
-                    prepareProductPage(Long.parseLong(matcher.group(1)));
-                    return AllPages.PRODUCT_PAGE;
+                    return prepareProductPage(Long.parseLong(matcher.group(1)));
                 } catch (Exceptions.NoProductWithThisIdInCartException e) {
                     System.out.println(e.getMessage());
                 }
@@ -119,23 +116,31 @@ public class CartPage extends Page {
         }
     }
 
-    private void prepareProductPage (long productId) throws Exceptions.NoProductWithThisIdInCartException {
-        ProductPageController.setSelectedProduct(controller.getCartProductById(productId));
+    private ProductPage prepareProductPage (long productId) throws Exceptions.NoProductWithThisIdInCartException {
+        return new ProductPage (controller.getCartProductById(productId));
     }
 
     private void purchase () {
         try {
             CustomerAccount customer = CustomerPageController.getInstance().getCustomer();
 
+            if (customer == null)
+                throw new Exceptions.NotCustomerException();
+
             controller.checkCartForPurchase();
+
+            int totalPrice = controller.getTotalPrice();
 
             String[] receiverInfo = getReceiverInfo();
 
             int discountAmount = getDiscountAmount(customer);
 
-            
+            controller.checkCartForPurchase();
 
-        } catch (Exceptions.NotEnoughProductToPurchaseException | Exceptions.NotCustomerException e) {
+            controller.buyCart(customer, totalPrice - discountAmount, discountAmount, receiverInfo);
+
+        } catch (Exceptions.NotEnoughProductToPurchaseException | Exceptions.EmptyCartException | Exceptions.NotEnoughCreditException |
+                    Exceptions.NotCustomerException e) {
             System.out.println(e.getMessage());
         } catch (Exceptions.StopPurchaseException ignored) {}
     }
@@ -175,12 +180,14 @@ public class CartPage extends Page {
         return receiverInfo;
     }
 
-    private int getDiscountAmount (CustomerAccount customer) {
+    private int getDiscountAmount (CustomerAccount customer) throws Exceptions.StopPurchaseException {
         System.out.println("In order to use a discount code enter it if not just enter a white space.");
-        String discountCode;
-        while ((discountCode = scanner.nextLine().trim()).equalsIgnoreCase("")) {
+        String input;
+        while ((input = scanner.nextLine().trim()).equalsIgnoreCase("")) {
+            if (Commands.BACK.getMatcher(input).matches())
+                throw new Exceptions.StopPurchaseException();
             try {
-                return controller.getDiscountAmount(customer, discountCode);
+                return controller.getDiscountAmount(customer, input);
             } catch (Exceptions.NotUsableDiscountCodeException | Exceptions.NoDiscountByCodeException e) {
                 System.out.println(e.getMessage());
             }

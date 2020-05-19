@@ -1,6 +1,5 @@
 package View.Pages;
 
-import View.AllPages;
 import View.Page;
 
 public class LoginRegisterPage extends Page {
@@ -12,7 +11,7 @@ public class LoginRegisterPage extends Page {
         return loginRegisterPage;
     }
 
-    public AllPages run() {
+    public Page run() {
         return null;
     }
 }

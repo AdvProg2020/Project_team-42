@@ -15,8 +15,8 @@ public class ProductPageController {
         this.shop = Shop.getInstance();
     }
 
-    public static void setSelectedProduct(Product SelectedProduct) {
-        productPageController.selectedProduct = SelectedProduct;
+    public void setSelectedProduct(Product SelectedProduct) {
+        this.selectedProduct = SelectedProduct;
     }
 
     public Product getSelectedProduct() {

@@ -1,9 +1,13 @@
 package Controller;
 
 import Controller.AccountPagesController.AccountPageController;
+import Controller.AccountPagesController.CustomerPageController;
+import Model.Accounts.Account;
 import Model.Accounts.CustomerAccount;
 import Model.Accounts.SellerAccount;
 import Model.Discount;
+import Model.Logs.BuyLog;
+import Model.Logs.SellLog;
 import Model.Product;
 import Model.Shop;
 
@@ -25,12 +29,10 @@ public class CartPageController {
     }
 
     public void addProductToCart (SellerAccount seller, Product selectedProduct) throws Exceptions.NotCustomerException {
-        try {
-            AccountPageController.getUser().addProductToCart(selectedProduct, seller);
-        } catch (Exceptions.NotLogedInException e) {
-            this.cart.put(selectedProduct, new HashMap<>());
-            this.cart.get(selectedProduct).put(seller, 1);
-        }
+        if (AccountPageController.getUser() != null && CustomerPageController.getInstance().getCustomer() == null)
+            throw new Exceptions.NotCustomerException();
+        this.cart.put(selectedProduct, new HashMap<>());
+        this.cart.get(selectedProduct).put(seller, 1);
     }
 
     public Product getCartProductById (long productId) throws Exceptions.NoProductWithThisIdInCartException {
@@ -108,5 +110,32 @@ public class CartPageController {
             return Math.min((int) ((totalPrice * discount.getDiscountPercent()) / 100), discount.getDiscountAmountLimit());
         }
         throw new Exceptions.NotUsableDiscountCodeException();
+    }
+
+    public void buyCart (CustomerAccount customer, int payablePrice, int discountAmount, String[] receiverInfo) throws Exceptions.NotEnoughCreditException {
+        if (customer.getCredit() < payablePrice)
+            throw new Exceptions.NotEnoughCreditException();
+
+        for (Product product : cart.keySet()) {
+            for (SellerAccount seller : cart.get(product).keySet()) {
+                SellLog sellLog;
+                try {
+                    sellLog = new SellLog(shop.getAllSellLogs().size() + 1, payablePrice + discountAmount,
+                            product.getOff(seller), product, cart.get(product).get(seller), customer.getUserName(), receiverInfo[0], receiverInfo[1],
+                            receiverInfo[2]);
+                } catch (Exceptions.NoOffForThisProductException e) {
+                    sellLog = new SellLog(shop.getAllSellLogs().size() + 1, payablePrice + discountAmount,
+                            0, product, cart.get(product).get(seller), customer.getUserName(), receiverInfo[0], receiverInfo[1],
+                            receiverInfo[2]);
+                }
+                seller.sellSellLog(sellLog);
+                shop.addSellLog(sellLog);
+            }
+        }
+
+        BuyLog buyLog = new BuyLog(shop.getAllBuyLogs().size() + 1, payablePrice, discountAmount,
+                                    cart, receiverInfo[0], receiverInfo[1], receiverInfo[2]);
+        customer.purchaseBuyLog(buyLog);
+        shop.addBuyLog(buyLog);
     }
 }

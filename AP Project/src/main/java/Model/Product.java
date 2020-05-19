@@ -117,4 +117,9 @@ public class Product {
         }
         return stringBuilder.toString();
     }
+
+    public void addRate (Rate rate) {
+        this.rates.add(rate);
+        this.averageRate = (this.averageRate * (this.rates.size() - 1) + rate.getRate()) / this.rates.size();
+    }
 }

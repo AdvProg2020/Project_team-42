@@ -12,8 +12,11 @@ public enum Commands {
     EMAIL(".+@.+\\..+"),
     PHONE_NUMBER("(\\+989|09)\\d\\d\\d\\d\\d\\d\\d\\d\\d"),
     PASSWORD("\\S\\S\\S\\S\\S\\S\\S\\S+"),
+    //customer page
     VIEW_CART("(?i)view\\s+cart"),
     VIEW_ORDERS("(?i)view\\s+orders"),
+    SHOW_ORDER("(?i)show\\s+order\\s+(\\d+)"),
+    RATE_PRODUCT("(?i)rate\\s+(\\d+)\\s+(\\d+)"),
     VIEW_BALANCE("(?i)view\\s+balance"),
     VIEW_DISCOUNT_CODES("(?i)view\\s+discount\\s+codes"),
     //product page

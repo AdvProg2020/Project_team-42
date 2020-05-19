@@ -35,4 +35,9 @@ public class SellerAccount extends Account {
     public int getCountOfProduct (Product product) {
         return this.sellableProductAndCounts.get(product);
     }
+
+    public void sellSellLog (SellLog sellLog) {
+        this.thisCustomerAllSellLogs.add(sellLog);
+        this.sellableProductAndCounts.replace(sellLog.getSoldProduct(), this.sellableProductAndCounts.get(sellLog.getSoldProduct()) - sellLog.getCount());
+    }
 }

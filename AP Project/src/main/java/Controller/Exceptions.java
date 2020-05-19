@@ -97,4 +97,28 @@ public class Exceptions {
             super("This discount code is not usable.");
         }
     }
+
+    public static class NotEnoughCreditException extends Exception {
+        public NotEnoughCreditException() {
+            super("You don`t have enough credit to buy the cart.");
+        }
+    }
+
+    public static class NoBuyLogByIdException extends Exception {
+        public NoBuyLogByIdException() {
+            super("You don`t have a buy log with this id.");
+        }
+    }
+
+    public static class RateOutOfRangeException extends Exception {
+        public RateOutOfRangeException() {
+            super("Rate must be from 1 to 5.");
+        }
+    }
+
+    public static class NotBoughtProductByIdException extends Exception {
+        public NotBoughtProductByIdException() {
+            super("You have not bought a product with this id.");
+        }
+    }
 }

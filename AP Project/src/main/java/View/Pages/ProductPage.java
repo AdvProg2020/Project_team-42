@@ -1,36 +1,33 @@
 package View.Pages;
 
 import Controller.AccountPagesController.AccountPageController;
-import Controller.CartPageController;
 import Controller.Exceptions;
 import Controller.ProductPageController;
 import Model.Accounts.Account;
 import Model.Accounts.SellerAccount;
 import Model.Comment;
 import Model.Product;
-import View.AllPages;
 import View.Commands;
 import View.Page;
 
 import java.util.regex.Matcher;
 
 public class ProductPage extends Page {
-    private static ProductPage productPage = new ProductPage();
     private ProductPageController controller;
+    private Product product;
 
-    private ProductPage () {
+    public ProductPage(Product product) {
+        this.product = product;
         this.controller = ProductPageController.getInstance();
     }
 
-    public static ProductPage getInstance() {
-        return productPage;
-    }
+    public Page run() {
+        controller.setSelectedProduct(this.product);
 
-    public AllPages run() {
         String input;
         Matcher matcher;
 
-        Page.pagesHistory.add(AllPages.PRODUCT_PAGE);
+        Page.pagesHistory.add(this);
 
         while (!Commands.EXIT.getMatcher(input = scanner.nextLine().trim()).matches()) {
             System.out.println("product id   : " + controller.getSelectedProduct().getProductId() +
@@ -46,7 +43,8 @@ public class ProductPage extends Page {
                 try {
                     showComments();
                 } catch (Exceptions.NotLogedInException e) {
-                    return AllPages.LOGIN_REGISTER_PAGE;
+                    System.out.println(e.getMessage());
+                    return LoginRegisterPage.getInstance();
                 }
             } else if (Commands.HELP.getMatcher(input).matches())
                 productPageHelp();
@@ -189,17 +187,14 @@ public class ProductPage extends Page {
     }
 
     private void addComment () throws Exceptions.NotLogedInException {
-        try {
-            Account user = AccountPageController.getUser();
-            System.out.println("Title :");
-            String title = scanner.nextLine();
-            System.out.println("Content :");
-            String content = scanner.nextLine();
-            controller.addComment(user, title, content);
-        } catch (Exceptions.NotLogedInException e) {
-            System.out.println(e.getMessage());
-            throw e;
-        }
+        Account user = AccountPageController.getUser();
+        if (user == null)
+            throw new Exceptions.NotLogedInException();
+        System.out.println("Title :");
+        String title = scanner.nextLine();
+        System.out.println("Content :");
+        String content = scanner.nextLine();
+        controller.addComment(user, title, content);
     }
 
     private void productPageHelp () {

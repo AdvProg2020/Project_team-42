@@ -4,9 +4,9 @@ import Controller.AccountPagesController.CustomerPageController;
 import Controller.Exceptions;
 import Model.Discount;
 import Model.Logs.BuyLog;
-import View.AllPages;
 import View.Commands;
 import View.Page;
+import View.Pages.CartPage;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,16 +25,16 @@ public class CustomerPage extends Page {
         return customerPage;
     }
 
-    public AllPages run() {
+    public Page run() {
         String input;
 
-        Page.pagesHistory.add(AllPages.CUSTOMER_PAGE);
+        Page.pagesHistory.add(this);
 
         while (!Commands.EXIT.getMatcher(input = scanner.nextLine().trim()).matches()) {
             if (Commands.VIEW_PERSONAL_INFO.getMatcher(input).matches())
                 viewPersonalInfo();
             else if (Commands.VIEW_CART.getMatcher(input).matches())
-                return AllPages.CART_PAGE;
+                return CartPage.getInstance();
             else if (Commands.VIEW_ORDERS.getMatcher(input).matches())
                 viewOrders();
             else if (Commands.VIEW_BALANCE.getMatcher(input).matches())
@@ -112,14 +112,53 @@ public class CustomerPage extends Page {
     private void viewOrders () {
         try {
             ArrayList<BuyLog> orders = controller.getOrders();
-            System.out.println("order ID | date and time       | Seller               | State     \n" +
-                               "---------|---------------------|----------------------|-------------");
+            System.out.println("order ID | date and time       | State     \n" +
+                               "---------|---------------------|-------------");
             for (BuyLog order : orders) {
-                System.out.printf("%-8d | %d/%02d/%02d %02d:%02d:%02d | %-20s | %-10s\n", order.getBuyLogId(), order.getDate().get(Calendar.YEAR),
+                System.out.printf("%-8d | %d/%02d/%02d %02d:%02d:%02d | %-10s\n", order.getBuyLogId(), order.getDate().get(Calendar.YEAR),
                         order.getDate().get(Calendar.MONTH) + 1, order.getDate().get(Calendar.DAY_OF_MONTH), order.getDate().get(Calendar.HOUR),
-                        order.getDate().get(Calendar.MINUTE), order.getDate().get(Calendar.SECOND), order.getSellerUsername(), order.getState());
+                        order.getDate().get(Calendar.MINUTE), order.getDate().get(Calendar.SECOND), order.getState());
+            }
+
+            String input;
+            Matcher matcher;
+
+            while (Commands.EXIT.getMatcher(input = scanner.nextLine().trim()).matches()) {
+                if ((matcher = Commands.SHOW_ORDER.getMatcher(input)).matches())
+                    viewOrder(Long.parseLong(matcher.group(1)));
+                else if ((matcher = Commands.RATE_PRODUCT.getMatcher(input)).matches())
+                    rateProduct(Long.parseLong(matcher.group(1)), Integer.parseInt(matcher.group(2)));
+                else if (Commands.HELP.getMatcher(input).matches())
+                    helpOrders();
+                else if (Commands.BACK.getMatcher(input).matches())
+                    return;
+                else {
+                    printInvalidCommandMessage();
+                    helpOrders();
+                }
             }
         } catch (Exceptions.NoOrderException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void helpOrders () {
+        System.out.println("Valid commands in this page are:\n\tshow order (order id)\n\trate (product id) (rate(from 1 to 5))\n\thelp\n\tback\n\texit");
+    }
+
+    private void viewOrder (long orderId) {
+        try {
+            BuyLog order = controller.getBuyLogById(orderId);
+            System.out.println(order.toString());
+        } catch (Exceptions.NoBuyLogByIdException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void rateProduct(long productId, int rate) {
+        try {
+            controller.rateProduct(productId, rate);
+        } catch (Exceptions.NotBoughtProductByIdException | Exceptions.RateOutOfRangeException e) {
             System.out.println(e.getMessage());
         }
     }

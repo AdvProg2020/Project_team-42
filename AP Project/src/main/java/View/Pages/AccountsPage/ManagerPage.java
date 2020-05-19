@@ -1,6 +1,5 @@
 package View.Pages.AccountsPage;
 
-import View.AllPages;
 import View.Page;
 
 public class ManagerPage extends Page {
@@ -12,7 +11,7 @@ public class ManagerPage extends Page {
         return managerPage;
     }
 
-    public AllPages run() {
+    public Page run() {
         return null;
     }
 }
