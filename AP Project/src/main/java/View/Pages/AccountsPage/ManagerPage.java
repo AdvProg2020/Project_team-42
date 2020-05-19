@@ -6,7 +6,9 @@ import View.Page;
 public class ManagerPage extends Page {
     private static ManagerPage managerPage = new ManagerPage();
 
-    private ManagerPage(){}
+    private ManagerPage(){
+
+    }
 
     public static ManagerPage getInstance() {
         return managerPage;
