@@ -107,7 +107,7 @@ public class SellerPage extends Page {
         controller.showSellerProduct();
     }
 
-    private void addProduct() throws Exceptions.NoCategoryException {
+    private void addProduct() {
         String input;
         SellerAccount sellerAccount = controller.getUser() ;
         String name = null;
@@ -134,7 +134,12 @@ public class SellerPage extends Page {
            System.out.println("please inter product category");
            categoryName = scanner.next();
            System.out.println("please inter product name");
-           category = shop.categoryByName(categoryName);
+           try {
+               category = shop.categoryByName(categoryName);
+           } catch (Exceptions.NoCategoryException e) {
+               System.out.println(e.getMessage);
+               return;
+           }
            System.out.println("please inter product name");
            descrption = scanner.nextLine();
            System.out.println("please inter product name");
@@ -144,8 +149,12 @@ public class SellerPage extends Page {
     }
 
 
-    private void removeProduct(int id) throws Exceptions.NoProductByThisIdException {
+    private void removeProduct(int id) {
+        try {
         controller.removeProduct(id);
+        } catch (Exceptions.NoProductByThisIdException e) {
+            System.out.println(e.getMessage);
+        }
     }
 
     private void showCategories()  {
