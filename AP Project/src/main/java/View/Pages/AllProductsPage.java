@@ -35,7 +35,7 @@ public class AllProductsPage extends Page {
                 filteringProsses();
             } else if (Commands.SORTING.getMatcher(input).matches()) {
                 sortingProsses();
-            } else if (Commands.SHOW_CATEGORIES.getMatcher(input).matches()) {
+            } else if (Commands.SHOW_PRODUCTS.getMatcher(input).matches()) {
                 showProducts();
             } else if ((matcher =Commands.SHOW_PRODUCT_BY_ID.getMatcher(input)).matches()) {
                 showProductByProductId(Integer.parseInt(matcher.group(1)));
