@@ -119,4 +119,12 @@ public class Shop {
         }
         return false;
     }
+    
+     public Category getCategoryByName(String categoryName)throws Exceptions.NoCategoryException {
+        for (Category category : allCategories) {
+            if(category.getName().equals(categoryName))
+                return category;
+        }
+        throw new Exceptions.NoCategoryException();
+    }
 }
