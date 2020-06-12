@@ -59,7 +59,11 @@ public enum Commands {
     //sorting prosses
     SORT_ANAVALAIBLE_SORT("(?i)sort\\s+(\\w+)"),
     CURRENST_SORT("(?i)current\\s+sort"),
-    DISABLE_SORT("(?i)disable\\s+sort");
+    DISABLE_SORT("(?i)disable\\s+sort"),
+    //add off
+    VIEW_OFF("(?i)view\\s+(\\d+)"),
+    EDIT_OFF("(?i)edit\\s+(\\d+)"),
+    ADD_OFF("(?i)add\\s+off");
 
 
     private Pattern pattern;
