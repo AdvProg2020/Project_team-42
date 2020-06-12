@@ -1,10 +1,12 @@
 package Controller.AccountPagesController;
 import Controller.Exceptions;
+import Model.Accounts.Account;
 import Model.Accounts.SellerAccount;
 import Model.Category;
 import Model.Logs.SellLog;
 import Model.Off;
 import Model.Product;
+import Model.Requests.AddProductRequest;
 import Model.Shop;
 
 import java.util.HashMap;
@@ -66,6 +68,21 @@ public class SellerPageController extends AccountPageController {
         }
     }
 
-    public void addProduct(){}
+    public void addProduct(SellerAccount sellerAccount,String name,int id,int count ,String brand,double price,Category category,String descrption,String arrtibute)throws Exceptions.NoCategoryException{
+        if(!shop.isCategory(category.getName())){
+          throw new Exceptions.NoCategoryException();
+        }
+         user.addRequest(new AddProductRequest(sellerAccount,name,id,count,brand,price,category,descrption,arrtibute));
+
+    }
+
+    public void removeProduct(int id) throws Exceptions.NoProductByThisIdException {
+        user.removeProduct(shop.getProductById(id));
+        shop.removeProduct(shop.getProductById(id),user.getCountOfProduct(shop.getProductById(id)));
+    }
+
+    public SellerAccount getUser(){
+        return this.user;
+    }
 }
 
