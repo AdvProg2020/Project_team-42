@@ -2,6 +2,9 @@ package View.Pages.AccountsPage;
 
 import Controller.AccountPagesController.SellerPageController;
 import Controller.Exceptions;
+import Model.Accounts.SellerAccount;
+import Model.Category;
+import Model.Shop;
 import View.Commands;
 import View.Page;
 
@@ -10,6 +13,7 @@ import java.util.regex.Matcher;
 public class SellerPage extends Page {
     private static SellerPage sellerPage = new SellerPage();
     private SellerPageController controller;
+    private Shop shop = Shop.getInstance();
 
     private SellerPage () {
         this.controller = SellerPageController.getInstance();
@@ -19,8 +23,9 @@ public class SellerPage extends Page {
         return sellerPage;
     }
 
-    public Page run()  {
+    public Page run() throws Exceptions.NoCategoryException, Exceptions.NoProductByThisIdException {
         String input;
+        Matcher matcher;
         boolean isEnd;
         while (!Commands.EXIT.getMatcher(input = scanner.nextLine().trim()).matches()) {
             if (Commands.VIEW_PERSONAL_INFO.getMatcher(input).matches()) {
@@ -33,8 +38,8 @@ public class SellerPage extends Page {
                 manageProducts();
             } else if (Commands.ADD_PRODUCT.getMatcher(input).matches()) {
                 addProduct();
-            } else if (Commands.REMOVE_PRODUCT.getMatcher(input).matches()) {
-                removeProduct();//todo
+            } else if ((matcher = Commands.REMOVE_PRODUCT.getMatcher(input)).matches()) {
+                removeProduct(Integer.valueOf(matcher.group(1)));
             } else if (Commands.SHOW_CATEGORIES.getMatcher(input).matches()) {
                 showCategories();
             } else if (Commands.VIEW_OFFS.getMatcher(input).matches()) {
@@ -44,7 +49,7 @@ public class SellerPage extends Page {
             }else if (Commands.HELP.getMatcher(input).matches()) {
                 help();
             }else if(Commands.OFF.getMatcher(input).matches()){
-
+                //todo go to off page
             }else{
                 System.out.println("invalid command");
             }
@@ -97,18 +102,50 @@ public class SellerPage extends Page {
     private void viewComponyInfo() {
         System.out.println(controller.getComponyinfo());
     }
-    //ToDo
 
     private void manageProducts() {
         controller.showSellerProduct();
     }
 
-    private void addProduct() {
-        controller.addProduct();
+    private void addProduct() throws Exceptions.NoCategoryException {
+        String input;
+        SellerAccount sellerAccount = controller.getUser() ;
+        String name = null;
+        int id = 0;
+        int count = 0;
+        String brand = null;
+        double price = 0;
+        String categoryName;
+        Category category = null;
+        String descrption = null;
+        String arrtibute = null;
+
+       while(!Commands.BACK.getMatcher(input = scanner.next().trim()).matches()){
+
+           System.out.println("please inter product name");
+           name=scanner.nextLine().trim();//todo
+           id = shop.returnNewId();
+           System.out.println("please inter product count");
+           count = scanner.nextInt();
+           System.out.println("please inter product brand");
+           brand = scanner.nextLine();
+           System.out.println("please inter product Pricee");
+           price = scanner.nextDouble();
+           System.out.println("please inter product category");
+           categoryName = scanner.next();
+           System.out.println("please inter product name");
+           category = shop.categoryByName(categoryName);
+           System.out.println("please inter product name");
+           descrption = scanner.nextLine();
+           System.out.println("please inter product name");
+           arrtibute = scanner.nextLine();
+       }
+        controller.addProduct(sellerAccount, name, id, count , brand, price, category, descrption, arrtibute);
     }
 
-    private void removeProduct() {
-        controller.removeProduct();
+
+    private void removeProduct(int id) throws Exceptions.NoProductByThisIdException {
+        controller.removeProduct(id);
     }
 
     private void showCategories()  {
