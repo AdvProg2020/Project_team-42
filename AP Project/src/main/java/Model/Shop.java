@@ -101,4 +101,22 @@ public class Shop {
     public void addSellLog (SellLog sellLog) {
         this.allSellLogs.add(sellLog);
     }
+    
+        public void removeProduct(Product product , int count) {
+        allProductAndCount.replace(product , allProductAndCount.get(product)-count);
+        for (Product productOnOFF : allProductOnOffsAndCount.keySet()) {
+            if(product == productOnOFF) {
+                allProductOnOffsAndCount.replace(productOnOFF,allProductOnOffsAndCount.get(productOnOFF)-count);
+            }
+        }
+    }
+
+    public boolean isCategory(String name){
+        for (Category category : allCategories) {
+            if(category.getName().equals(name)){
+                return true;
+            }
+        }
+        return false;
+    }
 }
