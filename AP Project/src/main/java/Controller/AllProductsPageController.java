@@ -1,4 +1,4 @@
-package Controller;
+ckage Controller;
 
 import Model.Product;
 import Model.Shop;
@@ -20,17 +20,62 @@ public class AllProductsPageController {
     }
 
     private Shop shop = Shop.getInstance();
-    private ArrayList<Product> allFilteredProduct = (ArrayList<Product>) shop.getAllProductOnOffsAndCount().keySet();
-    private ArrayList<Product> allProducts = (ArrayList<Product>) shop.getAllProductOnOffsAndCount().keySet();
-    private String nameForFlter = null;
+    private ArrayList<Product> allFilteredProduct = (ArrayList<Product>) shop.getAllProductAndCount().keySet();
+    private ArrayList<Product> allProducts = (ArrayList<Product>) shop.getAllProductAndCount().keySet();
+    private ArrayList<Product> allFilteredProductOnOff = (ArrayList<Product>) shop.getAllProductOnOffsAndCount().keySet();
+    private ArrayList<Product> allProductsOnOff = (ArrayList<Product>) shop.getAllProductOnOffsAndCount().keySet();
+    private String nameForFilter = null;
     private String brandForFilter = null;
     private Category categoryForFilter = null;
     private double rateForFilter = 0;
     private double minPrice = 0;
     private double maxPrice = 1000000000;
+    private String nameForFilterOnOff = null;
+    private String brandForFilterOnOff = null;
+    private Category categoryForFilterOnOff = null;
+    private double rateForFilterOnOff = 0;
+    private double minPriceOnOff = 0;
+    private double maxPriceOnOff = 1000000000;
 
-    public void setNameForFlter(String nameForFlter) {
-        this.nameForFlter = nameForFlter;
+    public static void setAllProductsPageController(AllProductsPageController allProductsPageController) {
+        AllProductsPageController.allProductsPageController = allProductsPageController;
+    }
+    
+
+    public void setMinPrice(double minPrice) {
+        this.minPrice = minPrice;
+    }
+
+    public void setMaxPrice(double maxPrice) {
+        this.maxPrice = maxPrice;
+    }
+
+    public void setNameForFilterOnOff(String nameForFilterOnOff) {
+        this.nameForFilterOnOff = nameForFilterOnOff;
+    }
+
+    public void setBrandForFilterOnOff(String brandForFilterOnOff) {
+        this.brandForFilterOnOff = brandForFilterOnOff;
+    }
+
+    public void setCategoryForFilterOnOff(Category categoryForFilterOnOff) {
+        this.categoryForFilterOnOff = categoryForFilterOnOff;
+    }
+
+    public void setRateForFilterOnOff(double rateForFilterOnOff) {
+        this.rateForFilterOnOff = rateForFilterOnOff;
+    }
+
+    public void setMinPriceOnOff(double minPriceOnOff) {
+        this.minPriceOnOff = minPriceOnOff;
+    }
+
+    public void setMaxPriceOnOff(double maxPriceOnOff) {
+        this.maxPriceOnOff = maxPriceOnOff;
+    }
+
+    public void setNameForFilter(String nameForFlter) {
+        this.nameForFilter = nameForFlter;
     }
 
     public void setBrandForFilter(String brandForFilter) {
@@ -43,6 +88,54 @@ public class AllProductsPageController {
 
     public void setRateForFilter(double rateForFilter) {
         this.rateForFilter = rateForFilter;
+    }
+
+    public void setRateZiro(){
+        this.rateForFilter = 0;
+    }
+
+    public void setMinPriceZiro(){
+        this.minPrice = 0;
+    }
+
+    public void setMaxPriceZiro(){
+        this.maxPrice = 1000000000;
+    }
+
+    public void setNameZiro(){
+        this.nameForFilter = null;
+    }
+
+    public void setBrandZiro(){
+        this.brandForFilter = null;
+    }
+
+    public void setCategoryZiro(){
+        this.categoryForFilter = null;
+    }
+
+    public void setRateZiroForOff(){
+        this.rateForFilterOnOff = 0;
+    }
+
+    public void setMinPriceZiroForOff(){
+        this.minPriceOnOff = 0;
+    }
+
+    public void setMaxPriceZiroForOff(){
+        this.maxPriceOnOff = 1000000000;
+    }
+
+    public void setNameZiroForOff(){
+        this.nameForFilterOnOff = null;
+    }
+
+    public void setBrandZiroForOff(){
+        this.brandForFilterOnOff = null;
+    }
+
+    public void setCategoryZiroForOff(){
+        this.categoryForFilterOnOff = null;
     }
 
     public void showOFFProducts() {
@@ -59,10 +152,10 @@ public class AllProductsPageController {
         }
     }
 
-    public void prossesFiltering() {
+    public ArrayList<Product> prossesFiltering(ArrayList<Product>products,double maxPrice , double minPrice , double minRateForFilter , Category categoryForFilter ,String brandForFilter,String nameForFlter) {
         ArrayList<Product> filteredProducts = new ArrayList<Product>();
-        for (Product product : allProducts) {
-            if ((product.getPrice() <= maxPrice && product.getPrice() >= maxPrice) && product.getRate() >= rateForFilter) {
+        for (Product product : products) {
+            if ((product.getPrice() <= maxPrice && product.getPrice() >= minPrice) && product.getRate() >= minRateForFilter) {
                 if (!categoryForFilter.equals(null) && product.getCategory().equals(categoryForFilter)) {
                     if (!brandForFilter.equals(null) && product.getBrand().equals(brandForFilter)) {
                         if (!nameForFlter.equals(null) && product.getName().equals(nameForFlter)) {
@@ -94,29 +187,81 @@ public class AllProductsPageController {
                 }
             }
         }
-        allFilteredProduct = filteredProducts;
+        return products;
     }
 
-    public void sortByMaxPrice() {
-        Collections.sort(allFilteredProduct, new SortByMaxPrice());
+    public ArrayList<Product> sortByMaxPrice(ArrayList<Product>products) {
+        Collections.sort(products, new SortByMaxPrice());
+        return products;
     }
 
-    public void sortByMinPrice() {
-        Collections.sort(allFilteredProduct, new SortByMinPrice());
+    public ArrayList<Product> sortByMinPrice(ArrayList<Product>products) {
+        Collections.sort(products, new SortByMinPrice());
+        return products;
     }
 
-    public void sortByVisit() {
-        Collections.sort(allFilteredProduct, new SortByVisit());
+    public ArrayList<Product> sortByVisit(ArrayList<Product>products) {
+        Collections.sort(products, new SortByVisit());
+        return products;
     }
 
-    public void sortByTime() {
-        Collections.sort(allFilteredProduct, new SortByTime());
+    public ArrayList<Product> sortByTime(ArrayList<Product>products) {
+        Collections.sort(products, new SortByTime());
+        return products;
     }
 
-    public void sortByRate() {
-        Collections.sort(allFilteredProduct, new SortByRate());
+    public ArrayList<Product> sortByRate(ArrayList<Product>products) {
+        Collections.sort(products, new SortByRate());
+        return products;
     }
 
+    public void showProducts() {
+        for (Product product : allFilteredProduct) {
+            System.out.println(product);
+        }
+    }
+
+    public void showProductByProcuctId(int id) {
+        boolean find = false;
+        for (Product product : allFilteredProduct) {
+            if(product.getProductId()==id){
+                System.out.println(product);
+                find = true;
+                break;
+            }
+        }if(!find){
+            System.out.println("there is not this id in out list");
+        }
+    }
+
+    public void showProductByProcuctOnOffId(int id) {
+        boolean find = false;
+        for (Product product : allFilteredProductOnOff) {
+            if(product.getProductId()==id){
+                System.out.println(product);
+                find = true;
+                break;
+            }
+        }if(!find){
+            System.out.println("there is not this id in out list");
+        }
+    }
+
+    public void showAvailableFilters(){
+        System.out.println("name " +
+                "brand " +
+                "category " +
+                "price maxprice minprice " +
+                "rate minrate ");
+    }
+
+    public ArrayList<Product> getAllFilteredProduct() {
+        return allFilteredProduct;
+    }
+
+    public ArrayList<Product> getAllFilteredProductOnOff() {
+        return allFilteredProductOnOff;
+    }
 }
 
 class SortByMaxPrice implements Comparator<Product> {
