@@ -121,4 +121,10 @@ public class Exceptions {
             super("You have not bought a product with this id.");
         }
     }
+    
+     public static class NoCategoryException extends Exception{
+        public NoCategoryException(){
+            super("There is no category by this name");
+        }
+    }
 }
