@@ -1,4 +1,4 @@
-package View.Pages.AccountsPage;
+    package View.Pages.AccountsPage;
 
 import Controller.AccountPagesController.SellerPageController;
 import Controller.Exceptions;
@@ -278,6 +278,7 @@ public class SellerPage extends Page {
                         double persentage = Double.valueOf(scanner.nextLine());
                         try {
                             new CreateOffRequest(true,shop.getOffById(id),listofProduct,start,end,persentage);
+                            shop.getOffById(id).changeWaitingState();
                         } catch (Exceptions.NoOffByThisId noOffByThisId) {
                             noOffByThisId.printStackTrace();
                         }
