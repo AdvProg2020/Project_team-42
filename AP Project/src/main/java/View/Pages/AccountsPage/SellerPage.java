@@ -181,6 +181,112 @@ public class SellerPage extends Page {
         System.out.println("view personal information" + "view compony information" + "manage products" + "add product" + "remove product" + "show categories" + "view offs" + "view balance" + "help");
     }
 
+ private void viewOffs() {
+        Matcher matcher;
+        String input;
+        controller.showOff();
+        while(!Commands.BACK.getMatcher(input = scanner.nextLine()).matches()){
+            if((matcher = Commands.VIEW_OFF.getMatcher(input)).matches()){
+                try {
+                    System.out.println(shop.getOffById(Integer.valueOf(matcher.group(1))));
+                } catch (Exceptions.NoOffByThisId noOffByThisId) {
+                    System.out.println(noOffByThisId.getMessage());
+                }
+            }if((Commands.ADD_OFF.getMatcher(input)).matches()){
+                ArrayList<Product>listofProduct = new ArrayList<>();
+                while(Commands.BACK.getMatcher(input = scanner.nextLine()).matches()) {
+                    System.out.println("enter your productId");
+                    while(Commands.BACK.getMatcher(input = scanner.nextLine()).matches()){
+                        try {
+                            listofProduct.add(user.hasProduct(Integer.valueOf(input)));
+                        } catch (Exceptions.NoProductByThisIdException e) {
+                            System.out.println(e.getMessage());
+                        }
+                    }
+                    System.out.println("enter start time year");
+                    int year = Integer.parseInt(scanner.nextLine());
+                    System.out.println("enter start time month");
+                    int month = Integer.valueOf(scanner.nextLine());
+                    System.out.println("enter start time day");
+                    int day = Integer.valueOf(scanner.nextLine());
+                    System.out.println("enter start time hour");
+                    int hour = Integer.valueOf(scanner.nextLine());
+                    System.out.println("enter start time minute");
+                    int minute = Integer.valueOf(scanner.nextLine());
+                    System.out.println("enter start time second");
+                    int second = Integer.valueOf(scanner.nextLine());
+                    GregorianCalendar start = new GregorianCalendar(year,month -1,day,hour,minute,second);
+                    System.out.println("enter end time year");
+                    year = Integer.parseInt(scanner.nextLine());
+                    System.out.println("enter end time month");
+                    month = Integer.valueOf(scanner.nextLine());
+                    System.out.println("enter end time day");
+                    day = Integer.valueOf(scanner.nextLine());
+                    System.out.println("enter end time hour");
+                    hour = Integer.valueOf(scanner.nextLine());
+                    System.out.println("enter end time minute");
+                    minute = Integer.valueOf(scanner.nextLine());
+                    System.out.println("enter end time second");
+                    second = Integer.valueOf(scanner.nextLine());
+                    GregorianCalendar end = new GregorianCalendar(year,month -1,day,hour,minute,second);
+                    System.out.println("enter persentage");
+                    double persentage = Double.valueOf(scanner.nextLine());
+                    new CreateOffRequest(false,null,listofProduct,start,end,persentage);
+                }
+            }if((matcher = Commands.EDIT_OFF.getMatcher(input)).matches()){
+                int id;
+                if(shop.isOffById(id = Integer.valueOf(matcher.group(1)))){
+                    ArrayList<Product>listofProduct = new ArrayList<>();
+                    while(Commands.BACK.getMatcher(input = scanner.nextLine()).matches()) {
+                        System.out.println("enter your productId");
+                        while(Commands.BACK.getMatcher(input = scanner.nextLine()).matches()){
 
+                            try {
+                                listofProduct.add(user.hasProduct(Integer.valueOf(input)));
+                            } catch (Exceptions.NoProductByThisIdException e) {
+                                System.out.println(e.getMessage());
+                            }
+                        }
+
+                        System.out.println("enter start time year");
+                        int year = Integer.parseInt(scanner.nextLine());
+                         System.out.println("enter start time month");
+                         int month = Integer.valueOf(scanner.nextLine());
+                         System.out.println("enter start time day");
+                        int day = Integer.valueOf(scanner.nextLine());
+                         System.out.println("enter start time hour");
+                        int hour = Integer.valueOf(scanner.nextLine());
+                         System.out.println("enter start time minute");
+                        int minute = Integer.valueOf(scanner.nextLine());
+                         System.out.println("enter start time second");
+                        int second = Integer.valueOf(scanner.nextLine());
+                        GregorianCalendar start = new GregorianCalendar(year,month -1,day,hour,minute,second);
+                        System.out.println("enter end time year");
+                         year = Integer.parseInt(scanner.nextLine());
+                         System.out.println("enter end time month");
+                          month = Integer.valueOf(scanner.nextLine());
+                         System.out.println("enter end time day");
+                         day = Integer.valueOf(scanner.nextLine());
+                         System.out.println("enter end time hour");
+                         hour = Integer.valueOf(scanner.nextLine());
+                         System.out.println("enter end time minute");
+                         minute = Integer.valueOf(scanner.nextLine());
+                         System.out.println("enter end time second");
+                         second = Integer.valueOf(scanner.nextLine());
+                        GregorianCalendar end = new GregorianCalendar(year,month -1,day,hour,minute,second);
+                        System.out.println("enter persentage");
+                        double persentage = Double.valueOf(scanner.nextLine());
+                        try {
+                            new CreateOffRequest(true,shop.getOffById(id),listofProduct,start,end,persentage);
+                        } catch (Exceptions.NoOffByThisId noOffByThisId) {
+                            noOffByThisId.printStackTrace();
+                        }
+                    }
+                }else{
+                    System.out.println("no off by this id");
+                }
+            }
+        }
+    }
 
 }
