@@ -46,7 +46,9 @@ public class SellerPage extends Page {
                 viewOffs();
             } else if (Commands.VIEW_BALANCE.getMatcher(input).matches()) {
                 viewBalance();
-            }else if (Commands.HELP.getMatcher(input).matches()) {
+            }else if (Commands.VIEW_OFFS.getMatcher(input).matches()) {
+                viewOffs();
+            } else if (Commands.HELP.getMatcher(input).matches()) {
                 help();
             }else if(Commands.OFF.getMatcher(input).matches()){
                 //todo go to off page
