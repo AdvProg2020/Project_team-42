@@ -127,4 +127,26 @@ public class Shop {
         }
         throw new Exceptions.NoCategoryException();
     }
+    
+     public int returnNewId()
+    {
+        return  allProductOnOffsAndCount.keySet().size();
+    }
+    
+      public Off getOffById(int id) throws Exceptions.NoOffByThisId{
+        for (Off off : allOffs) {
+            if(off.getOffId() == id) {
+                return off;
+            }
+        }throw new Exceptions.NoOffByThisId();
+    }
+
+    public boolean isOffById(int id) {
+        for (Off off : allOffs) {
+            if(off.getOffId() == id) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
