@@ -87,6 +87,15 @@ public class SellerAccount extends Account {
         this.requests.add(request);
     }
 
+    public Product hasProduct(int id) throws Exceptions.NoProductByThisIdException {
+        for (Product product : sellableProductAndCounts.keySet()) {
+            if(product.getProductId() == id) {
+                return product;
+            }
+        }
+        throw new Exceptions.NoProductByThisIdException(id);
+    }
+
     public int countProcudt(Product product){
         return sellableProductAndCounts.get(product);
     }
