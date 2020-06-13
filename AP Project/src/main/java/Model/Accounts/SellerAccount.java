@@ -78,4 +78,17 @@ public class SellerAccount extends Account {
         this.thisSellerAllSellLogs.add(sellLog);
         this.sellableProductAndCounts.replace(sellLog.getSoldProduct(), this.sellableProductAndCounts.get(sellLog.getSoldProduct()) - sellLog.getCount());
     }
+
+    public void removeProduct(Product product) {
+        sellableProductAndCounts.replace(product,0);
+    }
+
+    public void addRequest(Request request){
+        this.requests.add(request);
+    }
+
+    public int countProcudt(Product product){
+        return sellableProductAndCounts.get(product);
+    }
 }
+
