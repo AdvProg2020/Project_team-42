@@ -23,7 +23,7 @@ public class OffsPage extends Page {
         return offsPage;
     }
 
-    public Page run() throws Exceptions.NoCategoryException {
+    public Page run() {
         Matcher matcher;
         String input;
         while (!Commands.EXIT.getMatcher(input = scanner.nextLine().trim()).matches()) {
@@ -58,7 +58,7 @@ public class OffsPage extends Page {
         controller.showCategories();
     }
 
-    public void filteringProsses() throws Exceptions.NoCategoryException {
+    public void filteringProsses() {
         Matcher matcher;
         String input;
         while ((matcher = Commands.BACK.getMatcher(input = scanner.nextLine())).matches()) {
@@ -73,7 +73,11 @@ public class OffsPage extends Page {
                     controller.setBrandForFilterOnOff(String.valueOf(matcher.group(1)));
                 }if(matcher.group(1).equals("(?i)category")){
                     allCurrentFiltters.add("category");
-                    controller.setCategoryForFilterOnOff(shop.categoryByName(matcher.group(1)));
+                    try {
+                        controller.setCategoryForFilterOnOff(shop.getCategoryByName(matcher.group(1)));
+                    } catch (Exceptions.NoCategoryException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }if(matcher.group(1).equals("(?i)price\\s+\\s*(\\d+)\\s+\\s*(\\d+)")){
                     allCurrentFiltters.add("price");
                     controller.setMaxPriceOnOff(Integer.valueOf(matcher.group(2)));
@@ -106,7 +110,7 @@ public class OffsPage extends Page {
         }
     }
 
-    public void sortingProsses() throws Exceptions.NoCategoryException {
+    public void sortingProsses() {
         Matcher matcher;
         String input;
         while ((matcher = Commands.BACK.getMatcher(input = scanner.nextLine())).matches()) {
