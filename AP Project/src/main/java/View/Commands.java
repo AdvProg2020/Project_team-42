@@ -29,15 +29,15 @@ public enum Commands {
     ADD_TO_CART("(?i)add\\s+to\\s+cart"),
     ADD_COMMENT("(i?)add\\s+comment"),
     //SellerPage
-    VEIW_COMPANY_INFORMATION("(i?)view\\s+compony\\s+information"),
-    VIEW_SALES_HISTORY("(i?)view\\s+sales\\s+history"),
-    MANAGE_PRODUCTS("(i?)manage\\s+products"),
-    ADD_PRODUCT("(i?)add\\s+product"),
-    REMOVE_PRODUCT("(i?)remove\\s+product\\s+(\\d+)"),
-    SHOW_CATEGORIES("(i?)show\\s+categories"),
-    VIEW_OFFS("(i?)view\\s+offs"),
-    VIEW_BALANCEE("(i?)view\\s+balance"),
-    VIEW_CATEGORIES("(i?)view\\s+categories"),
+    VEIW_COMPANY_INFORMATION("(?i)view\\s+compony\\s+information"),
+    VIEW_SALES_HISTORY("(?i)view\\s+sales\\s+history"),
+    MANAGE_PRODUCTS("(?i)manage\\s+products"),
+    ADD_PRODUCT("(?i)add\\s+product"),
+    REMOVE_PRODUCT("(?i)remove\\s+product\\s+(\\d+)"),
+    SHOW_CATEGORIES("(?i)show\\s+categories"),
+    VIEW_OFFS("(?i)view\\s+offs"),
+    VIEW_BALANCEE("(?i)view\\s+balance"),
+    VIEW_CATEGORIES("(?i)view\\s+categories"),
     //cart page
     SHOW_PRODUCTS("(?i)show\\s+products"),
     VIEW_PRODUCT("(?i)view\\s+(\\d+)"),
@@ -63,7 +63,9 @@ public enum Commands {
     //add off
     VIEW_OFF("(?i)view\\s+(\\d+)"),
     EDIT_OFF("(?i)edit\\s+(\\d+)"),
-    ADD_OFF("(?i)add\\s+off");
+    ADD_OFF("(?i)add\\s+off"),
+    FILTERING_PRICE("(?i)price\\s+\\s*(\\d+)\\s+\\s*(\\d+)"),
+    FILTERING_RATE("(?i)rate\\s+(\\d+)");
 
 
     private Pattern pattern;
