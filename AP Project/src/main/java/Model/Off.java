@@ -40,4 +40,48 @@ public class Off {
     public double getOffPercentage() {
         return offPercentage;
     }
+    
+     public long getOffId() {
+        return offId;
+    }
+
+    public void setOffId(long offId) {
+        this.offId = offId;
+    }
+
+    public ArrayList<Product> getEffectingProducts() {
+        return effectingProducts;
+    }
+
+    public void setEffectingProducts(ArrayList<Product> effectingProducts) {
+        this.effectingProducts = effectingProducts;
+    }
+
+    public OffOrProductState getState() {
+        return state;
+    }
+
+    public void setState(OffOrProductState state) {
+        this.state = state;
+    }
+
+    public GregorianCalendar getBegin() {
+        return begin;
+    }
+
+    public void setBegin(GregorianCalendar begin) {
+        this.begin = begin;
+    }
+
+    public GregorianCalendar getEnd() {
+        return end;
+    }
+
+    public void setEnd(GregorianCalendar end) {
+        this.end = end;
+    }
+
+    public void setOffPercentage(double offPercentage) {
+        this.offPercentage = offPercentage;
+    }
 }
