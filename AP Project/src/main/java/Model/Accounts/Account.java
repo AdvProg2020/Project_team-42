@@ -135,4 +135,8 @@ public abstract class Account {
     public boolean hasBoughtProduct (Product product) {
         return false;
     }
+    
+    public String getPassword() {
+        return password;
+    }
 }
