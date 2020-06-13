@@ -160,4 +160,8 @@ public class Product {
         this.rates.add(rate);
         this.averageRate = (this.averageRate * (this.rates.size() - 1) + rate.getRate()) / this.rates.size();
     }
+    
+    public void setComments(ArrayList<Comment> comments) {
+        this.comments = comments;
+    }
 }
