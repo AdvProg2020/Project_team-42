@@ -8,22 +8,22 @@ import View.Page;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class AllProductsPage extends Page {
-    private static AllProductsPage allProductsPage = new AllProductsPage();
-    private Shop shop = Shop.getInstance();
-    private AllProductsPageController controller = AllProductsPageController.getInstance();
+public class OffsPage extends Page {
+    private static OffsPage offsPage = new OffsPage();
+   private Shop shop = Shop.getInstance();
+   private AllProductsPageController controller = AllProductsPageController.getInstance();
     private ArrayList<String> allCurrentFiltters = new ArrayList<>() ;
     private ArrayList<String> allCurrentSorts = new ArrayList<>();
-    private AllProductsPage() {
+
+
+    private OffsPage () {}
+
+    public static OffsPage getInstance() {
+        return offsPage;
     }
 
-    public static AllProductsPage getInstance() {
-        return allProductsPage;
-    }
-
-    public Page run() throws Exceptions.NoCategoryException {
+    public Page run() {
         Matcher matcher;
         String input;
         while (!Commands.EXIT.getMatcher(input = scanner.nextLine().trim()).matches()) {
@@ -35,8 +35,8 @@ public class AllProductsPage extends Page {
                 filteringProsses();
             } else if (Commands.SORTING.getMatcher(input).matches()) {
                 sortingProsses();
-            } else if (Commands.SHOW_PRODUCTS.getMatcher(input).matches()) {
-                showProducts();
+            } else if (Commands.SHOW_CATEGORIES.getMatcher(input).matches()) {
+                showOffsProducts();
             } else if ((matcher =Commands.SHOW_PRODUCT_BY_ID.getMatcher(input)).matches()) {
                 showProductByProductId(Integer.parseInt(matcher.group(1)));
             }
@@ -58,7 +58,7 @@ public class AllProductsPage extends Page {
         controller.showCategories();
     }
 
-    public void filteringProsses() throws Exceptions.NoCategoryException {
+    public void filteringProsses() {
         Matcher matcher;
         String input;
         while ((matcher = Commands.BACK.getMatcher(input = scanner.nextLine())).matches()) {
@@ -67,20 +67,24 @@ public class AllProductsPage extends Page {
             }if((matcher = Commands.FILTER_ANAVALAIBLE_FILTER.getMatcher(input)).matches()){
                 if(matcher.group(1).equals("(?i)name")){
                     allCurrentFiltters.add("name");
-                    controller.setNameForFilter(String.valueOf(matcher.group(1)));
+                    controller.setNameForFilterOnOff(String.valueOf(matcher.group(1)));
                 }if(matcher.group(1).equals("(?i)brand")){
                     allCurrentFiltters.add("brand");
-                    controller.setBrandForFilter(String.valueOf(matcher.group(1)));
+                    controller.setBrandForFilterOnOff(String.valueOf(matcher.group(1)));
                 }if(matcher.group(1).equals("(?i)category")){
                     allCurrentFiltters.add("category");
-                    controller.setCategoryForFilter(shop.categoryByName(matcher.group(1)));
+                    try {
+                        controller.setCategoryForFilterOnOff(shop.getCategoryByName(matcher.group(1)));
+                    } catch (Exceptions.NoCategoryException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }if(matcher.group(1).equals("(?i)price\\s+\\s*(\\d+)\\s+\\s*(\\d+)")){
                     allCurrentFiltters.add("price");
-                    controller.setMaxPrice(Integer.valueOf(matcher.group(2)));
-                    controller.setMinPrice(Integer.valueOf(matcher.group(3)));
+                    controller.setMaxPriceOnOff(Integer.valueOf(matcher.group(2)));
+                    controller.setMinPriceOnOff(Integer.valueOf(matcher.group(3)));
                 }if(matcher.group(1).equals("(?i)rate\\s+(\\d+)")){
                     allCurrentFiltters.add("rate");
-                    controller.setRateForFilter(Integer.valueOf(matcher.group(2)));
+                    controller.setRateForFilterOnOff(Integer.valueOf(matcher.group(2)));
                 }
             }if(Commands.CURRENST_FILTERS.getMatcher(input).matches()){
                 System.out.println(allCurrentFiltters);
@@ -88,15 +92,15 @@ public class AllProductsPage extends Page {
                 if(allCurrentFiltters.contains(String.valueOf(matcher.group(1)))){
                     allCurrentFiltters.remove(String.valueOf(matcher.group(1)));
                     if(String.valueOf((matcher.group(1))).equals("name")){
-                        controller.setNameZiro();
+                        controller.setNameZiroForOff();
                     }if(String.valueOf((matcher.group(1))).equals("brand")){
-                        controller.setBrandZiro();
+                        controller.setBrandZiroForOff();
                     }if(String.valueOf((matcher.group(1))).equals("category")){
-                        controller.setCategoryZiro();
+                        controller.setCategoryZiroForOff();
                     }if(String.valueOf((matcher.group(1))).equals("price")){
-                        controller.setMaxPriceZiro();
+                        controller.setMaxPriceZiroForOff();
                     }if(String.valueOf((matcher.group(1))).equals("rate")){
-                        controller.setRateZiro();
+                        controller.setRateZiroForOff();
                     }
                 }else{
                     System.out.println("there is no that filter");
@@ -106,7 +110,7 @@ public class AllProductsPage extends Page {
         }
     }
 
-    public void sortingProsses() throws Exceptions.NoCategoryException {
+    public void sortingProsses() {
         Matcher matcher;
         String input;
         while ((matcher = Commands.BACK.getMatcher(input = scanner.nextLine())).matches()) {
@@ -115,24 +119,24 @@ public class AllProductsPage extends Page {
             }if((matcher = Commands.SORT_ANAVALAIBLE_SORT.getMatcher(input)).matches()){
                 if(matcher.group(1).equals("(?i)visit")){
                     allCurrentSorts.add( "visit");
-                    controller.sortByVisit(controller.getAllFilteredProduct());
+                    controller.sortByVisit(controller.getAllFilteredProductOnOff());
                 }if(matcher.equals("(?i)max\\s+price")){
                     allCurrentFiltters.add("max");
-                    controller.sortByMaxPrice(controller.getAllFilteredProduct());
+                    controller.sortByMaxPrice(controller.getAllFilteredProductOnOff());
                 }if(matcher.equals("(?i)min\\s+price")){
                     allCurrentFiltters .add("min");
-                    controller.sortByMinPrice(controller.getAllFilteredProduct());
+                    controller.sortByMinPrice(controller.getAllFilteredProductOnOff());
                 }if(matcher.equals("(?i)time")){
                     allCurrentFiltters.add("time");
-                    controller.sortByTime(controller.getAllFilteredProduct());
+                    controller.sortByTime(controller.getAllFilteredProductOnOff());
                 }if(matcher.equals("(?i)rate")){
                     allCurrentFiltters.add("rate");
-                    controller.sortByRate(controller.getAllFilteredProduct());
+                    controller.sortByRate(controller.getAllFilteredProductOnOff());
                 }
             }if(Commands.CURRENST_SORT.getMatcher(input).matches()){
                 System.out.println(allCurrentFiltters);
             }if((Commands.DISABLE_SORT.getMatcher(input)).matches()){
-                controller.sortByVisit(controller.getAllFilteredProduct());
+                controller.sortByVisit(controller.getAllFilteredProductOnOff());
             }
         }
     }
@@ -145,4 +149,7 @@ public class AllProductsPage extends Page {
         showProductByProductId(id);
     }
 
+    public void showOffsProducts(){
+        controller.showOFFProducts();
+    }
 }
