@@ -65,7 +65,29 @@ public enum Commands {
     EDIT_OFF("(?i)edit\\s+(\\d+)"),
     ADD_OFF("(?i)add\\s+off"),
     FILTERING_PRICE("(?i)price\\s+\\s*(\\d+)\\s+\\s*(\\d+)"),
-    FILTERING_RATE("(?i)rate\\s+(\\d+)");
+    FILTERING_RATE("(?i)rate\\s+(\\d+)"),
+     //login regester page
+    CREATE_ACCOUNT("(?i)create\\s+account"),
+    LOGIN("(?i)login"),
+    //manager page
+    MANAGE_USERS("(?i)manage\\s+users"),
+    VIEW("(?i)view\\s+(\\S+)"),
+    DELETE_USER("(?I)delete\\s+user\\s+(\\S+)"),
+    CREATE_MANAGER_PROFILE("(?i)create\\s+manager\\s+profile"),
+    MANAGE_ALL_PRODUCTS("(?i)manage\\s+all\\s+products"),
+    CREATE_DISCOUNT_CODE("(i?)create\\s+discount\\s+code"),
+    VIEW_DISCOUNT_CODE("(i?)view\\s+discount\\s+code\\s+(\\d+)"),
+    EDIT_DISCOUNT_CODE("(i?)edit\\s+discount\\s+code\\s+(\\d+)"),
+    REMOVE_DISCOUNT_CODE("(i?)remove\\s+discount\\s+code\\s+(\\d+)"),
+    MANAGE_REQUEST("(?i)manage\\s+requests"),
+    DETAILS("(?i)details\\s+(\\d+)"),
+    ACCEPT("(?i)accept\\s+(\\d+)"),
+    DECLINE("(?i)decline\\s+(\\d+)"),
+    MANAGE_CATEGORIES("(?i)manage\\s+categories"),
+    EDIT_CATEGORY("(?i)edit\\s+category\\s+(\\S+)"),
+    ADD_CATEGORY("(?i)add\\s+(\\S+)"),
+    REMOVE_CATEGORY("(?i)remove\\s+(\\S+)"),
+    EDIT_FIELD("(?i)field\\s+(\\S+)");
 
 
     private Pattern pattern;
