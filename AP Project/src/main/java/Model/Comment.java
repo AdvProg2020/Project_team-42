@@ -16,4 +16,23 @@ public class Comment {
     public String getContent() {
         return content;
     }
+     public Comment(Account user, Product product, String title, String content, boolean isProductBoughtByUser) {
+        this.user = user;
+        this.product = product;
+        this.title = title;
+        this.content = content;
+        this.isProductBoughtByUser = isProductBoughtByUser;
+    }
+
+    public Account getUser() {
+        return user;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public boolean isProductBoughtByUser() {
+        return isProductBoughtByUser;
+    }
 }
