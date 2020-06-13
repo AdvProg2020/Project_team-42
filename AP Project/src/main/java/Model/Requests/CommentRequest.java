@@ -17,4 +17,35 @@ public class CommentRequest extends Request {
         this.content = content;
         this.isProductBoughtByUser = isProductBoughtByUser;
     }
+    
+    @Override
+    public String toString() {
+        return "CommentRequest{" +
+                "user=" + user +
+                ", product=" + product +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", isProductBoughtByUser=" + isProductBoughtByUser +
+                '}';
+    }
+
+    public Account getUser() {
+        return user;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public boolean isProductBoughtByUser() {
+        return isProductBoughtByUser;
+    }
 }
