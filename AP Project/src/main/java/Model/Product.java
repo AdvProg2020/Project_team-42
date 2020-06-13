@@ -20,7 +20,8 @@ public class Product {
     private HashMap<SellerAccount, Off> sellersAndOff;
     private ArrayList<Comment> comments;
     private ArrayList<Rate> rates;
-
+    private int visit;
+    
     public long getProductId() {
         return productId;
     }
@@ -50,6 +51,11 @@ public class Product {
         this.sellersAndOff.put(firstSeller, null);
         this.comments = new ArrayList<>();
         this.rates = new ArrayList<>();
+        this.visit = 0;
+    }
+    
+    public int getVisit() {
+        return this.visit;
     }
 
     public String getBrand() {
