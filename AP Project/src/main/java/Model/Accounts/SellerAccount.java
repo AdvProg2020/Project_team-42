@@ -26,6 +26,14 @@ public class SellerAccount extends Account {
         this.requests = new ArrayList<>();
         this.thisSellerAllSellLogs = new ArrayList<>();
     }
+  
+   public void setSellableProductAndCounts(HashMap<Product, Integer> sellableProductAndCounts) {
+        this.sellableProductAndCounts = sellableProductAndCounts;
+    }
+
+    public static ArrayList<SellerAccount> getAllSellerAccounts() {
+        return allSellerAccounts;
+    }
 
     public String getCompanyOrWorkShopName() {
         return companyOrWorkShopName;
