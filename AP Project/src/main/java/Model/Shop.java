@@ -3,9 +3,17 @@ package Model;
 import Controller.Exceptions;
 import Model.Logs.BuyLog;
 import Model.Logs.SellLog;
-
+import Model.Accounts.CustomerAccount;
+import Model.Accounts.SellerAccount;
 import java.util.ArrayList;
 import java.util.HashMap;
+import Model.Requests.AddSellerAccountRequest;
+import Model.Requests.Request;
+import java.util.GregorianCalendar;
+import static Model.Accounts.Account.getAllAccounts;
+import static Model.Accounts.CustomerAccount.getAllCustomerAccounts;
+
+
 
 public class Shop {
     private static Shop shop = new Shop();
@@ -38,8 +46,7 @@ public class Shop {
     public StringBuilder showAllProductsMoudel(){
         StringBuilder sallProducts = new StringBuilder();
         for (Product product : allProductAndCount.keySet()) {
-            sallProducts.append(product.getName() + "   " + product.getBrand() + "   " + product.getProductId()
-                    + "    " + product.getAverageRate() + "\n");
+           sallDiscounts.append(allDiscounts.get(i).getDiscountCode() + "   " + allDiscounts.get(i).getDiscountPercent() + "\n");
         }
         return sallProducts;
     }
@@ -110,6 +117,38 @@ public class Shop {
             }
         }
     }
+    
+    public void deleteDiscountMoudel(String code){
+        for (int i =0;i<allDiscounts.size();i++)
+        {
+            if (allDiscounts.get(i).getDiscountCode() . equals(code))
+            {
+                allDiscounts.remove(i);
+                break;
+            }
+        }
+    }
+
+    public void editDiscountMoudel(String code, GregorianCalendar begin,GregorianCalendar end,double discountPercent,int discountAmountLimit,int repeatCountForEachCustomer,HashMap<CustomerAccount, Integer> effectingCustomersAndUsageCount){
+        for (int i =0;i<allDiscounts.size();i++)
+        {
+            if (allDiscounts.get(i).getDiscountCode() . equals(code))
+            {
+                allDiscounts.get(i).setBegin(begin);
+                allDiscounts.get(i).setDiscountAmountLimit(discountAmountLimit);
+                allDiscounts.get(i).setDiscountPercent(discountPercent);
+                allDiscounts.get(i).setEnd(end);
+                allDiscounts.get(i).setRepeatCountForEachCustomer(repeatCountForEachCustomer);
+                break;
+            }
+        }
+
+    }
+
+    Product product = getProductById(id);
+        for (SellerAccount seller : product.getSellers()) {
+            seller.getSellableProductAndCounts().replace(product , 0);
+        }
 
     public boolean isCategory(String name){
         for (Category category : allCategories) {
@@ -119,6 +158,45 @@ public class Shop {
         }
         return false;
     }
+    
+    public void deleteCategoryMoudel(String name){
+        for (Category category : allCategories) {
+
+
+            if (category.getName() . equals(name))
+            {
+                if (category.getParentCategory()!=null) {
+                    category.getParentCategory().getProductsAndCount().putAll(category.getProductsAndCount());
+                    category.getParentCategory().getSubCategories().addAll(category.getSubCategories());
+                }
+                for (Category subCategory : category.getSubCategories()) {
+                    subCategory.setParentCategory(category.getParentCategory());
+                }
+                for (Product product : category.getProductsAndCount().keySet()) {
+                    product.setCategory(category.getParentCategory());
+                }
+                allCategories.remove(category);
+                break;
+            }
+        } 
+    }
+
+    public Category getCategoryBynameCategoryTypeMoudel(String name) throws Exception {
+        for (int i = 0 ; i< allCategories.size(); i++)
+        {
+            if (allCategories.get(i).getName().equals(name))
+                return allCategories.get(i);
+        }
+        throw new Exception("not found");
+    }
+
+
+
+public void addCategoryMoudel(String name, String attribute, Category parentCategory, ArrayList<Category> subCategories, HashMap<Product, Integer> productsAndCount)
+{
+   allCategories.add( new Category(name, attribute,parentCategory,subCategories, productsAndCount) ) ;
+}
+    
     
      public Category getCategoryByName(String categoryName)throws Exceptions.NoCategoryException {
         for (Category category : allCategories) {
@@ -139,6 +217,55 @@ public class Shop {
                 return off;
             }
         }throw new Exceptions.NoOffByThisId();
+    }
+    
+    public void setAllProductAndCount(HashMap<Product, Integer> allProductAndCount) {
+        this.allProductAndCount = allProductAndCount;
+    }
+
+    public String discountView(String discountCode)
+    {
+        for (int i=0;i<allDiscounts.size();i++) {
+            if (allDiscounts.get(i).getDiscountCode().equals(discountCode)) {
+                String a = allDiscounts.get(i).getDiscountCode() + "  " + allDiscounts.get(i).getBegin() + "   " + allDiscounts.get(i).getEnd() + "    " + allDiscounts.get(i).getDiscountPercent() + "    " + allDiscounts.get(i).getDiscountAmountLimit() + "   " + allDiscounts.get(i).getRepeatCountForEachCustomer() + "    " + allDiscounts.get(i).getEffectingCustomersAndUsageCount();
+                return a;
+            }
+        }
+        return "not found";
+    }
+
+    public void createCustomerAccountMoudel(String userName, String firstName, String lastName, String email, String phoneNumber, String password, String accountType)
+    {
+        CustomerAccount account;
+        getAllAccounts().add(account = new CustomerAccount(userName,firstName,lastName,email,phoneNumber,password,accountType));
+        getAllCustomerAccounts().add(account);
+    }
+
+    public void createRegisterRequestSellerAccountMoudel(String userName, String firstName, String lastName, String email, String phoneNumber, String password, String accountType, String companyOrWorkShopName)
+    {
+        Request register = new AddSellerAccountRequest(companyOrWorkShopName,userName,firstName,lastName,email,phoneNumber,password,accountType);
+        Request.getUnAnsweredRequests().add(register);
+    }
+
+    public CustomerAccount loginCustomerMoudel(String username,String password) throws Exception {
+        for (CustomerAccount customerAccount : getAllCustomerAccounts()) {
+            if (username.equals(customerAccount.getUserName())&&password.equals(customerAccount.getPassword()))
+                return customerAccount;
+        }
+        throw new Exception("account not found");
+    }
+
+    public Product getProductByIdd(int id) throws Exception {
+        for (Product product : allProductAndCount.keySet()) {
+            if(product.getProductId() == id){
+                return product;
+            }
+        }
+        throw new Exception("not found");
+    }
+
+    public Integer countOfProduct(Product product){
+        return allProductAndCount.get(product);
     }
 
     public boolean isOffById(int id) {
