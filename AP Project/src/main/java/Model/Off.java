@@ -84,4 +84,12 @@ public class Off {
     public void setOffPercentage(double offPercentage) {
         this.offPercentage = offPercentage;
     }
+    
+      public long getOffId() {
+        return offId;
+    }
+
+    public void changeWaitingState(){
+        this.state = OffOrProductState.WAITING_FOR_EDIT_ANSWER;
+    }
 }
