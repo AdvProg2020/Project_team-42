@@ -17,5 +17,17 @@ public class LoginAndRegisterPageController {
     }
 
     public CustomerAccount loginCustomerAccountController(String username ,String password) throws Exception { return shop.loginCustomerMoudel(username,password);}
+    
+    public SellerAccount loginSellerAccountController(String username , String password) throws Exception { return shop.loginSellerMoudel(username,password);}
+
+    public ManagerAccount loginManagerAccountController(String username , String password) throws Exception { return shop.loginManagerMoudel(username,password);}
+
+    public void CreateFirstManagerAccount(String userName, String firstName, String lastName, String email, String phoneNumber, String password,
+                                          String accountType) throws Exception {
+        shop.createFirstManagerAccount(userName, firstName, lastName, email, phoneNumber, password, accountType);
+    }
+
+
+
 }
  
