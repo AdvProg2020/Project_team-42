@@ -236,6 +236,11 @@ public void addCategoryMoudel(String name, String attribute, Category parentCate
 
     public void createCustomerAccountMoudel(String userName, String firstName, String lastName, String email, String phoneNumber, String password, String accountType)
     {
+        for (int i = 0 ; i<getAllAccounts().size();i++)
+        {
+            if (getAllAccounts().get(i).getUserName().equals(userName))
+                throw new Exception("username is used");
+        }
         CustomerAccount account;
         getAllAccounts().add(account = new CustomerAccount(userName,firstName,lastName,email,phoneNumber,password,accountType));
         getAllCustomerAccounts().add(account);
@@ -243,6 +248,11 @@ public void addCategoryMoudel(String name, String attribute, Category parentCate
 
     public void createRegisterRequestSellerAccountMoudel(String userName, String firstName, String lastName, String email, String phoneNumber, String password, String accountType, String companyOrWorkShopName)
     {
+        for (int i = 0; i<getAllAccounts().size();i++)
+        {
+            if (getAllAccounts().get(i).getUserName().equals(userName))
+                throw new Exception("username is used");
+        }
         Request register = new AddSellerAccountRequest(companyOrWorkShopName,userName,firstName,lastName,email,phoneNumber,password,accountType);
         Request.getUnAnsweredRequests().add(register);
     }
