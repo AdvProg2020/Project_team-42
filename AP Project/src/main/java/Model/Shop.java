@@ -297,4 +297,12 @@ public void addCategoryMoudel(String name, String attribute, Category parentCate
         getAllManagerAccounts().add(managerAccount);
         getAllAccounts().add(managerAccount);
     }
+    
+     public SellerAccount loginSellerMoudel(String username,String password) throws Exception {
+        for (SellerAccount sellerAccount : getAllSellerAccounts()) {
+            if (username.equals(sellerAccount.getUserName())&&password.equals(sellerAccount.getPassword()))
+                return sellerAccount;
+        }
+        throw new Exception("account not found");
+    }
 }
