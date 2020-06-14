@@ -276,4 +276,25 @@ public void addCategoryMoudel(String name, String attribute, Category parentCate
         }
         return false;
     }
+    
+    public ManagerAccount loginManagerMoudel(String username, String password) throws Exception {
+        for (ManagerAccount managerAccount : getAllManagerAccounts()) {
+            if (username.equals(managerAccount.getUserName())&&password.equals(managerAccount.getPassword()))
+                return managerAccount;
+        }
+        throw new Exception("account not found");
+    }
+
+    public void createFirstManagerAccount(String userName, String firstName, String lastName, String email, String phoneNumber, String password,
+                                          String accountType) throws Exception {
+        for (int i=0;i<getAllAccounts().size();i++)
+        {
+            if (getAllAccounts().get(i).equals(userName))
+                throw new Exception("username is used");
+        }
+        ManagerAccount managerAccount= new ManagerAccount(userName,firstName,lastName,email,phoneNumber,password,
+                accountType,true);
+        getAllManagerAccounts().add(managerAccount);
+        getAllAccounts().add(managerAccount);
+    }
 }
