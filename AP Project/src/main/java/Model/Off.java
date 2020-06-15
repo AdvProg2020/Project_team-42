@@ -1,12 +1,17 @@
 package Model;
 
+import Controller.Exceptions;
+import com.google.gson.Gson;
+
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class Off {
     private long offId;
-    private ArrayList<Product> effectingProducts;
+    private ArrayList<Integer> effectingProducts;
     private OffOrProductState state;
     private GregorianCalendar begin;
     private GregorianCalendar end;
@@ -14,11 +19,18 @@ public class Off {
 
     public Off(long offId, ArrayList<Product> effectingProducts, OffOrProductState state, GregorianCalendar begin, GregorianCalendar end, int offPercentage) {
         this.offId = offId;
-        this.effectingProducts = effectingProducts;
+        this.effectingProducts = new ArrayList<>();
+        for (Product product : effectingProducts) {
+            this.effectingProducts.add((int) product.getProductId());
+        }
         this.state = state;
         this.begin = begin;
         this.end = end;
         this.offPercentage = offPercentage;
+
+        try {
+            updateResources();
+        } catch (IOException ignored) {}
     }
 
     @Override
@@ -50,11 +62,25 @@ public class Off {
     }
 
     public ArrayList<Product> getEffectingProducts() {
+        ArrayList<Product> effectingProducts = new ArrayList<>();
+        for (Integer productId : this.effectingProducts) {
+            try {
+                effectingProducts.add(Shop.getInstance().getProductById(productId));
+            } catch (Exceptions.NoProductByThisIdException e) {}
+        }
+
         return effectingProducts;
     }
 
     public void setEffectingProducts(ArrayList<Product> effectingProducts) {
-        this.effectingProducts = effectingProducts;
+        this.effectingProducts = new ArrayList<>();
+        for (Product product : effectingProducts) {
+            this.effectingProducts.add((int) product.getProductId());
+        }
+
+        try {
+            updateResources();
+        } catch (IOException ignored) {}
     }
 
     public OffOrProductState getState() {
@@ -63,6 +89,10 @@ public class Off {
 
     public void setState(OffOrProductState state) {
         this.state = state;
+
+        try {
+            updateResources();
+        } catch (IOException ignored) {}
     }
 
     public GregorianCalendar getBegin() {
@@ -71,6 +101,10 @@ public class Off {
 
     public void setBegin(GregorianCalendar begin) {
         this.begin = begin;
+
+        try {
+            updateResources();
+        } catch (IOException ignored) {}
     }
 
     public GregorianCalendar getEnd() {
@@ -79,17 +113,37 @@ public class Off {
 
     public void setEnd(GregorianCalendar end) {
         this.end = end;
+
+        try {
+            updateResources();
+        } catch (IOException ignored) {}
     }
 
     public void setOffPercentage(double offPercentage) {
         this.offPercentage = offPercentage;
+
+        try {
+            updateResources();
+        } catch (IOException ignored) {}
     }
-    
-      public long getOffId() {
-        return offId;
+
+    public void updateResources () throws IOException {
+        Gson gson = new Gson();
+        FileWriter fileWriter = new FileWriter("src\\main\\resources\\Offs\\" + this.offId + ".txt");
+
+        gson.toJson(this, fileWriter);
+        fileWriter.close();
+    }
+
+    public boolean hasProductById (int id) {
+        return this.effectingProducts.contains(id);
     }
 
     public void changeWaitingState(){
         this.state = OffOrProductState.WAITING_FOR_EDIT_ANSWER;
+
+        try {
+            updateResources();
+        } catch (IOException ignored) {}
     }
 }

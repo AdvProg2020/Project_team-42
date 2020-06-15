@@ -2,12 +2,13 @@ package Model.Accounts;
 import Controller.Exceptions;
 import Model.Product;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 
 public abstract class Account {
 
-    protected static ArrayList<Account> allAccounts;
+    protected static ArrayList<Account> allAccounts = new ArrayList<>();
     protected String userName;
     protected String firstName;
     protected String lastName;
@@ -26,10 +27,22 @@ public abstract class Account {
         this.password = password;
         this.accountType = accountType;
         this.credit = 0;
+
+        try {
+            updateResources();
+        } catch (IOException e) {}
     }
 
     public double getCredit() {
         return credit;
+    }
+
+    public static Account getAccountByUsername (String username) throws Exception {
+        for (Account account : allAccounts) {
+            if (account.userName.equalsIgnoreCase(username))
+                return account;
+        }
+        throw new Exception();
     }
 
     @Override
@@ -120,15 +133,16 @@ public abstract class Account {
 
     public void deleteUserMoudel(String username){
         int size = allAccounts.size();
-        for (int i=0;i<size;i++) {
-            if (allAccounts.get(i).userName . equals(username)){
+        for (Account allAccount : allAccounts) {
+            if (allAccount.userName.equals(username)) {
 
-                     if(!(allAccounts.get(i).accountType . equals("manager")))
-                {
-                        allAccounts.get(i).setPassword("23");
+                if (!(allAccount.accountType.equals("manager"))) {
+                    allAccount.setPassword("23");
                 }
             }
-
+            try {
+                allAccount.updateResources();
+            } catch (IOException ignored) {}
         }
     }
 
@@ -139,4 +153,6 @@ public abstract class Account {
     public String getPassword() {
         return password;
     }
+
+    public abstract void updateResources() throws IOException;
 }

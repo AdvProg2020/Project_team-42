@@ -49,13 +49,27 @@ public class SellerPageController extends AccountPageController {
 
     public void showSellerProduct(){
         HashMap<Product, Integer> sellableProductAndCounts = user.getSellableProductAndCounts();
-       // sellableProductAndCounts.
+        for (Product product : sellableProductAndCounts.keySet()) {
+            System.out.println(product);
+        }
 
     }
+    public void viewBuyers(int productId) throws Exceptions.NoProductByThisIdException {
+        for (String buyer : user.getBuyers(productId)) {
+            System.out.println(buyer + "\n");
+        }
+    }
+    public Product viewProduct(int productId) throws Exceptions.NoProductByThisIdException {
+        for (Product product : user.getSellableProductAndCounts().keySet()) {
+            if(product.getProductId() == productId){
+                return product;
+            }
+        }
+        throw new Exceptions.NoProductByThisIdException(productId);
+    }
 
-    public void removeProduct(){}
 
-    public void showCategories() {
+    public void showCategories() throws Exception {
         if (shop.getAllCategories().isEmpty())
         for (Category category : shop.getAllCategories()) {
             System.out.println(category);
@@ -72,7 +86,15 @@ public class SellerPageController extends AccountPageController {
         if(!shop.isCategory(category.getName())){
           throw new Exceptions.NoCategoryException();
         }
-         user.addRequest(new AddProductRequest(sellerAccount,name,id,count,brand,price,category,descrption,arrtibute));
+         user.addRequest(new AddProductRequest(false,sellerAccount,name,id,count,brand, (int) price,category,descrption,arrtibute));
+
+    }
+
+    public void editProduct(SellerAccount sellerAccount,String name,int id,int count ,String brand,double price,Category category,String descrption,String arrtibute)throws Exceptions.NoCategoryException{
+        if(!shop.isCategory(category.getName())){
+          throw new Exceptions.NoCategoryException();
+        }
+         user.addRequest(new AddProductRequest(true ,sellerAccount,name,id,count,brand, (int) price,category,descrption,arrtibute));
 
     }
 
@@ -81,8 +103,5 @@ public class SellerPageController extends AccountPageController {
         shop.removeProduct(shop.getProductById(id),user.getCountOfProduct(shop.getProductById(id)));
     }
 
-    public SellerAccount getUser(){
-        return this.user;
-    }
 }
 

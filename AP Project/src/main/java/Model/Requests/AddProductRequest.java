@@ -1,10 +1,53 @@
 package Model.Requests;
 
+import Controller.Exceptions;
 import Model.Accounts.SellerAccount;
 import Model.Category;
+import Model.Shop;
+import com.google.gson.Gson;
 
-public SellerAccount getSeller() {
-        return seller;
+import java.io.FileWriter;
+import java.io.IOException;
+
+
+public class AddProductRequest extends Request {
+    private String seller;
+    private String name;
+    private int productId;
+    private int count;
+    private String brand;
+    private int price;
+    private String category;
+    private String description;
+    private String attribute;
+    private boolean isForEdit;
+       public AddProductRequest(boolean isForEdit,SellerAccount seller, String name, int productId, int count, String brand, int price, Category category, String description, String attribute) {
+        this.isForEdit = isForEdit;
+        this.seller = seller.getUserName();
+        this.name = name;
+        this.productId = productId;
+        this.count = count;
+        this.brand = brand;
+        this.price = price;
+        this.category = category.getName();
+        this.description = description;
+        this.attribute = attribute;
+    }
+
+    public boolean isForEdit() {
+        return isForEdit;
+    }
+
+    public void setForEdit(boolean forEdit) {
+        isForEdit = forEdit;
+    }
+
+    public SellerAccount getSeller() {
+        try {
+            return SellerAccount.getSellerAccountByUsername(seller);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public String getName() {
@@ -28,7 +71,11 @@ public SellerAccount getSeller() {
     }
 
     public Category getCategory() {
-        return category;
+        try {
+            return Shop.getInstance().getCategoryByName(category);
+        } catch (Exceptions.NoCategoryException e) {
+            return null;
+        }
     }
 
     public String getDescription() {
@@ -53,26 +100,11 @@ public SellerAccount getSeller() {
                 '}';
     }
 
-public class AddProductRequest extends Request {
-    private SellerAccount seller;
-    private String name;
-    private int productId;
-    private int count;
-    private String brand;
-    private int price;
-    private Category category;
-    private String description;
-    private String attribute;
-    
-       public AddProductRequest(SellerAccount seller, String name, int productId, int count, String brand, double price, Category category, String description, String attribute) {
-        this.seller = seller;
-        this.name = name;
-        this.productId = productId;
-        this.count = count;
-        this.brand = brand;
-        this.price = price;
-        this.category = category;
-        this.description = description;
-        this.attribute = attribute;
+    public void updateResources () throws IOException {
+        Gson gson = new Gson();
+        FileWriter fileWriter = new FileWriter("src\\main\\resources\\Requests\\AddProductRequests" + this.requestId + ".txt");
+
+        gson.toJson(this, fileWriter);
+        fileWriter.close();
     }
 }

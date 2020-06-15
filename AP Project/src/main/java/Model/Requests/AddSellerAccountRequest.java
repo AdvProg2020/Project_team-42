@@ -1,5 +1,10 @@
 package Model.Requests;
 
+import com.google.gson.Gson;
+
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class AddSellerAccountRequest extends Request {
     private String companyOrWorkshopName;
     private String userName;
@@ -65,5 +70,13 @@ public class AddSellerAccountRequest extends Request {
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.accountType = accountType;
+    }
+
+    public void updateResources () throws IOException {
+        Gson gson = new Gson();
+        FileWriter fileWriter = new FileWriter("src\\main\\resources\\Requests\\AddSellerAccountRequests" + this.requestId + ".txt");
+
+        gson.toJson(this, fileWriter);
+        fileWriter.close();
     }
 }

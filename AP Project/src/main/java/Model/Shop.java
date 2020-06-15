@@ -1,6 +1,8 @@
 package Model;
 
 import Controller.Exceptions;
+import Model.Accounts.Account;
+import Model.Accounts.ManagerAccount;
 import Model.Logs.BuyLog;
 import Model.Logs.SellLog;
 import Model.Accounts.CustomerAccount;
@@ -9,10 +11,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import Model.Requests.AddSellerAccountRequest;
 import Model.Requests.Request;
+import javafx.beans.binding.StringBinding;
+
 import java.util.GregorianCalendar;
 import static Model.Accounts.Account.getAllAccounts;
 import static Model.Accounts.CustomerAccount.getAllCustomerAccounts;
-
+import static Model.Accounts.ManagerAccount.getAllManagerAccounts;
+import static Model.Accounts.SellerAccount.getAllSellerAccounts;
 
 
 public class Shop {
@@ -35,6 +40,18 @@ public class Shop {
         this.allOffs = new ArrayList<>();
     }
 
+    public void setAllProductOnOffsAndCount(HashMap<Product, Integer> allProductOnOffsAndCount) {
+        this.allProductOnOffsAndCount = allProductOnOffsAndCount;
+    }
+
+    public Discount getDiscountByCode (String code) throws Exception {
+        for (Discount discount : this.allDiscounts) {
+            if (discount.getDiscountCode().equals(code))
+                return discount;
+        }
+        throw new Exception();
+    }
+
     public HashMap<Product, Integer> getAllProductAndCount() {
         return allProductAndCount;
     }
@@ -43,15 +60,19 @@ public class Shop {
         return allProductOnOffsAndCount;
     }
 
-    public StringBuilder showAllProductsMoudel(){
+    public StringBuilder showAllProductsMoudel() throws Exception {
         StringBuilder sallProducts = new StringBuilder();
+        if (allProductAndCount.isEmpty())
+            throw new Exception("there is no product");
         for (Product product : allProductAndCount.keySet()) {
-           sallDiscounts.append(allDiscounts.get(i).getDiscountCode() + "   " + allDiscounts.get(i).getDiscountPercent() + "\n");
+           sallProducts.append(product.getProductId() + "   " + product.getName() + "\n");
         }
         return sallProducts;
     }
 
-    public StringBuilder showAllDiscountsMoudel(){
+    public StringBuilder showAllDiscountsMoudel() throws Exception {
+        if (allDiscounts.isEmpty())
+        throw new Exception("there is no discount");
         StringBuilder sallDiscounts = new StringBuilder();
         int size = allDiscounts.size();
         for (int i=0;i<size;i++)
@@ -62,7 +83,11 @@ public class Shop {
     }
 
     public void deleteProductMoudel(long id) throws Exceptions.NoProductByThisIdException {
-        allProductAndCount.replace(getProductById(id), 0);
+        Product product = getProductById(id);
+        allProductAndCount.replace(product, 0);
+        for (SellerAccount seller : product.getSellers()) {
+            seller.removeProduct(product);
+        }
     }
 
     public ArrayList<Discount> getAllDiscounts() {
@@ -87,9 +112,13 @@ public class Shop {
         throw new Exceptions.NoProductByThisIdException(productId);
     }
 
-    public ArrayList<Category> getAllCategories() {
+    public void setAllCategories(ArrayList<Category> allCategories) {
+        this.allCategories = allCategories;
+    }
+
+    public ArrayList<Category> getAllCategories() throws Exception {
         if(allCategories.isEmpty())
-           return null;
+           throw new Exception("there is no categories");
         return allCategories;
     }
 
@@ -108,7 +137,7 @@ public class Shop {
     public void addSellLog (SellLog sellLog) {
         this.allSellLogs.add(sellLog);
     }
-    
+
         public void removeProduct(Product product , int count) {
         allProductAndCount.replace(product , allProductAndCount.get(product)-count);
         for (Product productOnOFF : allProductOnOffsAndCount.keySet()) {
@@ -117,7 +146,7 @@ public class Shop {
             }
         }
     }
-    
+
     public void deleteDiscountMoudel(String code){
         for (int i =0;i<allDiscounts.size();i++)
         {
@@ -130,25 +159,23 @@ public class Shop {
     }
 
     public void editDiscountMoudel(String code, GregorianCalendar begin,GregorianCalendar end,double discountPercent,int discountAmountLimit,int repeatCountForEachCustomer,HashMap<CustomerAccount, Integer> effectingCustomersAndUsageCount){
-        for (int i =0;i<allDiscounts.size();i++)
-        {
-            if (allDiscounts.get(i).getDiscountCode() . equals(code))
-            {
-                allDiscounts.get(i).setBegin(begin);
-                allDiscounts.get(i).setDiscountAmountLimit(discountAmountLimit);
-                allDiscounts.get(i).setDiscountPercent(discountPercent);
-                allDiscounts.get(i).setEnd(end);
-                allDiscounts.get(i).setRepeatCountForEachCustomer(repeatCountForEachCustomer);
+        for (Discount allDiscount : allDiscounts) {
+            if (allDiscount.getDiscountCode().equals(code)) {
+                allDiscount.setBegin(begin);
+                allDiscount.setDiscountAmountLimit(discountAmountLimit);
+                allDiscount.setDiscountPercent(discountPercent);
+                allDiscount.setEnd(end);
+                allDiscount.setRepeatCountForEachCustomer(repeatCountForEachCustomer);
                 break;
             }
         }
 
     }
 
-    Product product = getProductById(id);
-        for (SellerAccount seller : product.getSellers()) {
-            seller.getSellableProductAndCounts().replace(product , 0);
-        }
+    //Product product = getProductById(id);
+        //for (SellerAccount seller : product.getSellers()) {
+            //seller.getSellableProductAndCounts().replace(product , 0);
+        //}
 
     public boolean isCategory(String name){
         for (Category category : allCategories) {
@@ -182,20 +209,19 @@ public class Shop {
     }
 
     public Category getCategoryBynameCategoryTypeMoudel(String name) throws Exception {
-        for (int i = 0 ; i< allCategories.size(); i++)
-        {
-            if (allCategories.get(i).getName().equals(name))
-                return allCategories.get(i);
+        for (Category allCategory : allCategories) {
+            if (allCategory.getName().equals(name))
+                return allCategory;
         }
         throw new Exception("not found");
     }
 
 
 
-public void addCategoryMoudel(String name, String attribute, Category parentCategory, ArrayList<Category> subCategories, HashMap<Product, Integer> productsAndCount)
-{
-   allCategories.add( new Category(name, attribute,parentCategory,subCategories, productsAndCount) ) ;
-}
+    public void addCategoryMoudel(String name, String attribute, Category parentCategory, ArrayList<Category> subCategories, HashMap<Product, Integer> productsAndCount)
+    {
+        allCategories.add( new Category(name, attribute,parentCategory,subCategories, productsAndCount) ) ;
+    }
     
     
      public Category getCategoryByName(String categoryName)throws Exceptions.NoCategoryException {
@@ -225,17 +251,19 @@ public void addCategoryMoudel(String name, String attribute, Category parentCate
 
     public String discountView(String discountCode)
     {
-        for (int i=0;i<allDiscounts.size();i++) {
-            if (allDiscounts.get(i).getDiscountCode().equals(discountCode)) {
-                String a = allDiscounts.get(i).getDiscountCode() + "  " + allDiscounts.get(i).getBegin() + "   " + allDiscounts.get(i).getEnd() + "    " + allDiscounts.get(i).getDiscountPercent() + "    " + allDiscounts.get(i).getDiscountAmountLimit() + "   " + allDiscounts.get(i).getRepeatCountForEachCustomer() + "    " + allDiscounts.get(i).getEffectingCustomersAndUsageCount();
-                return a;
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Discount allDiscount : allDiscounts) {
+            if (allDiscount.getDiscountCode().equals(discountCode)) {
+                for (CustomerAccount customerAccount : allDiscount.getEffectingCustomersAndUsageCount().keySet()) {
+                    stringBuilder.append(customerAccount.getUserName() + "    "+allDiscount.getEffectingCustomersAndUsageCount().get(customerAccount)+"\n");
+                }
+                return allDiscount.getDiscountCode() + "  " + allDiscount.getBegin() + "   " + allDiscount.getEnd() + "    " + allDiscount.getDiscountPercent() + "    " + allDiscount.getDiscountAmountLimit() + "   " + allDiscount.getRepeatCountForEachCustomer() + "    " + "\n"+ stringBuilder;
             }
         }
         return "not found";
     }
 
-    public void createCustomerAccountMoudel(String userName, String firstName, String lastName, String email, String phoneNumber, String password, String accountType)
-    {
+    public void createCustomerAccountMoudel(String userName, String firstName, String lastName, String email, String phoneNumber, String password, String accountType) throws Exception {
         for (int i = 0 ; i<getAllAccounts().size();i++)
         {
             if (getAllAccounts().get(i).getUserName().equals(userName))
@@ -244,10 +272,10 @@ public void addCategoryMoudel(String name, String attribute, Category parentCate
         CustomerAccount account;
         getAllAccounts().add(account = new CustomerAccount(userName,firstName,lastName,email,phoneNumber,password,accountType));
         getAllCustomerAccounts().add(account);
+        account.updateResources();
     }
 
-    public void createRegisterRequestSellerAccountMoudel(String userName, String firstName, String lastName, String email, String phoneNumber, String password, String accountType, String companyOrWorkShopName)
-    {
+    public void createRegisterRequestSellerAccountMoudel(String userName, String firstName, String lastName, String email, String phoneNumber, String password, String accountType, String companyOrWorkShopName) throws Exception {
         for (int i = 0; i<getAllAccounts().size();i++)
         {
             if (getAllAccounts().get(i).getUserName().equals(userName))
@@ -286,7 +314,8 @@ public void addCategoryMoudel(String name, String attribute, Category parentCate
         }
         return false;
     }
-    
+
+
     public ManagerAccount loginManagerMoudel(String username, String password) throws Exception {
         for (ManagerAccount managerAccount : getAllManagerAccounts()) {
             if (username.equals(managerAccount.getUserName())&&password.equals(managerAccount.getPassword()))
@@ -295,20 +324,20 @@ public void addCategoryMoudel(String name, String attribute, Category parentCate
         throw new Exception("account not found");
     }
 
-    public void createFirstManagerAccount(String userName, String firstName, String lastName, String email, String phoneNumber, String password,
+    public void createFirstManagerAccountMoudel(String userName, String firstName, String lastName, String email, String phoneNumber, String password,
                                           String accountType) throws Exception {
-        for (int i=0;i<getAllAccounts().size();i++)
-        {
-            if (getAllAccounts().get(i).equals(userName))
+        for (Account account : getAllAccounts()) {
+            if (account.getUserName().equalsIgnoreCase(userName))
                 throw new Exception("username is used");
         }
         ManagerAccount managerAccount= new ManagerAccount(userName,firstName,lastName,email,phoneNumber,password,
                 accountType,true);
+        managerAccount.updateResources();
         getAllManagerAccounts().add(managerAccount);
         getAllAccounts().add(managerAccount);
     }
-    
-     public SellerAccount loginSellerMoudel(String username,String password) throws Exception {
+
+    public SellerAccount loginSellerMoudel(String username,String password) throws Exception {
         for (SellerAccount sellerAccount : getAllSellerAccounts()) {
             if (username.equals(sellerAccount.getUserName())&&password.equals(sellerAccount.getPassword()))
                 return sellerAccount;

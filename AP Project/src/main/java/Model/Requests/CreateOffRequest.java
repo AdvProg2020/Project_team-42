@@ -1,24 +1,33 @@
 package Model.Requests;
 
+import Controller.Exceptions;
 import Model.Off;
 import Model.Product;
 import Model.Accounts.SellerAccount;
+import Model.Shop;
+import com.google.gson.Gson;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 public class CreateOffRequest extends Request {
-        private SellerAccount seller;
+    private String seller;
     private boolean forEdit;
     private Off previous;
-    private ArrayList<Product> effectingProducts;
+    private ArrayList<Integer> effectingProducts;
+    private GregorianCalendar start;
     private GregorianCalendar end;
-    private int offPercentage;
+    private double offPercentage;
     
      public CreateOffRequest(boolean forEdit, Off previous, ArrayList<Product> effectingProducts, GregorianCalendar start, GregorianCalendar end, double offPercentage) {
         this.forEdit = forEdit;
         this.previous = previous;
-        this.effectingProducts = effectingProducts;
+        this.effectingProducts = new ArrayList<>();
+         for (Product product : effectingProducts) {
+             this.effectingProducts.add((int) product.getProductId());
+         }
         this.start = start;
         this.end = end;
         this.offPercentage = offPercentage;
@@ -34,6 +43,12 @@ public class CreateOffRequest extends Request {
     }
 
     public ArrayList<Product> getEffectingProducts() {
+        ArrayList<Product> effectingProducts = new ArrayList<>();
+        for (Integer productId : this.effectingProducts) {
+            try {
+                effectingProducts.add(Shop.getInstance().getProductById(productId));
+            } catch (Exceptions.NoProductByThisIdException ignored) {}
+        }
         return effectingProducts;
     }
 
@@ -41,7 +56,7 @@ public class CreateOffRequest extends Request {
         return end;
     }
 
-    public int getOffPercentage() {
+    public double getOffPercentage() {
         return offPercentage;
     }
 
@@ -50,7 +65,11 @@ public class CreateOffRequest extends Request {
     }
 
     public SellerAccount getSeller() {
-        return seller;
+        try {
+            return SellerAccount.getSellerAccountByUsername(this.seller);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
@@ -64,5 +83,13 @@ public class CreateOffRequest extends Request {
                 ", offPercentage=" + offPercentage +
                 ", begin=" + begin +
                 '}';
+    }
+
+    public void updateResources () throws IOException {
+        Gson gson = new Gson();
+        FileWriter fileWriter = new FileWriter("src\\main\\resources\\Requests\\CreateOffRequests" + this.requestId + ".txt");
+
+        gson.toJson(this, fileWriter);
+        fileWriter.close();
     }
 }

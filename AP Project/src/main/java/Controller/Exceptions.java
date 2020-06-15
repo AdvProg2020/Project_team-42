@@ -79,8 +79,8 @@ public class Exceptions {
     }
 
     public static class NotEnoughProductToPurchaseException extends Exception {
-        public NotEnoughProductToPurchaseException(Product product, SellerAccount seller, int existingCount) {
-            super(seller.getUserName() + " has only " + existingCount + " units of " + product.getName());
+        public NotEnoughProductToPurchaseException(int product, String seller, int existingCount) {
+            super(seller + " has only " + existingCount + " units of " + product);
         }
     }
 
@@ -125,6 +125,12 @@ public class Exceptions {
      public static class NoCategoryException extends Exception{
         public NoCategoryException(){
             super("There is no category by this name");
+        }
+    }
+
+    public static class NoOffByThisId extends Exception {
+        public NoOffByThisId () {
+            super("No product by this id.");
         }
     }
 }

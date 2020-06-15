@@ -1,6 +1,7 @@
 package Controller.AccountPagesController;
 
 import Controller.Exceptions;
+import Model.Accounts.Account;
 import Model.Accounts.CustomerAccount;
 import Model.Accounts.ManagerAccount;
 import Model.Category;
@@ -13,18 +14,19 @@ import java.util.HashMap;
 
 public class ManagerPageController extends AccountPageController {
     boolean hasManagerPageRegistered;
-static ManagerAccount user;
+    private ManagerAccount user;
     private static ManagerPageController mController = new ManagerPageController();
     public static ManagerPageController getInstance(){return mController;}
     private ManagerPageController() {
     }
 
     public static ManagerAccount getUser() {
-        return user;
+        return mController.user;
     }
 
-    public static void setUser(ManagerAccount user) {
-        ManagerPageController.user = user;
+    public void setUser(ManagerAccount user) {
+        this.user = user;
+        AccountPageController.user = user;
     }
     public StringBuilder getAllAccountsController() {
     return user.getAllAccountsMoudel();
@@ -46,7 +48,7 @@ static ManagerAccount user;
 
     public void deleteDiscountController(String code){ shop.deleteDiscountMoudel(code); }
 
-    public StringBuilder showAllDiscountsController(){ return shop.showAllDiscountsMoudel(); }
+    public StringBuilder showAllDiscountsController() throws Exception { return shop.showAllDiscountsMoudel(); }
 
     public StringBuilder showAllRequestsController(){ return Request.showAllRequestsMoudel(); }
 
@@ -60,7 +62,7 @@ static ManagerAccount user;
 
      public void createManagerAccountController(String userName, String firstName, String lastName, String email, String phoneNumber, String password, String accountType, boolean isMain){user.createManagerAccountMouddel(userName,firstName,lastName,email,phoneNumber,password,accountType,isMain);}
 
-     public StringBuilder showAllProductsController(){return shop.showAllProductsMoudel();}
+     public StringBuilder showAllProductsController() throws Exception {return shop.showAllProductsMoudel();}
 
     public void checkUsernameIsUsedController(String username) throws Exception {user.checkUsernameIsUsedMoudel(username);}
 
@@ -89,9 +91,5 @@ static ManagerAccount user;
 
     public Integer productCount(Product product){ return shop.countOfProduct(product);}
 
-    public String getAllCategories(){return String.valueOf(shop.getAllCategories());}
-    
-    
-    
-    
+    public String getAllCategories() throws Exception {return String.valueOf(shop.getAllCategories());}
 }

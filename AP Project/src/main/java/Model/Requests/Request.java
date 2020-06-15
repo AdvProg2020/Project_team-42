@@ -2,23 +2,28 @@ package Model.Requests;
 
 import Model.Accounts.ManagerAccount;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 public abstract class Request {
     private static ArrayList<Request> unAnsweredRequests;
     private static ArrayList<Request> answeredRequests;
-    private int requestId;
-    private GregorianCalendar requestDate;
-    private GregorianCalendar answerDate;
-    private ManagerAccount responsiveManager;
-    private RequestState requestState;
+    protected int requestId;
+    protected GregorianCalendar requestDate;
+    protected GregorianCalendar answerDate;
+    protected String responsiveManager;
+    protected RequestState requestState;
 
     public Request () {
-        this.requestId = Request.unAnsweredRequests.size() + 1;
+        this.requestId = Request.unAnsweredRequests.size() + Request.answeredRequests.size() + 1;
         this.requestDate = new GregorianCalendar();
         this.requestState = RequestState.IS_ANSWERING;
         Request.unAnsweredRequests.add(this);
+
+        try {
+            updateResources();
+        } catch (IOException ignored) {}
     }
     
      public static StringBuilder showAllRequestsMoudel(){
@@ -77,11 +82,15 @@ public abstract class Request {
     }
 
     public ManagerAccount getResponsiveManager() {
-        return responsiveManager;
+        try {
+            return ManagerAccount.getManagerByUsername(responsiveManager);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public void setResponsiveManager(ManagerAccount responsiveManager) {
-        this.responsiveManager = responsiveManager;
+        this.responsiveManager = responsiveManager.getUserName();
     }
 
     public RequestState getRequestState() {
@@ -90,5 +99,11 @@ public abstract class Request {
 
     public void setRequestState(RequestState requestState) {
         this.requestState = requestState;
+
+        try {
+            updateResources();
+        } catch (IOException ignored) {}
     }
+
+    public abstract void updateResources() throws IOException;
 }

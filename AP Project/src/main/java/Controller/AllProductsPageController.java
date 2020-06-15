@@ -1,4 +1,4 @@
-ckage Controller;
+package Controller;
 
 import Model.Product;
 import Model.Shop;
@@ -13,6 +13,14 @@ public class AllProductsPageController {
     private static AllProductsPageController allProductsPageController = new AllProductsPageController();
 
     private AllProductsPageController() {
+        allFilteredProduct = new ArrayList<>();
+        allFilteredProduct.addAll(shop.getAllProductAndCount().keySet());
+        allProducts = new ArrayList<>();
+        allProducts.addAll(shop.getAllProductAndCount().keySet());
+        allFilteredProductOnOff = new ArrayList<>();
+        allFilteredProductOnOff.addAll(shop.getAllProductOnOffsAndCount().keySet());
+        allProductsOnOff = new ArrayList<>();
+        allProductsOnOff.addAll(shop.getAllProductOnOffsAndCount().keySet());
     }
 
     public static AllProductsPageController getInstance() {
@@ -20,10 +28,10 @@ public class AllProductsPageController {
     }
 
     private Shop shop = Shop.getInstance();
-    private ArrayList<Product> allFilteredProduct = (ArrayList<Product>) shop.getAllProductAndCount().keySet();
-    private ArrayList<Product> allProducts = (ArrayList<Product>) shop.getAllProductAndCount().keySet();
-    private ArrayList<Product> allFilteredProductOnOff = (ArrayList<Product>) shop.getAllProductOnOffsAndCount().keySet();
-    private ArrayList<Product> allProductsOnOff = (ArrayList<Product>) shop.getAllProductOnOffsAndCount().keySet();
+    private ArrayList<Product> allFilteredProduct;
+    private ArrayList<Product> allProducts;
+    private ArrayList<Product> allFilteredProductOnOff;
+    private ArrayList<Product> allProductsOnOff;
     private String nameForFilter = null;
     private String brandForFilter = null;
     private Category categoryForFilter = null;
@@ -40,7 +48,7 @@ public class AllProductsPageController {
     public static void setAllProductsPageController(AllProductsPageController allProductsPageController) {
         AllProductsPageController.allProductsPageController = allProductsPageController;
     }
-    
+
 
     public void setMinPrice(double minPrice) {
         this.minPrice = minPrice;
@@ -90,51 +98,51 @@ public class AllProductsPageController {
         this.rateForFilter = rateForFilter;
     }
 
-    public void setRateZiro(){
+    public void setRateZiro() {
         this.rateForFilter = 0;
     }
 
-    public void setMinPriceZiro(){
+    public void setMinPriceZiro() {
         this.minPrice = 0;
     }
 
-    public void setMaxPriceZiro(){
+    public void setMaxPriceZiro() {
         this.maxPrice = 1000000000;
     }
 
-    public void setNameZiro(){
+    public void setNameZiro() {
         this.nameForFilter = null;
     }
 
-    public void setBrandZiro(){
+    public void setBrandZiro() {
         this.brandForFilter = null;
     }
 
-    public void setCategoryZiro(){
+    public void setCategoryZiro() {
         this.categoryForFilter = null;
     }
 
-    public void setRateZiroForOff(){
+    public void setRateZiroForOff() {
         this.rateForFilterOnOff = 0;
     }
 
-    public void setMinPriceZiroForOff(){
+    public void setMinPriceZiroForOff() {
         this.minPriceOnOff = 0;
     }
 
-    public void setMaxPriceZiroForOff(){
+    public void setMaxPriceZiroForOff() {
         this.maxPriceOnOff = 1000000000;
     }
 
-    public void setNameZiroForOff(){
+    public void setNameZiroForOff() {
         this.nameForFilterOnOff = null;
     }
 
-    public void setBrandZiroForOff(){
+    public void setBrandZiroForOff() {
         this.brandForFilterOnOff = null;
     }
 
-    public void setCategoryZiroForOff(){
+    public void setCategoryZiroForOff() {
         this.categoryForFilterOnOff = null;
     }
 
@@ -144,7 +152,7 @@ public class AllProductsPageController {
         }
     }
 
-    public void showCategories() {
+    public void showCategories() throws Exception {
         if (!shop.getAllCategories().isEmpty()) {
             for (Category category : shop.getAllCategories()) {
                 System.out.println(category);
@@ -152,10 +160,10 @@ public class AllProductsPageController {
         }
     }
 
-    public ArrayList<Product> prossesFiltering(ArrayList<Product>products,double maxPrice , double minPrice , double minRateForFilter , Category categoryForFilter ,String brandForFilter,String nameForFlter) {
+    public ArrayList<Product> prossesFiltering(ArrayList<Product> products, double maxPrice, double minPrice, double minRateForFilter, Category categoryForFilter, String brandForFilter, String nameForFlter) {
         ArrayList<Product> filteredProducts = new ArrayList<Product>();
         for (Product product : products) {
-            if ((product.getPrice() <= maxPrice && product.getPrice() >= minPrice) && product.getRate() >= minRateForFilter) {
+            if ((product.getPrice() <= maxPrice && product.getPrice() >= minPrice) && product.getAverageRate() >= minRateForFilter) {
                 if (!categoryForFilter.equals(null) && product.getCategory().equals(categoryForFilter)) {
                     if (!brandForFilter.equals(null) && product.getBrand().equals(brandForFilter)) {
                         if (!nameForFlter.equals(null) && product.getName().equals(nameForFlter)) {
@@ -190,27 +198,27 @@ public class AllProductsPageController {
         return products;
     }
 
-    public ArrayList<Product> sortByMaxPrice(ArrayList<Product>products) {
+    public ArrayList<Product> sortByMaxPrice(ArrayList<Product> products) {
         Collections.sort(products, new SortByMaxPrice());
         return products;
     }
 
-    public ArrayList<Product> sortByMinPrice(ArrayList<Product>products) {
+    public ArrayList<Product> sortByMinPrice(ArrayList<Product> products) {
         Collections.sort(products, new SortByMinPrice());
         return products;
     }
 
-    public ArrayList<Product> sortByVisit(ArrayList<Product>products) {
+    public ArrayList<Product> sortByVisit(ArrayList<Product> products) {
         Collections.sort(products, new SortByVisit());
         return products;
     }
 
-    public ArrayList<Product> sortByTime(ArrayList<Product>products) {
+    public ArrayList<Product> sortByTime(ArrayList<Product> products) {
         Collections.sort(products, new SortByTime());
         return products;
     }
 
-    public ArrayList<Product> sortByRate(ArrayList<Product>products) {
+    public ArrayList<Product> sortByRate(ArrayList<Product> products) {
         Collections.sort(products, new SortByRate());
         return products;
     }
@@ -224,12 +232,13 @@ public class AllProductsPageController {
     public void showProductByProcuctId(int id) {
         boolean find = false;
         for (Product product : allFilteredProduct) {
-            if(product.getProductId()==id){
+            if (product.getProductId() == id) {
                 System.out.println(product);
                 find = true;
                 break;
             }
-        }if(!find){
+        }
+        if (!find) {
             System.out.println("there is not this id in out list");
         }
     }
@@ -237,17 +246,18 @@ public class AllProductsPageController {
     public void showProductByProcuctOnOffId(int id) {
         boolean find = false;
         for (Product product : allFilteredProductOnOff) {
-            if(product.getProductId()==id){
+            if (product.getProductId() == id) {
                 System.out.println(product);
                 find = true;
                 break;
             }
-        }if(!find){
+        }
+        if (!find) {
             System.out.println("there is not this id in out list");
         }
     }
 
-    public void showAvailableFilters(){
+    public void showAvailableFilters() {
         System.out.println("name " +
                 "brand " +
                 "category " +
@@ -262,59 +272,60 @@ public class AllProductsPageController {
     public ArrayList<Product> getAllFilteredProductOnOff() {
         return allFilteredProductOnOff;
     }
-}
 
-class SortByMaxPrice implements Comparator<Product> {
+    private class SortByMaxPrice implements Comparator<Product> {
 
-    public int compare(Product a, Product b) {
-        if (a.getPrice() >= b.getPrice())
-            return a.getPrice() - b.getPrice();
-        else {
-            return b.getPrice() - a.getPrice();
+        public int compare(Product a, Product b) {
+            if (a.getPrice() >= b.getPrice())
+                return a.getPrice() - b.getPrice();
+            else {
+                return b.getPrice() - a.getPrice();
+            }
+        }
+    }
+
+    private class SortByMinPrice implements Comparator<Product> {
+
+        public int compare(Product a, Product b) {
+            if (a.getPrice() <= b.getPrice())
+                return a.getPrice() - b.getPrice();
+            else {
+                return b.getPrice() - a.getPrice();
+            }
+        }
+    }
+
+    private class SortByVisit implements Comparator<Product> {
+
+        public int compare(Product a, Product b) {
+            if (a.getVisit() >= b.getVisit())
+                return a.getVisit() - b.getVisit();
+            else {
+                return b.getVisit() - a.getVisit();
+            }
+        }
+    }
+
+    private class SortByTime implements Comparator<Product> {
+
+        public int compare(Product a, Product b) {
+            if (a.getProductId() >= b.getProductId())
+                return (int) (a.getProductId() - b.getProductId());
+            else {
+                return b.getPrice() - a.getPrice();
+            }
+        }
+    }
+
+    private class SortByRate implements Comparator<Product> {
+
+        public int compare(Product a, Product b) {
+            if (a.getAverageRate() >= b.getAverageRate())
+                return (int) (a.getAverageRate() - b.getAverageRate());
+            else {
+                return b.getPrice() - a.getPrice();
+            }
         }
     }
 }
 
-class SortByMinPrice implements Comparator<Product> {
-
-    public int compare(Product a, Product b) {
-        if (a.getPrice() <= b.getPrice())
-            return a.getPrice() - b.getPrice();
-        else {
-            return b.getPrice() - a.getPrice();
-        }
-    }
-}
-
-class SortByVisit implements Comparator<Product> {
-
-    public int compare(Product a, Product b) {
-        if (a.getVisit() >= b.getVisit())
-            return a.getVisit() - b.getVisit();
-        else {
-            return b.getVisit() - a.getVisit();
-        }
-    }
-}
-
-class SortByTime implements Comparator<Product> {
-
-    public int compare(Product a, Product b) {
-        if (a.getProductId() >= b.getProductId())
-            return (int) (a.getProductId() - b.getProductId());
-        else {
-            return b.getPrice() - a.getPrice();
-        }
-    }
-}
-
-class SortByRate implements Comparator<Product> {
-
-    public int compare(Product a, Product b) {
-        if (a.getRate() >= b.getRate())
-            return (int) (a.getRate() - b.getRate());
-        else {
-            return b.getPrice() - a.getPrice();
-        }
-    }
-}

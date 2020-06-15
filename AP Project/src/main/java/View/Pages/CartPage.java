@@ -1,13 +1,20 @@
 package View.Pages;
 
+import Controller.AccountPagesController.AccountPageController;
 import Controller.AccountPagesController.CustomerPageController;
+import Controller.AccountPagesController.ManagerPageController;
+import Controller.AccountPagesController.SellerPageController;
 import Controller.CartPageController;
 import Controller.Exceptions;
 import Model.Accounts.CustomerAccount;
+import Model.Accounts.ManagerAccount;
 import Model.Accounts.SellerAccount;
 import Model.Product;
 import View.Commands;
 import View.Page;
+import View.Pages.AccountsPage.CustomerPage;
+import View.Pages.AccountsPage.ManagerPage;
+import View.Pages.AccountsPage.SellerPage;
 
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -29,6 +36,8 @@ public class CartPage extends Page {
         Matcher matcher;
 
         Page.pagesHistory.add(this);
+
+        System.out.println("cart page");
 
         while (!Commands.EXIT.getMatcher(input = scanner.nextLine()).matches()) {
             if (Commands.SHOW_PRODUCTS.getMatcher(input).matches())
@@ -53,6 +62,28 @@ public class CartPage extends Page {
                 } catch (Exceptions.NoProductWithThisIdInCartException e) {
                     System.out.println(e.getMessage());
                 }
+            }  else if (Commands.ACCOUNT_PAGE.getMatcher(input).matches()) {
+                if (AccountPageController.getUser() == null)
+                    return LoginRegisterPage.getInstance();
+                if (AccountPageController.getUser().getClass() == CustomerAccount.class)
+                    return CustomerPage.getInstance();
+                if (AccountPageController.getUser().getClass() == SellerAccount.class)
+                    return SellerPage.getInstance();
+                if (AccountPageController.getUser().getClass() == ManagerAccount.class)
+                    return ManagerPage.getInstance();
+            } else if (Commands.LOGIN_PAGE.getMatcher(input).matches()) {
+                return LoginRegisterPage.getInstance();
+            } else if (Commands.LOG_OUT.getMatcher(input).matches()) {
+                AccountPageController.setUser(null);
+                SellerPageController.getInstance().setUser(null);
+                ManagerPageController.getInstance().setUser(null);
+                CustomerPageController.getInstance().setUser(null);
+                Page.pagesHistory.clear();
+                return LoginRegisterPage.getInstance();
+            } else if (Commands.ALL_PRODUCTS_PAGE.getMatcher(input).matches()) {
+                return AllProductsPage.getInstance();
+            } else if (Commands.OFFS_PAGE.getMatcher(input).matches()) {
+                return OffsPage.getInstance();
             } else {
                 printInvalidCommandMessage();
                 cartPageHelp();
@@ -63,8 +94,10 @@ public class CartPage extends Page {
     }
 
     private void cartPageHelp () {
-        System.out.println("Valid commands in this page are:\n\tshow products\n\tview (product id)\n\tincrease (product id)\n\tdecrease (product id)\n\t" +
-                "show total price\n\tpurchase\n\thelp\n\tback\n\texit");
+        System.out.println("Valid commands in this page are:\n\tshow products\n\tview (product id)\n\tincrease (product id)" +
+                "\n\tdecrease (product id)\n\t" +
+                "show total price\n\tpurchase\n\thelp\n\taccount page\n\tlogin page\n\tlogout\n\tall product page\n\toffs page" +
+                "\n\tback\n\texit");
     }
 
     private void showCart () {
@@ -142,7 +175,7 @@ public class CartPage extends Page {
         } catch (Exceptions.NotEnoughProductToPurchaseException | Exceptions.EmptyCartException | Exceptions.NotEnoughCreditException |
                     Exceptions.NotCustomerException e) {
             System.out.println(e.getMessage());
-        } catch (Exceptions.StopPurchaseException ignored) {}
+        } catch (Exception ignored) {}
     }
 
     private String[] getReceiverInfo () throws Exceptions.StopPurchaseException {

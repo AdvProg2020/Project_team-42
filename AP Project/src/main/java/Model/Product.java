@@ -2,10 +2,12 @@ package Model;
 
 import Controller.Exceptions;
 import Model.Accounts.SellerAccount;
+import com.google.gson.Gson;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 public class Product {
     private long productId;
@@ -13,11 +15,11 @@ public class Product {
     private String brand;
     private OffOrProductState state;
     private int price;
-    private Category category;
+    private String category;
     private String attribute;
     private String description;
     private double averageRate;
-    private HashMap<SellerAccount, Off> sellersAndOff;
+    private HashMap<String, Off> sellersAndOff;
     private ArrayList<Comment> comments;
     private ArrayList<Rate> rates;
     private int visit;
@@ -26,8 +28,8 @@ public class Product {
         return productId;
     }
 
-    public void setProductId(long productId) {
-        this.productId = productId;
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public String getName() {
@@ -43,15 +45,19 @@ public class Product {
         this.name = name;
         this.brand = brand;
         this.price = price;
-        this.category = category;
+        this.category = category.getName();
         this.attribute = attribute;
         this.description = description;
         this.averageRate = 0;
         this.sellersAndOff = new HashMap<>();
-        this.sellersAndOff.put(firstSeller, null);
+        this.sellersAndOff.put(firstSeller.getUserName(), null);
         this.comments = new ArrayList<>();
         this.rates = new ArrayList<>();
         this.visit = 0;
+
+        try {
+            updateResources();
+        } catch (IOException ignored) {}
     }
     
     public int getVisit() {
@@ -75,11 +81,19 @@ public class Product {
     }
 
     public Category getCategory() {
-        return category;
+        try {
+            return Shop.getInstance().getCategoryByName(this.category);
+        } catch (Exceptions.NoCategoryException e) {
+            return null;
+        }
     }
 
     public void setCategory(Category category) {
-        this.category = category;
+        this.category = category.getName();
+
+        try {
+            updateResources();
+        } catch (IOException ignored) {}
     }
 
     public String getAttribute() {
@@ -91,9 +105,10 @@ public class Product {
     }
 
     public SellerAccount getSellerByUsername (String userName) throws Exceptions.NoSellerByThisUserNameForProductException {
-        for (SellerAccount seller : this.sellersAndOff.keySet()) {
-            if (seller.getUserName().equals(userName))
-                return seller;
+        if (this.sellersAndOff.containsKey(userName)) {
+            try {
+                return SellerAccount.getSellerAccountByUsername(userName);
+            } catch (Exception ignored) {}
         }
         throw new Exceptions.NoSellerByThisUserNameForProductException();
     }
@@ -106,13 +121,25 @@ public class Product {
         return price;
     }
 
-    public Set<SellerAccount> getSellers () {
-        return this.sellersAndOff.keySet();
+    public ArrayList<SellerAccount> getSellers () {
+        ArrayList<SellerAccount> sellerAccounts = new ArrayList<>();
+        for (String sellerUsername : this.sellersAndOff.keySet()) {
+            try {
+                sellerAccounts.add(SellerAccount.getSellerAccountByUsername(sellerUsername));
+            } catch (Exception ignored) {}
+        }
+
+        return sellerAccounts;
     }
 
     public ArrayList<Comment> getComments () throws Exceptions.NoCommentsException {
         if (this.comments.isEmpty())
             throw new Exceptions.NoCommentsException();
+
+        try {
+            updateResources();
+        } catch (IOException ignored) {}
+
         return this.comments;
     }
 
@@ -136,17 +163,25 @@ public class Product {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Category     : " + this.category.getName() +
-                           "\n\tCategory attribute : " + this.category.getAttribute() +
-                           "\nName         : " + this.name +
-                           "\nBrand        : " + this.brand +
-                           "\nDescription  : " + this.description +
-                           "\nAttribute    : " + this.attribute +
-                           "\nAverage rate : " + this.averageRate +
-                           "\nPrice        : " + this.price +
-                           "\nSellers      : ");
+        try {
+            stringBuilder.append("Category     : " + this.category +
+                               "\n\tCategory attribute : " + Shop.getInstance().getCategoryByName(this.category).getAttribute() +
+                               "\nName         : " + this.name +
+                               "\nBrand        : " + this.brand +
+                               "\nDescription  : " + this.description +
+                               "\nAttribute    : " + this.attribute +
+                               "\nAverage rate : " + this.averageRate +
+                               "\nPrice        : " + this.price +
+                               "\nSellers      : ");
+        } catch (Exceptions.NoCategoryException e) {
+            return null;
+        }
 
-        for (SellerAccount seller : this.sellersAndOff.keySet()) {
+        for (String sellerUsername : this.sellersAndOff.keySet()) {
+            SellerAccount seller = null;
+            try {
+                seller = getSellerByUsername(sellerUsername);
+            } catch (Exceptions.NoSellerByThisUserNameForProductException ignored) {}
             try {
                 stringBuilder.append("\n\t" + seller.getUserName() + " by " + this.getOff(seller) + "% off");
             } catch (Exceptions.NoOffForThisProductException e) {
@@ -159,9 +194,21 @@ public class Product {
     public void addRate (Rate rate) {
         this.rates.add(rate);
         this.averageRate = (this.averageRate * (this.rates.size() - 1) + rate.getRate()) / this.rates.size();
+
+        try {
+            updateResources();
+        } catch (IOException ignored) {}
     }
     
     public void setComments(ArrayList<Comment> comments) {
         this.comments = comments;
+    }
+
+    public void updateResources () throws IOException {
+        Gson gson = new Gson();
+        FileWriter fileWriter = new FileWriter("src\\main\\resources\\Products\\" + this.productId + ".txt");
+
+        gson.toJson(this, fileWriter);
+        fileWriter.close();
     }
 }

@@ -2,7 +2,6 @@ package Controller;
 
 import Controller.AccountPagesController.AccountPageController;
 import Controller.AccountPagesController.CustomerPageController;
-import Model.Accounts.Account;
 import Model.Accounts.CustomerAccount;
 import Model.Accounts.SellerAccount;
 import Model.Discount;
@@ -11,13 +10,13 @@ import Model.Logs.SellLog;
 import Model.Product;
 import Model.Shop;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 public class CartPageController {
     private static CartPageController cartPageController = new CartPageController();
     private Shop shop;
-    private HashMap<Product, HashMap<SellerAccount, Integer>> cart;
+    private HashMap<Integer, HashMap<String, Integer>> cart;
 
     private CartPageController () {
         this.shop = Shop.getInstance();
@@ -31,46 +30,59 @@ public class CartPageController {
     public void addProductToCart (SellerAccount seller, Product selectedProduct) throws Exceptions.NotCustomerException {
         if (AccountPageController.getUser() != null && CustomerPageController.getInstance().getCustomer() == null)
             throw new Exceptions.NotCustomerException();
-        this.cart.put(selectedProduct, new HashMap<>());
-        this.cart.get(selectedProduct).put(seller, 1);
+        this.cart.put((int) selectedProduct.getProductId(), new HashMap<>());
+        this.cart.get((int)selectedProduct.getProductId()).put(seller.getUserName(), 1);
     }
 
     public Product getCartProductById (long productId) throws Exceptions.NoProductWithThisIdInCartException {
-        for (Product product : cart.keySet()) {
-            if (product.getProductId() == productId)
-                return product;
+        if (cart.containsKey((int)productId)) {
+            try {
+                return Shop.getInstance().getProductById(productId);
+            } catch (Exceptions.NoProductByThisIdException ignored) {}
         }
         throw new Exceptions.NoProductWithThisIdInCartException();
     }
 
-    public Set<Product> getProducts () throws Exceptions.EmptyCartException {
+    public ArrayList<Product> getProducts () throws Exceptions.EmptyCartException {
         if (cart.isEmpty())
             throw new Exceptions.EmptyCartException();
-        return cart.keySet();
+        ArrayList<Product> products = new ArrayList<>();
+        for (Integer productId : cart.keySet()) {
+            try {
+                products.add(Shop.getInstance().getProductById(productId));
+            } catch (Exceptions.NoProductByThisIdException ignored) {}
+        }
+        return products;
     }
 
     public HashMap<SellerAccount, Integer> getSellersAndCountOfProduct (Product product) {
-        return cart.get(product);
+        HashMap<SellerAccount, Integer> sellerAndCount = new HashMap<>();
+        for (String seller : this.cart.get((int)product.getProductId()).keySet()) {
+            try {
+                sellerAndCount.put(SellerAccount.getSellerAccountByUsername(seller), this.cart.get((int)product.getProductId()).get(seller));
+            } catch (Exception ignored) {}
+        }
+        return sellerAndCount;
     }
 
     public void increaseProductCount (Product product, String sellerUserName) throws Exceptions.NoSellerByThisUserNameForProductException {
         SellerAccount seller = product.getSellerByUsername(sellerUserName);
 
-        if (cart.get(product).containsKey(seller))
-            cart.get(product).replace(seller, cart.get(product).get(seller) + 1);
+        if (cart.get((int)product.getProductId()).containsKey(seller.getUserName()))
+            cart.get((int)product.getProductId()).replace(seller.getUserName(), cart.get((int)product.getProductId()).get(seller.getUserName()) + 1);
         else
-            cart.get(product).put(seller, 1);
+            cart.get((int)product.getProductId()).put(seller.getUserName(), 1);
     }
 
     public void decreaseProductCount (Product product, String sellerUserName) throws Exceptions.NoSellerByThisUserNameForProductException, Exceptions.NoSellerWithThisUserNameForThisProductInCartException {
         SellerAccount seller = product.getSellerByUsername(sellerUserName);
 
-        if (cart.get(product).containsKey(seller)) {
-            cart.get(product).replace(seller, cart.get(product).get(seller) - 1);
-            if (cart.get(product).get(seller) == 0) {
-                cart.get(product).remove(seller);
-                if (cart.get(product).isEmpty())
-                    cart.remove(product);
+        if (cart.get((int)product.getProductId()).containsKey(seller.getUserName())) {
+            cart.get((int)product.getProductId()).replace(seller.getUserName(), cart.get((int)product.getProductId()).get(seller.getUserName()) - 1);
+            if (cart.get((int)product.getProductId()).get(seller.getUserName()) == 0) {
+                cart.get((int)product.getProductId()).remove(seller.getUserName());
+                if (cart.get((int)product.getProductId()).isEmpty())
+                    cart.remove((int)product.getProductId());
             }
         } else
             throw new Exceptions.NoSellerWithThisUserNameForThisProductInCartException();
@@ -79,22 +91,26 @@ public class CartPageController {
     public int getTotalPrice () throws Exceptions.EmptyCartException {
         int totalPrice = 0;
         for (Product product : getProducts()) {
-            for (SellerAccount seller : cart.get(product).keySet()) {
+            for (String seller : cart.get((int)product.getProductId()).keySet()) {
                 try {
-                    totalPrice += (int) (cart.get(product).get(seller) * product.getPrice() * product.getOff(seller)) / 100;
+                    totalPrice += (int) (cart.get((int)product.getProductId()).get(seller) * product.getPrice() *
+                            product.getOff(SellerAccount.getSellerAccountByUsername(seller))) / 100;
                 } catch (Exceptions.NoOffForThisProductException e) {
-                    totalPrice += cart.get(product).get(seller) * product.getPrice();
-                }
+                    totalPrice += cart.get((int)product.getProductId()).get(seller) * product.getPrice();
+                } catch (Exception ignored) {}
             }
         }
         return totalPrice;
     }
 
-    public void checkCartForPurchase () throws Exceptions.NotEnoughProductToPurchaseException {
-        for (Product product : cart.keySet()) {
-            for (SellerAccount seller : cart.get(product).keySet()) {
-                if (!seller.hasEnoughOfProduct(product, cart.get(product).get(seller)))
-                    throw new Exceptions.NotEnoughProductToPurchaseException(product, seller, seller.getCountOfProduct(product));
+    public void checkCartForPurchase () throws Exception {
+        for (int product : cart.keySet()) {
+            for (String seller : cart.get(product).keySet()) {
+
+                if (!SellerAccount.getSellerAccountByUsername(seller).hasEnoughOfProduct(Shop.getInstance().getProductById(product),
+                        cart.get(product).get(seller)))
+                    throw new Exceptions.NotEnoughProductToPurchaseException(product, seller,
+                            SellerAccount.getSellerAccountByUsername(seller).getCountOfProduct(Shop.getInstance().getProductById(product)));
             }
         }
     }
@@ -116,19 +132,25 @@ public class CartPageController {
         if (customer.getCredit() < payablePrice)
             throw new Exceptions.NotEnoughCreditException();
 
-        for (Product product : cart.keySet()) {
-            for (SellerAccount seller : cart.get(product).keySet()) {
-                SellLog sellLog;
+        for (int product : cart.keySet()) {
+            for (String seller : cart.get(product).keySet()) {
+                SellLog sellLog = null;
                 try {
                     sellLog = new SellLog(shop.getAllSellLogs().size() + 1, payablePrice + discountAmount,
-                            product.getOff(seller), product, cart.get(product).get(seller), customer.getUserName(), receiverInfo[0], receiverInfo[1],
+                            Shop.getInstance().getProductByIdd(product).getOff(SellerAccount.getSellerAccountByUsername(seller)),
+                            Shop.getInstance().getProductByIdd(product), cart.get(product).get(seller),
+                            customer.getUserName(), receiverInfo[0], receiverInfo[1],
                             receiverInfo[2]);
                 } catch (Exceptions.NoOffForThisProductException e) {
-                    sellLog = new SellLog(shop.getAllSellLogs().size() + 1, payablePrice + discountAmount,
-                            0, product, cart.get(product).get(seller), customer.getUserName(), receiverInfo[0], receiverInfo[1],
-                            receiverInfo[2]);
-                }
-                seller.sellSellLog(sellLog);
+                    try {
+                        sellLog = new SellLog(shop.getAllSellLogs().size() + 1, payablePrice + discountAmount,
+                                0, Shop.getInstance().getProductByIdd(product), cart.get(product).get(seller), customer.getUserName(), receiverInfo[0], receiverInfo[1],
+                                receiverInfo[2]);
+                    } catch (Exception ignored) {}
+                } catch (Exception ignored) {}
+                try {
+                    SellerAccount.getSellerAccountByUsername(seller).sellSellLog(sellLog);
+                } catch (Exception ignored) {}
                 shop.addSellLog(sellLog);
             }
         }
@@ -137,5 +159,9 @@ public class CartPageController {
                                     cart, receiverInfo[0], receiverInfo[1], receiverInfo[2]);
         customer.purchaseBuyLog(buyLog);
         shop.addBuyLog(buyLog);
+    }
+
+    public HashMap<Integer, HashMap<String, Integer>> getCart() {
+        return cart;
     }
 }

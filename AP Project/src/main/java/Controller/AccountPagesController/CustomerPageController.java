@@ -1,5 +1,6 @@
 package Controller.AccountPagesController;
 
+import Controller.CartPageController;
 import Controller.Exceptions;
 import Model.Accounts.CustomerAccount;
 import Model.Discount;
@@ -7,6 +8,7 @@ import Model.Logs.BuyLog;
 import Model.Product;
 import Model.Rate;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -16,7 +18,10 @@ public class CustomerPageController extends AccountPageController {
 
     public void setUser(CustomerAccount user) {
         this.user = user;
-        AccountPageController.user = user;
+        if (user != null) {
+            this.user.setCart(CartPageController.getInstance().getCart());
+            AccountPageController.user = user;
+        }
     }
 
     public CustomerAccount getCustomer() {
@@ -60,5 +65,8 @@ public class CustomerPageController extends AccountPageController {
         if (rate < 1 || rate > 5)
             throw new Exceptions.RateOutOfRangeException();
         product.addRate(new Rate(user, product, rate));
+        try {
+            product.updateResources();
+        } catch (IOException ignored) {}
     }
 }

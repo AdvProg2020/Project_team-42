@@ -1,14 +1,25 @@
     package View.Pages.AccountsPage;
 
-import Controller.AccountPagesController.SellerPageController;
-import Controller.Exceptions;
-import Model.Accounts.SellerAccount;
-import Model.Category;
-import Model.Shop;
-import View.Commands;
-import View.Page;
+    import Controller.AccountPagesController.AccountPageController;
+    import Controller.AccountPagesController.CustomerPageController;
+    import Controller.AccountPagesController.ManagerPageController;
+    import Controller.AccountPagesController.SellerPageController;
+    import Controller.Exceptions;
+    import Model.Accounts.SellerAccount;
+    import Model.Category;
+    import Model.Product;
+    import Model.Requests.CreateOffRequest;
+    import Model.Shop;
+    import View.Commands;
+    import View.Page;
+    import View.Pages.AllProductsPage;
+    import View.Pages.CartPage;
+    import View.Pages.LoginRegisterPage;
+    import View.Pages.OffsPage;
 
-import java.util.regex.Matcher;
+    import java.util.ArrayList;
+    import java.util.GregorianCalendar;
+    import java.util.regex.Matcher;
 
 public class SellerPage extends Page {
     private static SellerPage sellerPage = new SellerPage();
@@ -24,9 +35,12 @@ public class SellerPage extends Page {
     }
 
     public Page run() {
+        Page.pagesHistory.add(this);
+
+        System.out.println("seller page");
+
         String input;
         Matcher matcher;
-        boolean isEnd;
         while (!Commands.EXIT.getMatcher(input = scanner.nextLine().trim()).matches()) {
             if (Commands.VIEW_PERSONAL_INFO.getMatcher(input).matches()) {
                 viewPersonalInfo();
@@ -39,7 +53,7 @@ public class SellerPage extends Page {
             } else if (Commands.ADD_PRODUCT.getMatcher(input).matches()) {
                 addProduct();
             } else if ((matcher = Commands.REMOVE_PRODUCT.getMatcher(input)).matches()) {
-                removeProduct(Integer.valueOf(matcher.group(1)));
+                removeProduct(Integer.parseInt(matcher.group(1)));
             } else if (Commands.SHOW_CATEGORIES.getMatcher(input).matches()) {
                 showCategories();
             } else if (Commands.VIEW_OFFS.getMatcher(input).matches()) {
@@ -50,10 +64,24 @@ public class SellerPage extends Page {
                 viewOffs();
             } else if (Commands.HELP.getMatcher(input).matches()) {
                 help();
-            }else if(Commands.OFF.getMatcher(input).matches()){
-                //todo go to off page
-            }else{
-                System.out.println("invalid command");
+            } else if (Commands.LOGIN_PAGE.getMatcher(input).matches()) {
+                return LoginRegisterPage.getInstance();
+            } else if (Commands.LOG_OUT.getMatcher(input).matches()) {
+                AccountPageController.setUser(null);
+                SellerPageController.getInstance().setUser(null);
+                ManagerPageController.getInstance().setUser(null);
+                CustomerPageController.getInstance().setUser(null);
+                Page.pagesHistory.clear();
+                return LoginRegisterPage.getInstance();
+            } else if (Commands.ALL_PRODUCTS_PAGE.getMatcher(input).matches()) {
+                return AllProductsPage.getInstance();
+            } else if (Commands.OFFS_PAGE.getMatcher(input).matches()) {
+                return OffsPage.getInstance();
+            } else if (Commands.CART_PAGE.getMatcher(input).matches()) {
+                return CartPage.getInstance();
+            } else {
+                printInvalidCommandMessage();
+                help();
             }
         }
 
@@ -107,10 +135,79 @@ public class SellerPage extends Page {
 
     private void manageProducts() {
         controller.showSellerProduct();
+        String input;
+        while (!Commands.BACK.getMatcher(input = scanner.nextLine().trim()).matches()) {
+            Matcher matcher ;
+            if((matcher = Commands.VIEW_PRODUCT_BYID.getMatcher(input)).matches()){
+                try {
+                    System.out.println(controller.viewProduct(Integer.parseInt(matcher.group(1))));
+                } catch (Exceptions.NoProductByThisIdException e) {
+                    System.out.println(e.getMessage());
+                }
+            }else if((matcher = Commands.EDIT_PRODUCT_BYID.getMatcher(input)).matches()){
+
+
+                            SellerAccount sellerAccount = (SellerAccount) controller.getUser();
+                            String name = null;
+                            int id = Integer.parseInt(matcher.group(1));;
+                            int count = 0;
+                            String brand = null;
+                            double price = 0;
+                            String categoryName;
+                            Category category = null;
+                            String description = null;
+                            String attribute = null;
+                try {
+                    shop.getProductById(id);
+                } catch (Exceptions.NoProductByThisIdException e) {
+                    System.out.println(e.getMessage());
+                    return;
+
+                }
+                System.out.println("please enter product name");
+                            name=scanner.nextLine().trim();
+                            System.out.println("please enter product count");
+                            count = scanner.nextInt();
+                            System.out.println("please enter product brand");
+                            brand = scanner.nextLine();
+                            System.out.println("please enter product Price");
+                            price = scanner.nextDouble();
+                            System.out.println("please enter product category");
+                            categoryName = scanner.next();
+                            try {
+                                category = shop.getCategoryByName(categoryName);
+                            } catch (Exceptions.NoCategoryException e) {
+                                System.out.println(e.getMessage());
+                                return;
+                            }
+                            System.out.println("please inter product description");
+                            description = scanner.nextLine();
+                            System.out.println("please inter product attribute");
+                            attribute = scanner.nextLine();
+                            try {
+                                controller.editProduct(sellerAccount, name, id, count , brand, price, category, description, attribute);
+                            } catch (Exceptions.NoCategoryException e) {
+                                System.out.println(e.getMessage());
+                            }
+
+            }else if((matcher = Commands.VIEW_BUYERS.getMatcher(input)).matches()){
+                try {
+                    controller.viewBuyers(Integer.parseInt(matcher.group(1)));
+                } catch (Exceptions.NoProductByThisIdException e) {
+                    System.out.println(e.getMessage());
+                }
+            }else if(Commands.HELP.getMatcher(input).matches()) {
+                System.out.println("back\n" +
+                        "help\n" +
+                        "view [productId]\n" +
+                        "view buyers [productId]\n" +
+                        "edit [productId]\n");
+            }
+        }
+
     }
 
     private void addProduct() {
-        String input;
         SellerAccount sellerAccount = (SellerAccount) controller.getUser();
         String name = null;
         int id = 0;
@@ -122,34 +219,32 @@ public class SellerPage extends Page {
         String descrption = null;
         String arrtibute = null;
 
-       while(!Commands.BACK.getMatcher(input = scanner.next().trim()).matches()){
-
-           System.out.println("please inter product name");
-           name=scanner.nextLine().trim();//todo
-           id = shop.returnNewId();
-           System.out.println("please inter product count");
+           System.out.println("please enter product name");
+           name=scanner.nextLine().trim();
+           System.out.println("please enter product count");
            count = scanner.nextInt();
-           System.out.println("please inter product brand");
+           System.out.println("please enter product brand");
            brand = scanner.nextLine();
-           System.out.println("please inter product Pricee");
+           System.out.println("please enter product Price");
            price = scanner.nextDouble();
-           System.out.println("please inter product category");
+           System.out.println("please enter product category");
            categoryName = scanner.next();
-           System.out.println("please inter product name");
            try {
                category = shop.getCategoryByName(categoryName);
            } catch (Exceptions.NoCategoryException e) {
                System.out.println(e.getMessage());
                return;
            }
-           System.out.println("please inter product name");
+           System.out.println("please inter product description");
            descrption = scanner.nextLine();
-           System.out.println("please inter product name");
+           System.out.println("please inter product attribute");
            arrtibute = scanner.nextLine();
-       }
+
         try {
             controller.addProduct(sellerAccount, name, id, count , brand, price, category, descrption, arrtibute);
-        } catch (Exceptions.NoCategoryException ignored) {}
+        } catch (Exceptions.NoCategoryException ignored) {
+            System.out.println(ignored.getMessage());
+        }
     }
 
 
@@ -162,11 +257,11 @@ public class SellerPage extends Page {
     }
 
     private void showCategories()  {
-        controller.showCategories();
-    }
-
-    private void viewOffs() {
-        controller.showOff();
+        try {
+            controller.showCategories();
+        } catch (Exception e) {
+            System.out.println("there is no categories");
+        }
     }
 
     private void viewBalance() {
@@ -178,7 +273,13 @@ public class SellerPage extends Page {
     }
 
     private void help() {
-        System.out.println("view personal information" + "view compony information" + "manage products" + "add product" + "remove product" + "show categories" + "view offs" + "view balance" + "help");
+        System.out.println("view personal information\n" + "view compony information\n" + "manage products\n" +
+                "add product\n" + "remove product\n" + "show categories\n" + "view offs\n" + "view balance\n" + "help\n" +
+                "login page\n" +
+                "log out\n" +
+                "products page\n" +
+                "offs page\n" +
+                "cart page");
     }
 
  private void viewOffs() {
@@ -193,12 +294,13 @@ public class SellerPage extends Page {
                     System.out.println(noOffByThisId.getMessage());
                 }
             }if((Commands.ADD_OFF.getMatcher(input)).matches()){
-                ArrayList<Product>listofProduct = new ArrayList<>();
+                ArrayList<Product> listOfProduct = new ArrayList<>();
                 while(Commands.BACK.getMatcher(input = scanner.nextLine()).matches()) {
                     System.out.println("enter your productId");
                     while(Commands.BACK.getMatcher(input = scanner.nextLine()).matches()){
                         try {
-                            listofProduct.add(user.hasProduct(Integer.valueOf(input)));
+                            SellerAccount seller = (SellerAccount) AccountPageController.getUser();
+                            listOfProduct.add(seller.hasProduct(Integer.parseInt(input)));
                         } catch (Exceptions.NoProductByThisIdException e) {
                             System.out.println(e.getMessage());
                         }
@@ -206,15 +308,15 @@ public class SellerPage extends Page {
                     System.out.println("enter start time year");
                     int year = Integer.parseInt(scanner.nextLine());
                     System.out.println("enter start time month");
-                    int month = Integer.valueOf(scanner.nextLine());
+                    int month = Integer.parseInt(scanner.nextLine());
                     System.out.println("enter start time day");
-                    int day = Integer.valueOf(scanner.nextLine());
+                    int day = Integer.parseInt(scanner.nextLine());
                     System.out.println("enter start time hour");
-                    int hour = Integer.valueOf(scanner.nextLine());
+                    int hour = Integer.parseInt(scanner.nextLine());
                     System.out.println("enter start time minute");
-                    int minute = Integer.valueOf(scanner.nextLine());
+                    int minute = Integer.parseInt(scanner.nextLine());
                     System.out.println("enter start time second");
-                    int second = Integer.valueOf(scanner.nextLine());
+                    int second = Integer.parseInt(scanner.nextLine());
                     GregorianCalendar start = new GregorianCalendar(year,month -1,day,hour,minute,second);
                     System.out.println("enter end time year");
                     year = Integer.parseInt(scanner.nextLine());
@@ -231,7 +333,7 @@ public class SellerPage extends Page {
                     GregorianCalendar end = new GregorianCalendar(year,month -1,day,hour,minute,second);
                     System.out.println("enter persentage");
                     double persentage = Double.valueOf(scanner.nextLine());
-                    new CreateOffRequest(false,null,listofProduct,start,end,persentage);
+                    new CreateOffRequest(false,null,listOfProduct,start,end,persentage);
                 }
             }if((matcher = Commands.EDIT_OFF.getMatcher(input)).matches()){
                 int id;
@@ -242,7 +344,8 @@ public class SellerPage extends Page {
                         while(Commands.BACK.getMatcher(input = scanner.nextLine()).matches()){
 
                             try {
-                                listofProduct.add(user.hasProduct(Integer.valueOf(input)));
+                                SellerAccount seller = (SellerAccount) AccountPageController.getUser();
+                                listofProduct.add(seller.hasProduct(Integer.valueOf(input)));
                             } catch (Exceptions.NoProductByThisIdException e) {
                                 System.out.println(e.getMessage());
                             }

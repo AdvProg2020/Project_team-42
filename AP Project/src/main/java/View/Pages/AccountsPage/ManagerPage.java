@@ -1,5 +1,10 @@
 package View.Pages.AccountsPage;
 
+import Controller.AccountPagesController.AccountPageController;
+import Controller.AccountPagesController.CustomerPageController;
+import Controller.AccountPagesController.SellerPageController;
+import Model.Accounts.ManagerAccount;
+import Model.Accounts.SellerAccount;
 import View.Page;
 import Controller.AccountPagesController.ManagerPageController;
 import Controller.Exceptions;
@@ -7,6 +12,10 @@ import Model.Accounts.CustomerAccount;
 import Model.Category;
 import Model.Product;
 import View.Commands;
+import View.Pages.AllProductsPage;
+import View.Pages.CartPage;
+import View.Pages.LoginRegisterPage;
+import View.Pages.OffsPage;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 
 import java.util.ArrayList;
@@ -17,48 +26,49 @@ import java.util.regex.Matcher;
 public class ManagerPage extends Page {
     private static ManagerPage managerPage = new ManagerPage();
 
-    private ManagerPage(){
+    private ManagerPage() {
 
     }
+
     ManagerPageController mController = ManagerPageController.getInstance();
+
     public static ManagerPage getInstance() {
         return managerPage;
     }
 
     public Page run() {
-        
-        return null;
+        Page.pagesHistory.add(this);
 
-        while(true)
-        {
+        System.out.println("manager page");
+
+        while (true) {
             Matcher matcher;
             String command = scanner.nextLine();
-            if (Commands.MANAGE_USERS.getMatcher(command).matches())
-            {
+            if (Commands.EXIT.getMatcher(command).matches())
+                break;
+            else if (Commands.VIEW_PERSONAL_INFO.getMatcher(command).matches()) {
+                viewPersonalInfo();
+            } else if (Commands.MANAGE_USERS.getMatcher(command).matches()) {
                 System.out.println(mController.getAllAccountsController());
-                while(true)
-                {
+                while (true) {
 
                     command = scanner.nextLine();
-                    if ((matcher=Commands.VIEW.getMatcher(command)).matches())
-                    {
+                    if ((matcher = Commands.VIEW.getMatcher(command)).matches()) {
                         String username = matcher.group(1);
                         System.out.println(mController.getAccountByUserNameController(username));
                     }
-                    if ((matcher=Commands.DELETE_USER.getMatcher(command)).matches())
-                    {
+                    else if ((matcher = Commands.DELETE_USER.getMatcher(command)).matches()) {
                         String username = matcher.group(1);
                         mController.deleteUserController(username);
                     }
-                    if ((matcher=Commands.CREATE_MANAGER_PROFILE.getMatcher(command)).matches())
-                    {
+                    else if (Commands.CREATE_MANAGER_PROFILE.getMatcher(command).matches()) {
                         System.out.println("please enter your username");
                         String useru = scanner.nextLine();
                         try {
                             mController.checkUsernameIsUsedController(useru);
                         } catch (Exception e) {
                             System.out.println("username is used please enter another one");
-                             useru = scanner.nextLine();
+                            useru = scanner.nextLine();
                             try {
                                 mController.checkUsernameIsUsedController(useru);
                             } catch (Exception exception) {
@@ -82,71 +92,73 @@ public class ManagerPage extends Page {
                         String userphoneNumber = scanner.nextLine();
                         System.out.println("please enter your password it should be over 4 characters");
                         String userpassword = scanner.nextLine();
-                        while (userpassword.length()<5)
-                        {
+                        while (userpassword.length() < 5) {
                             System.out.println("please enter another password it should be over 4 characters");
                             userpassword = scanner.nextLine();
                         }
-                        mController.createManagerAccountController(useru,userfirstname,userlastname,useremail,userphoneNumber,userpassword,"manager",false);
+                        mController.createManagerAccountController(useru, userfirstname, userlastname, useremail, userphoneNumber, userpassword, "manager", false);
                     }
-                    if (Commands.BACK.getMatcher(command).matches())
+                    else if (Commands.BACK.getMatcher(command).matches())
                         break;
                 }
-                if(Commands.MANAGE_ALL_PRODUCTS.getMatcher(command).matches())
-                {
-                    while (true)
-                    {
-                        System.out.println(mController.showAllProductsController());
-                        command=scanner.nextLine();
-                        if ((matcher=Commands.REMOVE_PRODUCT.getMatcher(command)).matches()) {
+                }
+                else if (Commands.MANAGE_ALL_PRODUCTS.getMatcher(command).matches()) {
+                    do {
+                        try {
+                            System.out.println(mController.showAllProductsController());
+                        } catch (Exception e) {
+                            System.out.println("there is no product");
+                        }
+                        command = scanner.nextLine();
+                        if (Commands.HELP.getMatcher(command).matches())
+                            System.out.println("remove [productid]" +"\n"+ "back");
+                        else if ((matcher = Commands.REMOVE_PRODUCT.getMatcher(command)).matches()) {
                             try {
                                 mController.deleteProductController(Long.parseLong(matcher.group(1)));
                             } catch (Exceptions.NoProductByThisIdException e) {
                                 System.out.println("invalid id");
                             }
                         }
-                        if (Commands.BACK.getMatcher(command).matches())
-                            break;
-
-                    }
+                    } while (!Commands.BACK.getMatcher(command).matches());
                 }
-                if (Commands.CREATE_DISCOUNT_CODE.getMatcher(command).matches())
-                {
-                    System.out.println(mController.showAllDiscountsController());
-                    while (true)
-                    {
+                else if (Commands.CREATE_DISCOUNT_CODE.getMatcher(command).matches()) {
+                    try {
+                        System.out.println(mController.showAllDiscountsController());
+                    } catch (Exception e) {
+                        System.out.println("there is no discount built");
+                    }
+                    while (true) {
                         System.out.println("please enter discount code");
-                        String discountCode=scanner.nextLine();
+                        String discountCode = scanner.nextLine();
                         try {
                             mController.checkValidationDiscountCodeController(discountCode);
                         } catch (Exception e) {
                             System.out.println("code is used please try again");
-                            command="back";
+                            command = "back";
                         }
                         if (Commands.BACK.getMatcher(command).matches())
                             break;
                         System.out.println("please enter start year");
-                        int year= Integer.parseInt(scanner.nextLine());
+                        int year = Integer.parseInt(scanner.nextLine());
                         System.out.println("please enter start month");
-                        int month= Integer.parseInt(scanner.nextLine());
+                        int month = Integer.parseInt(scanner.nextLine());
                         System.out.println("please enter start day");
-                        int day= Integer.parseInt(scanner.nextLine());
+                        int day = Integer.parseInt(scanner.nextLine());
                         System.out.println("please enter start hour");
-                        int hour= Integer.parseInt(scanner.nextLine());
-                        GregorianCalendar begin = new GregorianCalendar(year,month-1,day,hour,0,0);
+                        int hour = Integer.parseInt(scanner.nextLine());
+                        GregorianCalendar begin = new GregorianCalendar(year, month - 1, day, hour, 0, 0);
                         System.out.println("please enter end year");
-                         year= Integer.parseInt(scanner.nextLine());
+                        year = Integer.parseInt(scanner.nextLine());
                         System.out.println("please enter end month");
-                         month= Integer.parseInt(scanner.nextLine());
+                        month = Integer.parseInt(scanner.nextLine());
                         System.out.println("please enter end day");
-                         day= Integer.parseInt(scanner.nextLine());
+                        day = Integer.parseInt(scanner.nextLine());
                         System.out.println("please enter end hour");
-                         hour= Integer.parseInt(scanner.nextLine());
-                        GregorianCalendar end = new GregorianCalendar(year,month-1,day,hour,0,0);
+                        hour = Integer.parseInt(scanner.nextLine());
+                        GregorianCalendar end = new GregorianCalendar(year, month - 1, day, hour, 0, 0);
                         System.out.println("enter discount percentage");
                         double percent = Double.parseDouble(scanner.nextLine());
-                        while(percent>100.00 || percent<=0)
-                        {
+                        while (percent > 100.00 || percent <= 0) {
                             System.out.println("enter a vilid discount percentage");
                             percent = Double.parseDouble(scanner.nextLine());
                         }
@@ -155,62 +167,59 @@ public class ManagerPage extends Page {
                         System.out.println("enter discount reapeat for each customer");
                         int reapeatLimit = Integer.parseInt(scanner.nextLine());
                         System.out.println("enter  customers then type done");
-                        HashMap<CustomerAccount,Integer> customers =new HashMap<CustomerAccount,Integer>();
-                        String customer="";
-                        while(!customer.equals("done"))
-                        {
-                            customer=scanner.nextLine();
+                        HashMap<CustomerAccount, Integer> customers = new HashMap<CustomerAccount, Integer>();
+                        String customer = "";
+                        while (!customer.equals("done")) {
+                            customer = scanner.nextLine();
                             if (customer.equals("done"))
                                 break;
                             try {
-                                customers.put(mController.getCustomerAccountAccountTypeByUsernameController(customer),0);
+                                customers.put(mController.getCustomerAccountAccountTypeByUsernameController(customer), 0);
                             } catch (Exception e) {
                                 System.out.println("customer not found");
                             }
                         }
-                        mController.createDiscountCodeController(discountCode,begin,end,percent,amountLimit,reapeatLimit,customers);
+                        mController.createDiscountCodeController(discountCode, begin, end, percent, amountLimit, reapeatLimit, customers);
                     }
                 }
-                if (Commands.VIEW_DISCOUNT_CODES.getMatcher(command).matches())
-                {
-                    mController.showAllDiscountsController();
-                    while(true) {
+                else if (Commands.VIEW_DISCOUNT_CODES.getMatcher(command).matches()) {
+                    while (!Commands.BACK.getMatcher(command).matches()) {
+                        try {
+                            mController.showAllDiscountsController();
+                        } catch (Exception e) {
+                            System.out.println("there is no discount");
+                        }
+
                         command = scanner.nextLine();
                         if ((matcher = Commands.VIEW_DISCOUNT_CODE.getMatcher(command)).matches()) {
                             String discountCode = matcher.group(1);
                             mController.viewDiscount(discountCode);
-                        }
-                        if ((matcher = Commands.REMOVE_DISCOUNT_CODE.getMatcher(command)).matches())
-                        {
+                        } else if ((matcher = Commands.REMOVE_DISCOUNT_CODE.getMatcher(command)).matches()) {
                             String discountCode = matcher.group(1);
                             mController.deleteDiscountController(discountCode);
-                        }
-                        if ((matcher = Commands.EDIT_DISCOUNT_CODE.getMatcher(command)).matches())
-                        {
-                            System.out.println("please enter discount code");
-                            String discountCode=scanner.nextLine();
+                        } else if ((matcher=Commands.EDIT_DISCOUNT_CODE.getMatcher(command)).matches()) {
+                            String discountCode = matcher.group(1);
                             System.out.println("please enter start year");
-                            int year= Integer.parseInt(scanner.nextLine());
+                            int year = Integer.parseInt(scanner.nextLine());
                             System.out.println("please enter start month");
-                            int month= Integer.parseInt(scanner.nextLine());
+                            int month = Integer.parseInt(scanner.nextLine());
                             System.out.println("please enter start day");
-                            int day= Integer.parseInt(scanner.nextLine());
+                            int day = Integer.parseInt(scanner.nextLine());
                             System.out.println("please enter start hour");
-                            int hour= Integer.parseInt(scanner.nextLine());
-                            GregorianCalendar begin = new GregorianCalendar(year,month-1,day,hour,0,0);
+                            int hour = Integer.parseInt(scanner.nextLine());
+                            GregorianCalendar begin = new GregorianCalendar(year, month - 1, day, hour, 0, 0);
                             System.out.println("please enter end year");
-                            year= Integer.parseInt(scanner.nextLine());
+                            year = Integer.parseInt(scanner.nextLine());
                             System.out.println("please enter end month");
-                            month= Integer.parseInt(scanner.nextLine());
+                            month = Integer.parseInt(scanner.nextLine());
                             System.out.println("please enter end day");
-                            day= Integer.parseInt(scanner.nextLine());
+                            day = Integer.parseInt(scanner.nextLine());
                             System.out.println("please enter end hour");
-                            hour= Integer.parseInt(scanner.nextLine());
-                            GregorianCalendar end = new GregorianCalendar(year,month-1,day,hour,0,0);
+                            hour = Integer.parseInt(scanner.nextLine());
+                            GregorianCalendar end = new GregorianCalendar(year, month - 1, day, hour, 0, 0);
                             System.out.println("enter discount percentage");
                             double percent = Double.parseDouble(scanner.nextLine());
-                            while(percent>100.00 || percent<=0)
-                            {
+                            while (percent > 100.00 || percent <= 0) {
                                 System.out.println("enter a vilid discount percentage");
                                 percent = Double.parseDouble(scanner.nextLine());
                             }
@@ -219,33 +228,39 @@ public class ManagerPage extends Page {
                             System.out.println("enter discount reapeat for each customer");
                             int reapeatLimit = Integer.parseInt(scanner.nextLine());
                             System.out.println("enter  customers then type done");
-                            HashMap<CustomerAccount,Integer> customers =new HashMap<CustomerAccount,Integer>();
-                            String customer="";
-                            while(!customer.equals("done")) {
+                            HashMap<CustomerAccount, Integer> customers = new HashMap<CustomerAccount, Integer>();
+                            String customer = "";
+                            while (true) {
                                 customer = scanner.nextLine();
                                 if (customer.equals("done"))
                                     break;
-                                try {
-                                    customers.put(mController.getCustomerAccountAccountTypeByUsernameController(customer), 0);
-                                } catch (Exception e) {
-                                    System.out.println("customer not found");
+                                else if (customer.equalsIgnoreCase("help"))
+                                    System.out.println("customer name"+"\n"+"done");
+                                else {
+                                    try {
+                                        customers.put(mController.getCustomerAccountAccountTypeByUsernameController(customer), 0);
+                                    } catch (Exception e) {
+                                        System.out.println("customer not found");
+                                    }
                                 }
                             }
-                            mController.editDiscountController(discountCode,begin,end,percent,amountLimit,reapeatLimit,customers);
+                            mController.editDiscountController(discountCode, begin, end, percent, amountLimit, reapeatLimit, customers);
+                        } else if (Commands.HELP.getMatcher(command).matches())
+                            System.out.println("view discount code [code]"+"\n"+"edit discount code [code]"+"\n"+"remove discount code [code]");
+
+                        else {
+                           printInvalidCommandMessage();
                         }
                     }
                 }
-            }
-            if (Commands.MANAGE_REQUEST.getMatcher(command).matches())
-            {
-                while(true)
-                {
+
+            else if (Commands.MANAGE_REQUESTS.getMatcher(command).matches()) {
+                while (true) {
                     mController.showAllRequestsController();
-                    command=scanner.nextLine();
+                    command = scanner.nextLine();
                     if (Commands.BACK.getMatcher(command).matches())
                         break;
-                    if ((matcher = Commands.DETAILS.getMatcher(command)).matches())
-                    {
+                    else if ((matcher = Commands.DETAILS.getMatcher(command)).matches()) {
                         int id = Integer.parseInt(matcher.group(1));
                         try {
                             mController.requestDetailController(id);
@@ -253,7 +268,7 @@ public class ManagerPage extends Page {
                             System.out.println("request not found");
                         }
                     }
-                    if ((matcher = Commands.ACCEPT.getMatcher(command)).matches()) {
+                    else if ((matcher = Commands.ACCEPT.getMatcher(command)).matches()) {
                         int id = Integer.parseInt(matcher.group(1));
                         try {
                             mController.acceptRequest(id);
@@ -261,58 +276,63 @@ public class ManagerPage extends Page {
                             System.out.println("unanswered request not found");
                         }
                     }
-                    if ((matcher = Commands.DECLINE.getMatcher(command)).matches())
-                    {
+                    else if ((matcher = Commands.DECLINE.getMatcher(command)).matches()) {
                         int id = Integer.parseInt(matcher.group(1));
                         try {
                             mController.declineRequest(id);
                         } catch (Exception e) {
                             System.out.println("unanswered request not found");
                         }
-                    }
+                    } else if (Commands.HELP.getMatcher(command).matches())
+                        System.out.println("details\n" +
+                                "accept\n" +
+                                "decline\n" +
+                                "decline\n" +
+                                "help\n" +
+                                "back");
+                    else
+                        printInvalidCommandMessage();
                 }
             }
-            if (Commands.MANAGE_CATEGORIES.getMatcher(command).matches())
-            {
-                while (true)
-                {
-                    mController.getAllCategories();
-                command=scanner.nextLine();
-                if (Commands.BACK.getMatcher(command).matches())
-                    break;
-                if ((matcher=Commands.EDIT_CATEGORY.getMatcher(command)).matches())
-                {
-                    String categoryName = matcher.group(1);
+            else if (Commands.MANAGE_CATEGORIES.getMatcher(command).matches()) {
+                while (true) {
                     try {
-                        Category a =mController.getCategoryBynameCategoryTypeMoudel(categoryName);
+                        mController.getAllCategories();
                     } catch (Exception e) {
-                        System.out.println("category not found please try again");
+                        System.out.println("there is no categories");
+                    }
+                    command = scanner.nextLine();
+                    if (Commands.BACK.getMatcher(command).matches())
                         break;
-                    }
-                    System.out.println("please enter the new name");
-                    String newName = scanner.nextLine();
-                    System.out.println("enter new artibute");
-                    String newarrtibute=scanner.nextLine();
-                    System.out.println("enter new parent category name");
-                    String newparentCategoryName=scanner.nextLine();
-                    try {
-                        mController.getCategoryBynameCategoryTypeMoudel(newparentCategoryName);
-                    } catch (Exception e) {
-                        System.out.println("new parent category not found please try again");
-                        break;
-                    }
-                    try {
-                        mController.editCategory(mController.getCategoryBynameCategoryTypeMoudel(categoryName), newName, newarrtibute, mController.getCategoryBynameCategoryTypeMoudel(newparentCategoryName));
-                    }
-                    catch (Exception e) {
-                    }
-                }
-                if ((matcher=Commands.ADD_CATEGORY.getMatcher(command)).matches())
-                    {
+                    else if ((matcher = Commands.EDIT_CATEGORY.getMatcher(command)).matches()) {
+                        String categoryName = matcher.group(1);
+                        try {
+                            Category a = mController.getCategoryBynameCategoryTypeMoudel(categoryName);
+                        } catch (Exception e) {
+                            System.out.println("category not found please try again");
+                            break;
+                        }
+                        System.out.println("please enter the new name");
+                        String newName = scanner.nextLine();
+                        System.out.println("enter new artibute");
+                        String newarrtibute = scanner.nextLine();
+                        System.out.println("enter new parent category name");
+                        String newparentCategoryName = scanner.nextLine();
+                        try {
+                            mController.getCategoryBynameCategoryTypeMoudel(newparentCategoryName);
+                        } catch (Exception e) {
+                            System.out.println("new parent category not found please try again");
+                            break;
+                        }
+                        try {
+                            mController.editCategory(mController.getCategoryBynameCategoryTypeMoudel(categoryName), newName, newarrtibute, mController.getCategoryBynameCategoryTypeMoudel(newparentCategoryName));
+                        } catch (Exception e) {
+                        }
+                    } else if ((matcher = Commands.ADD_CATEGORY.getMatcher(command)).matches()) {
                         String name = matcher.group(1);
                         System.out.println("enter  artibute");
-                        String arrtibute=scanner.nextLine();
-                        String parentCategoryName=scanner.nextLine();
+                        String arrtibute = scanner.nextLine();
+                        String parentCategoryName = scanner.nextLine();
                         try {
                             mController.getCategoryBynameCategoryTypeMoudel(parentCategoryName);
                         } catch (Exception e) {
@@ -320,59 +340,134 @@ public class ManagerPage extends Page {
                             break;
                         }
                         System.out.println("pleas enter sub categories then type done");
-                        String sub="";
+                        String sub = "";
                         ArrayList<Category> subs = null;
-                        while (!sub.equals("done"))
-                        {
-                            sub=scanner.nextLine();
+                        while (!sub.equals("done")) {
+                            sub = scanner.nextLine();
                             try {
                                 subs.add(mController.getCategoryBynameCategoryTypeMoudel(sub));
                             } catch (Exception e) {
-                                System.out.println("invalid sub");                            }
-                            sub="back;";
-                            break;
+                                System.out.println("invalid sub");
+                            }
+                            if (sub.equalsIgnoreCase("back"))
+                                break;
                         }
                         if (Commands.BACK.getMatcher(sub).matches())
                             break;
-                        HashMap<Product,Integer> productIntegerHashMap = null;
+                        HashMap<Product, Integer> productIntegerHashMap = null;
                         System.out.println("enter categorys products then done");
                         int productId;
-                        while (true)
-                        {
-                            String id=scanner.nextLine();
+                        while (true) {
+                            String id = scanner.nextLine();
 
                             if (id.equals("done"))
                                 break;
-                            productId= Integer.parseInt(scanner.nextLine());
+                            productId = Integer.parseInt(scanner.nextLine());
                             try {
-                                productIntegerHashMap.put(mController.productByName(productId),mController.productCount(mController.productByName(productId)));
+                                productIntegerHashMap.put(mController.productByName(productId), mController.productCount(mController.productByName(productId)));
                             } catch (Exception e) {
                                 System.out.println("product not found please try again");
-                                productId=-10;
                                 break;
                             }
                         }
 
                     }
-                }
-                if ((matcher=Commands.REMOVE_CATEGORY.getMatcher(command)).matches())
-                {
+                    else if ((matcher = Commands.REMOVE_CATEGORY.getMatcher(command)).matches()) {
 
 
-                        String name=matcher.group(1);
+                        String name = matcher.group(1);
                         try {
-                            Category category=mController.getCategoryBynameCategoryTypeMoudel(name);
+                            Category category = mController.getCategoryBynameCategoryTypeMoudel(name);
                         } catch (Exception e) {
                             System.out.println("category not found please try again");
                             break;
                         }
                         mController.deleteCategoryController(name);
 
+                    }else if (Commands.HELP.getMatcher(command).matches())
+                        System.out.println("edit [category]\n" +
+                                "add [category]\n" +
+                                "remove [category]\n" +
+                                "help\n" +
+                                "back");
+                    else
+                        printInvalidCommandMessage();
+                }
+            } else if (Commands.LOGIN_PAGE.getMatcher(command).matches()) {
+                return LoginRegisterPage.getInstance();
+            } else if (Commands.LOG_OUT.getMatcher(command).matches()) {
+                AccountPageController.setUser(null);
+                SellerPageController.getInstance().setUser(null);
+                ManagerPageController.getInstance().setUser(null);
+                CustomerPageController.getInstance().setUser(null);
+                Page.pagesHistory.clear();
+                return LoginRegisterPage.getInstance();
+            } else if (Commands.ALL_PRODUCTS_PAGE.getMatcher(command).matches()) {
+                return AllProductsPage.getInstance();
+            } else if (Commands.OFFS_PAGE.getMatcher(command).matches()) {
+                return OffsPage.getInstance();
+            } else if (Commands.CART_PAGE.getMatcher(command).matches()) {
+                return CartPage.getInstance();
+            } else if (Commands.BACK.getMatcher(command).matches()) {
+                Page page = pagesHistory.get(pagesHistory.size() - 1);
+                pagesHistory.remove(pagesHistory.get(pagesHistory.size() - 1));
+                return page;
+            } else if (Commands.HELP.getMatcher(command).matches()) {
+                System.out.println("view personal information\n" + "manage users\n" +
+                        "manage all product\n" + "create discount code\n" + "view discount codes\n" + "manage requests\n" +
+                        "manage categories\n" + "help\n" +
+                        "login page\n" +
+                        "log out\n" +
+                        "products page\n" +
+                        "offs page\n" +
+                        "cart page\n" +
+                        "back\n" +
+                        "exit");
+            } else {
+                printInvalidCommandMessage();
+            }
+        }
+        return null;
+    }
+
+    private void viewPersonalInfo() {
+        System.out.println(mController.getPersonalInfo());
+
+        String input;
+        Matcher matcher;
+
+        while (!Commands.BACK.getMatcher(input = scanner.nextLine().trim()).matches()) {
+            if ((matcher = Commands.EDIT_PERSONAL_INFO.getMatcher(input)).matches()) {
+                try {
+                    editPersonalInfo(matcher.group(1));
+                } catch (Exceptions.InvalidFormatException | Exceptions.InvalidFieldException e) {
+                    System.out.println(e.getMessage());
+                    System.out.println("The changeable fields are : first name, last name, email, phone number, and password");
                 }
             }
         }
-        Page page = pagesHistory.get(pagesHistory.size()-1);
-        pagesHistory.remove(pagesHistory.get(pagesHistory.size()-1));
-        return page;
+    }
+
+    private void editPersonalInfo(String field) throws Exceptions.InvalidFormatException, Exceptions.InvalidFieldException {
+        String input;
+
+        if (field.equalsIgnoreCase("first name") || field.equalsIgnoreCase("last name")) {
+            if (Commands.NAMES.getMatcher(input = scanner.nextLine().trim()).matches())
+                mController.editPersonalInfo(field, input);
+            else throw new Exceptions.InvalidFormatException();
+        } else if (field.equalsIgnoreCase("email")) {
+            if (Commands.EMAIL.getMatcher(input = scanner.nextLine().trim()).matches())
+                mController.editPersonalInfo(field, input);
+            else throw new Exceptions.InvalidFormatException();
+        } else if (field.equalsIgnoreCase("phone number")) {
+            if (Commands.PHONE_NUMBER.getMatcher(input = scanner.nextLine().trim()).matches())
+                mController.editPersonalInfo(field, input);
+            else throw new Exceptions.InvalidFormatException();
+        } else if (field.equalsIgnoreCase("password")) {
+            if (Commands.PASSWORD.getMatcher(input = scanner.nextLine().trim()).matches())
+                mController.editPersonalInfo(field, input);
+            else throw new Exceptions.InvalidFormatException();
+        } else throw new Exceptions.InvalidFieldException();
+        System.out.println(mController.getPersonalInfo());
     }
 }

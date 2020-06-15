@@ -2,6 +2,7 @@ package Model.Logs;
 
 import Model.Accounts.SellerAccount;
 import Model.Product;
+import Model.Shop;
 
 import java.util.*;
 
@@ -10,13 +11,13 @@ public class BuyLog {
     private GregorianCalendar date;
     private int payedMoney;
     private int discountAmount;
-    private HashMap<Product, HashMap<SellerAccount, Integer>> boughtProducts;
+    private HashMap<Integer, HashMap<String, Integer>> boughtProducts;
     private String state;
     private String receiverName;
     private String receiverPhoneNumber;
     private String receiverAddress;
 
-    public BuyLog(long buyLogId, int payedMoney, int discountAmount, HashMap<Product, HashMap<SellerAccount, Integer>> boughtProducts,
+    public BuyLog(long buyLogId, int payedMoney, int discountAmount, HashMap<Integer, HashMap<String, Integer>> boughtProducts,
                   String receiverName, String receiverPhoneNumber, String receiverAddress) {
         this.buyLogId = buyLogId;
         this.payedMoney = payedMoney;
@@ -45,8 +46,14 @@ public class BuyLog {
         return state;
     }
 
-    public Set<Product> getBoughtProducts() {
-        return boughtProducts.keySet();
+    public ArrayList<Product> getBoughtProducts() {
+        ArrayList<Product> products = new ArrayList<>();
+        for (Integer productId : boughtProducts.keySet()) {
+            try {
+                products.add(Shop.getInstance().getProductByIdd(productId));
+            } catch (Exception e) {}
+        }
+        return products;
     }
 
     @Override

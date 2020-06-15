@@ -1,6 +1,8 @@
 package Model.Logs;
 
+import Controller.Exceptions;
 import Model.Product;
+import Model.Shop;
 
 import java.util.GregorianCalendar;
 
@@ -9,7 +11,7 @@ public class SellLog {
     private GregorianCalendar date;
     private int receivedMoney;
     private double offPercent;
-    private Product soldProduct;
+    private int soldProduct;
     private int count;
     private String buyerUsername;
     private String state;
@@ -17,6 +19,9 @@ public class SellLog {
     private String receiverPhoneNumber;
     private String receiverAddress;
 
+    public String getBuyerUsername() {
+        return buyerUsername;
+    }
 
     @Override
     public String toString() {
@@ -39,7 +44,7 @@ public class SellLog {
         this.sellLogId = sellLogId;
         this.receivedMoney = receivedMoney;
         this.offPercent = offPercent;
-        this.soldProduct = soldProduct;
+        this.soldProduct = (int) soldProduct.getProductId();
         this.count = count;
         this.buyerUsername = buyerUsername;
         this.state = "preparing";
@@ -53,8 +58,12 @@ public class SellLog {
         return receivedMoney;
     }
 
-    public Product getSoldProduct() {
-        return soldProduct;
+    public Product getSoldProductId() {
+        try {
+            return Shop.getInstance().getProductById(soldProduct);
+        } catch (Exceptions.NoProductByThisIdException e) {
+            return null;
+        }
     }
 
     public int getCount() {

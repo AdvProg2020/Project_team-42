@@ -1,8 +1,9 @@
 package Controller.AccountPagesController;
 
-import Controller.Exceptions;
 import Model.Accounts.Account;
 import Model.Shop;
+
+import java.io.IOException;
 
 public abstract class AccountPageController {
     protected Shop shop;
@@ -10,6 +11,10 @@ public abstract class AccountPageController {
 
     public static Account getUser() {
         return user;
+    }
+
+    public static void setUser(Account user) {
+        AccountPageController.user = user;
     }
 
     public String getPersonalInfo() {
@@ -27,5 +32,9 @@ public abstract class AccountPageController {
             user.setPhoneNumber(newValue);
         else if (field.equalsIgnoreCase("password"))
             user.setPassword(newValue);
+
+        try {
+            user.updateResources();
+        } catch (IOException ignored) {}
     }
 }
