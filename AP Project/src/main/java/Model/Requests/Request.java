@@ -5,10 +5,11 @@ import Model.Accounts.ManagerAccount;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.concurrent.atomic.AtomicReferenceArray;
 
 public abstract class Request {
-    private static ArrayList<Request> unAnsweredRequests;
-    private static ArrayList<Request> answeredRequests;
+    private static ArrayList<Request> unAnsweredRequests = new ArrayList<>();
+    private static ArrayList<Request> answeredRequests = new ArrayList<>();
     protected int requestId;
     protected GregorianCalendar requestDate;
     protected GregorianCalendar answerDate;
@@ -29,15 +30,21 @@ public abstract class Request {
      public static StringBuilder showAllRequestsMoudel(){
         StringBuilder allRequests = new StringBuilder();
         int size = unAnsweredRequests.size();
-        for (int i=0 ; i < size ; i++)
-        {
-            allRequests.append(unAnsweredRequests.get(i).requestState + "   " + unAnsweredRequests.get(i).requestId + "   " + unAnsweredRequests.get(i).requestDate + "not answered\n");
+        if (size==0)
+            allRequests.append("there is no unanswered request"+"\n");
+        else {
+            for (int i = 0; i < size; i++) {
+                allRequests.append(unAnsweredRequests.get(i).requestState + "   " + unAnsweredRequests.get(i).requestId + "   " + unAnsweredRequests.get(i).requestDate.getTime() + "not answered\n");
+            }
         }
         size = answeredRequests.size();
-        for (int i =0 ; i < size ; i++)
-        {
-            allRequests.append(answeredRequests.get(i).requestState + "   " + answeredRequests.get(i).requestId + "   " + answeredRequests.get(i).requestDate + "answered\n");
-        }
+         if (size==0)
+             allRequests.append("there is no answered request"+"\n");
+         else {
+             for (int i = 0; i < size; i++) {
+                 allRequests.append(answeredRequests.get(i).requestState + "   " + answeredRequests.get(i).requestId + "   " + answeredRequests.get(i).requestDate.getTime() + "answered\n");
+             }
+         }
         return allRequests;
     }
 

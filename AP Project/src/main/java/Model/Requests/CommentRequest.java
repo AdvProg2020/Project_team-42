@@ -65,7 +65,7 @@ public class CommentRequest extends Request {
 
     public void updateResources () throws IOException {
         Gson gson = new Gson();
-        FileWriter fileWriter = new FileWriter("src\\main\\resources\\Requests\\CommentRequests" + this.requestId + ".txt");
+        FileWriter fileWriter = new FileWriter("src\\main\\resources\\Requests\\CommentRequests\\" + this.requestId + ".txt");
 
         gson.toJson(this, fileWriter);
         fileWriter.close();

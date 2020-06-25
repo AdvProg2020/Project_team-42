@@ -94,7 +94,7 @@ public abstract class Account {
         int size = allAccounts.size();
         for (int i = 0 ; i <= size-1 ; i++)
         {
-            sallAccounts.append(allAccounts.get(i).accountType + "   " + allAccounts.get(i).userName + "/n");
+            sallAccounts.append(allAccounts.get(i).accountType + "   " + allAccounts.get(i).userName + "\n");
         }
         return sallAccounts;
     }

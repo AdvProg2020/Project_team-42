@@ -11,6 +11,7 @@ import java.io.IOException;
 
 
 public class AddProductRequest extends Request {
+    private boolean newProduct;
     private String seller;
     private String name;
     private int productId;
@@ -21,7 +22,9 @@ public class AddProductRequest extends Request {
     private String description;
     private String attribute;
     private boolean isForEdit;
-       public AddProductRequest(boolean isForEdit,SellerAccount seller, String name, int productId, int count, String brand, int price, Category category, String description, String attribute) {
+
+    public AddProductRequest(boolean newProduct, boolean isForEdit, SellerAccount seller, String name, int productId, int count, String brand, int price, Category category, String description, String attribute) {
+        this.newProduct = newProduct;
         this.isForEdit = isForEdit;
         this.seller = seller.getUserName();
         this.name = name;
@@ -48,6 +51,10 @@ public class AddProductRequest extends Request {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public boolean isNewProduct() {
+        return newProduct;
     }
 
     public String getName() {
@@ -100,9 +107,9 @@ public class AddProductRequest extends Request {
                 '}';
     }
 
-    public void updateResources () throws IOException {
+    public void updateResources() throws IOException {
         Gson gson = new Gson();
-        FileWriter fileWriter = new FileWriter("src\\main\\resources\\Requests\\AddProductRequests" + this.requestId + ".txt");
+        FileWriter fileWriter = new FileWriter("src\\main\\resources\\Requests\\AddProductRequests\\" + this.requestId + ".txt");
 
         gson.toJson(this, fileWriter);
         fileWriter.close();

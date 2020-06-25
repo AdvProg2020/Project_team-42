@@ -159,6 +159,7 @@ public class LoginRegisterPage extends Page {
                         System.out.println("enter company or workshop name");
                         String company = scanner.nextLine();
                         try {
+
                             controller.createRegisterRequestSellerAccountController(username, userfirstname, userlastname, useremail, userphoneNumber, userpassword, "seller", company);
                             System.out.println("You have successfully created a request for seller account.");
                         } catch (Exception e) {

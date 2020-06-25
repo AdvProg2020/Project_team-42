@@ -33,13 +33,19 @@ public class Category {
                 ", productsAndCount=" + productsAndCount +
                 '}';
     }
-     public HashMap<Product, Integer> getProductsAndCount() {
-        HashMap <Product, Integer> productsAndCount = new HashMap<>();
-         for (Integer productId : this.productsAndCount.keySet()) {
-             try {
-                 productsAndCount.put(Shop.getInstance().getProductById(productId), this.productsAndCount.get(productId));
-             } catch (Exceptions.NoProductByThisIdException ignored) {}
-         }
+
+    public HashMap<Product, Integer> getProductsAndCount() {
+        HashMap<Product, Integer> productsAndCount = new HashMap<>();
+        for (Integer productId : this.productsAndCount.keySet()) {
+            try {
+                productsAndCount.put(Shop.getInstance().getProductById(productId), this.productsAndCount.get(productId));
+            } catch (Exceptions.NoProductByThisIdException ignored) {
+            }
+        }
+        return productsAndCount;
+    }
+
+    public HashMap<Integer, Integer> getProductIdAndCount () {
         return productsAndCount;
     }
 
@@ -48,8 +54,13 @@ public class Category {
         for (String subCategoryName : this.subCategories) {
             try {
                 subCategories.add(Shop.getInstance().getCategoryByName(subCategoryName));
-            } catch (Exceptions.NoCategoryException ignored) {}
+            } catch (Exceptions.NoCategoryException ignored) {
+            }
         }
+        return subCategories;
+    }
+
+    public ArrayList<String> addToSubCategories() {
         return subCategories;
     }
 
@@ -58,20 +69,22 @@ public class Category {
 
         try {
             updateResources();
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
     }
-    
-     public void editCategory(String newName, String attribute,Category parentCategory)
-    {
+
+    public void editCategory(String newName, String attribute, Category parentCategory) {
         this.getParentCategory().subCategories.remove(this.name);
-        this.parentCategory=parentCategory.getName();
+        this.parentCategory = parentCategory.getName();
         this.name = name;
         this.attribute = attribute;
 
         try {
             updateResources();
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
     }
+
     public Category getParentCategory() {
         try {
             return Shop.getInstance().getCategoryByName(parentCategory);
@@ -83,7 +96,8 @@ public class Category {
     public Category(String name, String attribute, Category parentCategory, ArrayList<Category> subCategories, HashMap<Product, Integer> productsAndCount) {
         this.name = name;
         this.attribute = attribute;
-        this.parentCategory = parentCategory.getName();
+        if (parentCategory != null)
+            this.parentCategory = parentCategory.getName();
         this.subCategories = new ArrayList<>();
         for (Category subCategory : subCategories) {
             this.subCategories.add(subCategory.name);
@@ -95,10 +109,11 @@ public class Category {
 
         try {
             updateResources();
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
     }
 
-    public void updateResources () throws IOException {
+    public void updateResources() throws IOException {
         Gson gson = new Gson();
         FileWriter fileWriter = new FileWriter("src\\main\\resources\\Categories\\" + this.name + ".txt");
 

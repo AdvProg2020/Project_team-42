@@ -6,7 +6,7 @@ import Model.Shop;
 import java.io.IOException;
 
 public abstract class AccountPageController {
-    protected Shop shop;
+    protected Shop shop = Shop.getInstance();
     protected static Account user;
 
     public static Account getUser() {

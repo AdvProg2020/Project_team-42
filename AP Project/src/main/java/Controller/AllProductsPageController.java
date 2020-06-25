@@ -152,12 +152,14 @@ public class AllProductsPageController {
         }
     }
 
-    public void showCategories() throws Exception {
+    public String showCategories() throws Exception {
+        StringBuilder stringBuilder = new StringBuilder();
         if (!shop.getAllCategories().isEmpty()) {
             for (Category category : shop.getAllCategories()) {
-                System.out.println(category);
+                stringBuilder.append(category.toString() + "\n");
             }
         }
+        return stringBuilder.toString();
     }
 
     public ArrayList<Product> prossesFiltering(ArrayList<Product> products, double maxPrice, double minPrice, double minRateForFilter, Category categoryForFilter, String brandForFilter, String nameForFlter) {
@@ -326,6 +328,10 @@ public class AllProductsPageController {
                 return b.getPrice() - a.getPrice();
             }
         }
+    }
+
+    public Product getProductById (int id) throws Exceptions.NoProductByThisIdException {
+        return shop.getProductById(id);
     }
 }
 

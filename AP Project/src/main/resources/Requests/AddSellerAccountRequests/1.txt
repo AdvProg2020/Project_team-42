@@ -1,0 +1,1 @@
+{"companyOrWorkshopName":"t","userName":"ahmad","FirstName":"a","lastName":"s","email":"a","phoneNumber":"s","password":"rrrrrrrrr","accountType":"seller","requestId":1,"requestDate":{"year":2020,"month":5,"dayOfMonth":25,"hourOfDay":14,"minute":39,"second":22},"answerDate":{"year":2020,"month":5,"dayOfMonth":25,"hourOfDay":14,"minute":39,"second":55},"requestState":"ACCEPTED"}

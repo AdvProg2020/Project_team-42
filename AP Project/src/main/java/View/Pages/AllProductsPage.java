@@ -9,6 +9,7 @@ import Controller.Exceptions;
 import Model.Accounts.CustomerAccount;
 import Model.Accounts.ManagerAccount;
 import Model.Accounts.SellerAccount;
+import Model.Product;
 import Model.Shop;
 import View.Commands;
 import View.Page;
@@ -54,7 +55,10 @@ public class AllProductsPage extends Page {
             } else if (Commands.SHOW_PRODUCTS.getMatcher(input).matches()) {
                 showProducts();
             } else if ((matcher =Commands.SHOW_PRODUCT_BY_ID.getMatcher(input)).matches()) {
-                showProductByProductId(Integer.parseInt(matcher.group(1)));
+                try {
+                    return new ProductPage(showProductByProductId(Integer.parseInt(matcher.group(1))));
+                } catch (Exceptions.NoProductByThisIdException ignored) {}
+                //showProductByProductId(Integer.parseInt(matcher.group(1)));
             }  else if (Commands.ACCOUNT_PAGE.getMatcher(input).matches()) {
                 if (AccountPageController.getUser() == null)
                     return LoginRegisterPage.getInstance();
@@ -209,8 +213,7 @@ public class AllProductsPage extends Page {
         controller.showProducts();
     }
 
-    public void showProductByProductId(int id) {
-        showProductByProductId(id);
+    public Product showProductByProductId(int id) throws Exceptions.NoProductByThisIdException {
+        return controller.getProductById(id);
     }
-
 }

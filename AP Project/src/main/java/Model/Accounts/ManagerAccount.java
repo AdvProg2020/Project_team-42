@@ -75,8 +75,8 @@ public class ManagerAccount extends Account {
     }
 
     public void answerRequest(int id, String state) throws Exception {
-        int i = 0;
-        for (; i < Request.getUnAnsweredRequests().size(); i++) {
+        int i;
+        for (i = 0; i < Request.getUnAnsweredRequests().size(); i++) {
             if (Request.getUnAnsweredRequests().get(i).getRequestId() == id)
                 break;
             if (i == Request.getUnAnsweredRequests().size() - 1)
@@ -104,16 +104,34 @@ public class ManagerAccount extends Account {
                 Request.getUnAnsweredRequests().remove(Request.getUnAnsweredRequests().get(i));
             } else if (Request.getUnAnsweredRequests().get(i).getClass().equals(AddProductRequest.class)) {
                 AddProductRequest request = (AddProductRequest) Request.getUnAnsweredRequests().get(i);
-                if (!request.isForEdit()){
-                Product product = new Product(shop.returnNewId(), request.getName(), request.getBrand(), request.getPrice(), request.getCategory(), request.getAttribute(), request.getDescription(), request.getSeller());
-                shop.getAllProductAndCount().put(product, 0);
-                ((AddProductRequest) Request.getUnAnsweredRequests().get(i)).getSeller().getSellableProductAndCounts().put(product, 0);
-                Request.getUnAnsweredRequests().get(i).setAnswerDate(new GregorianCalendar());
-                Request.getUnAnsweredRequests().get(i).setRequestState(RequestState.ACCEPTED);
-                Request.getAnsweredRequests().add(Request.getUnAnsweredRequests().get(i));
-                Request.getUnAnsweredRequests().remove(Request.getUnAnsweredRequests().get(i));
-                }
-                else {
+                if (!request.isForEdit()) {
+                    if (request.isNewProduct()) {
+                        Product product = new Product(shop.returnNewId(), request.getName(), request.getBrand(), request.getPrice(), request.getCategory(), request.getAttribute(), request.getDescription(), request.getSeller());
+                        shop.getAllProductAndCount().put(product , request.getCount());
+                        request.getSeller().addToSellableProducts((int) product.getProductId(), request.getCount());
+                        request.setAnswerDate(new GregorianCalendar());
+                        request.setRequestState(RequestState.ACCEPTED);
+                        Request.getAnsweredRequests().add(Request.getUnAnsweredRequests().get(i));
+                        Request.getUnAnsweredRequests().remove(Request.getUnAnsweredRequests().get(i));
+                    } else {
+                        Product existProduct = null;
+                        long existId;
+                        for (Product product : shop.getAllProductAndCount().keySet()) {
+                            if (product.getName().equals(request.getName())) {
+                                existId = product.getProductId();
+                                existProduct = product;
+                            }
+                        }
+                        int count = shop.getAllProductAndCount().get(existProduct);
+                        count = count + request.getCount();
+                        shop.getAllProductAndCount().replace(existProduct, count);
+                        ((AddProductRequest) Request.getUnAnsweredRequests().get(i)).getSeller().addToSellableProducts((int) existProduct.getProductId(), request.getCount());
+                        Request.getUnAnsweredRequests().get(i).setAnswerDate(new GregorianCalendar());
+                        Request.getUnAnsweredRequests().get(i).setRequestState(RequestState.ACCEPTED);
+                        Request.getAnsweredRequests().add(Request.getUnAnsweredRequests().get(i));
+                        Request.getUnAnsweredRequests().remove(Request.getUnAnsweredRequests().get(i));
+                    }
+                } else {
                     Product product = shop.getProductByIdd(request.getProductId());
                     product.setName(request.getName());
                     product.setCategory(request.getCategory());
@@ -121,7 +139,7 @@ public class ManagerAccount extends Account {
                     product.setBrand(request.getBrand());
                     product.setDescription(request.getDescription());
                     product.setPrice(request.getPrice());
-                    shop.getAllProductOnOffsAndCount().replace(product,shop.getAllProductAndCount().get(product),request.getCount());
+                    shop.getAllProductOnOffsAndCount().replace(product, shop.getAllProductAndCount().get(product), request.getCount());
 
                 }
             } else if (Request.getUnAnsweredRequests().get(i).getClass().equals(CommentRequest.class)) {
@@ -131,7 +149,6 @@ public class ManagerAccount extends Account {
                 Request.getUnAnsweredRequests().get(i).setRequestState(RequestState.ACCEPTED);
                 Request.getAnsweredRequests().add(Request.getUnAnsweredRequests().get(i));
                 Request.getUnAnsweredRequests().remove(Request.getUnAnsweredRequests().get(i));
-                return;
             } else if (Request.getUnAnsweredRequests().get(i).getClass().equals(CreateOffRequest.class)) {
                 CreateOffRequest request = (CreateOffRequest) Request.getUnAnsweredRequests().get(i);
                 if (request.isForEdit()) {
@@ -143,8 +160,7 @@ public class ManagerAccount extends Account {
                 } else {
                     Off off;
                     shop.getAllOffs().add(off = new Off(shop.getAllOffs().size(), request.getEffectingProducts(), OffOrProductState.ACCEPTED, request.getBegin(), request.getEnd(), (int) request.getOffPercentage()));
-                    request.getSeller().getOffs().add(off);
-
+                    request.getSeller().getOffs().add((int) off.getOffId());
                 }
             }
         }
@@ -157,7 +173,8 @@ public class ManagerAccount extends Account {
         allManagerAccounts.add(account);
         try {
             account.updateResources();
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
     }
 
     public void createDiscountCodeMoudel(String discountCode, GregorianCalendar begin, GregorianCalendar end, double discountPercent, int discountAmountLimit, int repeatCountForEachCustomer, HashMap<CustomerAccount, Integer> effectingCustomersAndUsageCount) {

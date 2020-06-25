@@ -14,6 +14,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static Model.Accounts.Account.getAllAccounts;
+
 public class LoginAndRegisterPageController {
     private static LoginAndRegisterPageController controller = new LoginAndRegisterPageController();
     private Shop shop = Shop.getInstance();
@@ -22,32 +24,43 @@ public class LoginAndRegisterPageController {
         return controller;
     }
 
-    private LoginAndRegisterPageController() {}
+    private LoginAndRegisterPageController() {
+    }
 
     public void createCustomerAccountController(String userName, String firstName, String lastName, String email, String phoneNumber, String password, String accountType) throws Exception {
-        shop.createCustomerAccountMoudel(userName,firstName,lastName,email,phoneNumber,password,accountType);
+        shop.createCustomerAccountMoudel(userName, firstName, lastName, email, phoneNumber, password, accountType);
     }
 
-    public void createRegisterRequestSellerAccountController(String userName, String firstName, String lastName, String email, String phoneNumber, String password, String accountType, String companyOrWorkShopName)
-    {
-        AddSellerAccountRequest request = new AddSellerAccountRequest(userName,firstName,lastName,email,phoneNumber,password,accountType,companyOrWorkShopName);
+    public void createRegisterRequestSellerAccountController(String userName, String firstName, String lastName, String email, String phoneNumber, String password, String accountType, String companyOrWorkShopName) throws Exception {
+        for (int i = 0; i < getAllAccounts().size(); i++) {
+            if (getAllAccounts().get(i).getUserName().equals(userName))
+                throw new Exception("username is used");
+        }
+        AddSellerAccountRequest request = new AddSellerAccountRequest(userName, firstName, lastName, email, phoneNumber, password, accountType, companyOrWorkShopName);
         try {
             request.updateResources();
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
     }
 
-    public CustomerAccount loginCustomerAccountController(String username ,String password) throws Exception { return shop.loginCustomerMoudel(username,password);}
+    public CustomerAccount loginCustomerAccountController(String username, String password) throws Exception {
+        return shop.loginCustomerMoudel(username, password);
+    }
 
-    public SellerAccount loginSellerAccountController(String username , String password) throws Exception { return shop.loginSellerMoudel(username,password);}
+    public SellerAccount loginSellerAccountController(String username, String password) throws Exception {
+        return shop.loginSellerMoudel(username, password);
+    }
 
-    public ManagerAccount loginManagerAccountController(String username , String password) throws Exception { return shop.loginManagerMoudel(username,password);}
+    public ManagerAccount loginManagerAccountController(String username, String password) throws Exception {
+        return shop.loginManagerMoudel(username, password);
+    }
 
     public void CreateFirstManagerAccountController(String userName, String firstName, String lastName, String email, String phoneNumber, String password,
-                                          String accountType) throws Exception {
+                                                    String accountType) throws Exception {
         shop.createFirstManagerAccountMoudel(userName, firstName, lastName, email, phoneNumber, password, "manager");
     }
 
-    public void parseResources () throws FileNotFoundException {
+    public void parseResources() throws FileNotFoundException {
         HashMap<Product, Integer> allProductsAndCount = new HashMap<>();
         HashMap<Product, Integer> allProductsOnOffAndCount = new HashMap<>();
         ArrayList<Category> categories = new ArrayList<>();
@@ -171,7 +184,14 @@ public class LoginAndRegisterPageController {
 
                 SellerAccount.getAllSellerAccounts().add(account = gson.fromJson(reader, SellerAccount.class));
                 Account.getAllAccounts().add(account);
-                shop.getAllSellLogs().addAll(account.getThisSellerAllSellLogs());
+                if (account.getThisSellerAllSellLogs() == null)
+                    account.newThisSellerAllSellLogs();
+                if (account.getSellableProductAndCounts() == null)
+                    account.newSellableProductAndCount();
+                if (account.getRequests() == null)
+                    account.newRequests();
+                if (account.getOffs() == null)
+                    account.newOff();
 
                 for (Product product : account.getSellableProductAndCounts().keySet()) {
                     allProductsAndCount.replace(product, allProductsAndCount.get(product) + account.getCountOfProduct(product));

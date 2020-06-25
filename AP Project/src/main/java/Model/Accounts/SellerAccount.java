@@ -15,31 +15,47 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SellerAccount extends Account {
-  
+
     private static ArrayList<SellerAccount> allSellerAccounts = new ArrayList<>();
-    private String companyOrWorkShopName ;
+    private String companyOrWorkShopName;
     private ArrayList<SellLog> thisSellerAllSellLogs;
-    private HashMap<Integer,Integer> sellableProductAndCounts;
-    private ArrayList<Off> offs;
-    private ArrayList<Request> requests;
+    private HashMap<Integer, Integer> sallableProductAndCounts;
+    private ArrayList<Integer> offs;
+    private ArrayList<Integer> requests;
 
     public SellerAccount(String userName, String firstName, String lastName, String email, String phoneNumber, String password, String accountType, String companyOrWorkShopName) {
         super(userName, firstName, lastName, email, phoneNumber, password, accountType);
         this.companyOrWorkShopName = companyOrWorkShopName;
         this.offs = new ArrayList<>();
-        this.sellableProductAndCounts = new HashMap<>();
+        this.sallableProductAndCounts = new HashMap<>();
         this.requests = new ArrayList<>();
         this.thisSellerAllSellLogs = new ArrayList<>();
     }
-  
+
+    public void newOff() {
+        offs = new ArrayList<>();
+    }
+
+    public void newSellableProductAndCount() {
+        sallableProductAndCounts = new HashMap<>();
+    }
+
+    public void newRequests() {
+        requests = new ArrayList<>();
+    }
+
+    public void newThisSellerAllSellLogs() {
+        thisSellerAllSellLogs = new ArrayList<>();
+    }
+
     public void setSellableProductAndCounts(HashMap<Product, Integer> sellableProductAndCounts) {
-        this.sellableProductAndCounts = new HashMap<>();
+        this.sallableProductAndCounts = new HashMap<>();
         for (Product product : sellableProductAndCounts.keySet()) {
-            this.sellableProductAndCounts.put((int) product.getProductId(), sellableProductAndCounts.get(product));
+            this.sallableProductAndCounts.put((int) product.getProductId(), sellableProductAndCounts.get(product));
         }
     }
 
-    public static SellerAccount getSellerAccountByUsername (String username) throws Exception {
+    public static SellerAccount getSellerAccountByUsername(String username) throws Exception {
 
         for (SellerAccount sellerAccount : SellerAccount.getAllSellerAccounts()) {
             if (sellerAccount.getUserName().equalsIgnoreCase(username))
@@ -62,24 +78,34 @@ public class SellerAccount extends Account {
 
     public HashMap<Product, Integer> getSellableProductAndCounts() {
         HashMap<Product, Integer> productsAndCount = new HashMap<>();
-        for (Integer productId : this.sellableProductAndCounts.keySet()) {
+        if (sallableProductAndCounts == null)
+            sallableProductAndCounts = new HashMap<>();
+        for (Integer productId : this.sallableProductAndCounts.keySet()) {
             try {
-                productsAndCount.put(Shop.getInstance().getProductById(productId), this.sellableProductAndCounts.get(productId));
-            } catch (Exceptions.NoProductByThisIdException ignored) {}
+                productsAndCount.put(Shop.getInstance().getProductById(productId), this.sallableProductAndCounts.get(productId));
+            } catch (Exceptions.NoProductByThisIdException ignored) {
+            }
         }
         return productsAndCount;
     }
 
-    public ArrayList<Off> getOffs() {
+    public void addToSellableProducts(int id , int count)
+    {
+        this.sallableProductAndCounts.put(id, count);
+        try {
+            updateResources();
+        } catch (IOException ignored) {}
+    }
+
+    public ArrayList<Integer> getOffs() {
         return offs;
     }
 
-    public ArrayList<Request> getRequests() {
+    public ArrayList<Integer> getRequests() {
         return requests;
     }
 
-    public String showPersolanInfo()
-    {
+    public String showPersonalInfo() {
         return "username : " + super.userName +
                 "\nfirstName : " + super.firstName +
                 "\nlastName : " + super.lastName +
@@ -91,48 +117,50 @@ public class SellerAccount extends Account {
                 "\ncompony or workshop :" + companyOrWorkShopName;
     }
 
-    public String getBalance(){
-        return "Balance :"+String.valueOf(super.credit);
+    public String getBalance() {
+        return "Balance :" + String.valueOf(super.credit);
     }
 
-    public boolean hasEnoughOfProduct (Product product, int count) {
-        if (count < this.sellableProductAndCounts.get((int)product.getProductId()))
+    public boolean hasEnoughOfProduct(Product product, int count) {
+        if (count < this.sallableProductAndCounts.get((int) product.getProductId()))
             return true;
         return false;
     }
 
-    public int getCountOfProduct (Product product) {
-        return this.sellableProductAndCounts.get((int)product.getProductId());
+    public int getCountOfProduct(Product product) {
+        return this.sallableProductAndCounts.get((int) product.getProductId());
     }
 
-    public void sellSellLog (SellLog sellLog) {
+    public void sellSellLog(SellLog sellLog) {
         this.thisSellerAllSellLogs.add(sellLog);
-        this.sellableProductAndCounts.replace((int)sellLog.getSoldProductId().getProductId(),
-                this.sellableProductAndCounts.get((int)sellLog.getSoldProductId().getProductId()) - sellLog.getCount());
+        this.sallableProductAndCounts.replace((int) sellLog.getSoldProductId().getProductId(),
+                this.sallableProductAndCounts.get((int) sellLog.getSoldProductId().getProductId()) - sellLog.getCount());
     }
 
     public void removeProduct(Product product) {
-        sellableProductAndCounts.replace((int) product.getProductId(),0);
+        sallableProductAndCounts.replace((int) product.getProductId(), 0);
     }
 
-    public void addRequest(Request request){
-        this.requests.add(request);
+    public void addRequest(Request request) {
+        this.requests.add(request.getRequestId());
+
     }
 
     public Product hasProduct(int id) throws Exceptions.NoProductByThisIdException {
-        if (this.sellableProductAndCounts.containsKey(id)) {
+        if (this.sallableProductAndCounts.containsKey(id)) {
             try {
                 return Shop.getInstance().getProductByIdd(id);
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
         throw new Exceptions.NoProductByThisIdException(id);
     }
 
-    public int countProcudt(Product product){
-        return sellableProductAndCounts.get((int)product.getProductId());
+    public int countProcudt(Product product) {
+        return sallableProductAndCounts.get((int) product.getProductId());
     }
 
-    public void updateResources () throws IOException {
+    public void updateResources() throws IOException {
         Gson gson = new Gson();
         FileWriter fileWriter = new FileWriter("src\\main\\resources\\Accounts\\SellerAccounts\\" + this.userName + ".txt");
 
@@ -144,14 +172,14 @@ public class SellerAccount extends Account {
         ArrayList<String> listBuyers = new ArrayList<>();
         boolean isEmpty = false;
         for (SellLog sellLog : this.thisSellerAllSellLogs) {
-            if(sellLog.getSoldProductId().equals(productId)){
+            if (sellLog.getSoldProductId().equals(productId)) {
                 listBuyers.add(sellLog.getBuyerUsername());
                 isEmpty = true;
             }
         }
-        if(isEmpty){
+        if (isEmpty) {
             return listBuyers;
-        }else{
+        } else {
             throw new Exceptions.NoProductByThisIdException(productId);
         }
     }

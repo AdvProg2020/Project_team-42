@@ -19,7 +19,7 @@ public class Product {
     private String attribute;
     private String description;
     private double averageRate;
-    private HashMap<String, Off> sellersAndOff;
+    private HashMap<String, Integer> sellersAndOff;
     private ArrayList<Comment> comments;
     private ArrayList<Rate> rates;
     private int visit;
@@ -30,6 +30,9 @@ public class Product {
 
     public void setPrice(int price) {
         this.price = price;
+        try {
+            this.updateResources();
+        } catch (IOException ignored) {}
     }
 
     public String getName() {
@@ -38,6 +41,9 @@ public class Product {
 
     public void setName(String name) {
         this.name = name;
+        try {
+            this.updateResources();
+        } catch (IOException ignored) {}
     }
 
     public Product(long productId,String name, String brand, int price, Category category, String attribute, String description, SellerAccount firstSeller) {
@@ -50,7 +56,7 @@ public class Product {
         this.description = description;
         this.averageRate = 0;
         this.sellersAndOff = new HashMap<>();
-        this.sellersAndOff.put(firstSeller.getUserName(), null);
+        this.sellersAndOff.put(firstSeller.getUserName(), -1);
         this.comments = new ArrayList<>();
         this.rates = new ArrayList<>();
         this.visit = 0;
@@ -70,6 +76,9 @@ public class Product {
 
     public void setBrand(String brand) {
         this.brand = brand;
+        try {
+            this.updateResources();
+        } catch (IOException ignored) {}
     }
 
     public OffOrProductState getState() {
@@ -78,6 +87,9 @@ public class Product {
 
     public void setState(OffOrProductState state) {
         this.state = state;
+        try {
+            this.updateResources();
+        } catch (IOException ignored) {}
     }
 
     public Category getCategory() {
@@ -102,6 +114,9 @@ public class Product {
 
     public void setAttribute(String attribute) {
         this.attribute = attribute;
+        try {
+            this.updateResources();
+        } catch (IOException ignored) {}
     }
 
     public SellerAccount getSellerByUsername (String userName) throws Exceptions.NoSellerByThisUserNameForProductException {
@@ -145,6 +160,9 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+        try {
+            this.updateResources();
+        } catch (IOException ignored) {}
     }
 
     public double getAverageRate() {
@@ -152,10 +170,12 @@ public class Product {
     }
 
     public double getOff(SellerAccount seller) throws Exceptions.NoOffForThisProductException {
-        if (this.sellersAndOff.get(seller) != null) {
-            if (this.sellersAndOff.get(seller).isUsable())
-                return this.sellersAndOff.get(seller).getOffPercentage();
-            this.sellersAndOff.remove(seller);
+        if (this.sellersAndOff.get(seller.getUserName()) != -1) {
+            try {
+                if ((Shop.getInstance().getOffById(this.sellersAndOff.get(seller.getUserName()))).isUsable())
+                    return (Shop.getInstance().getOffById(this.sellersAndOff.get(seller.getUserName()))).getOffPercentage();
+            } catch (Exceptions.NoOffByThisId ignored) {}
+            this.sellersAndOff.remove(seller.getUserName());
         }
         throw new Exceptions.NoOffForThisProductException();
     }
@@ -183,9 +203,9 @@ public class Product {
                 seller = getSellerByUsername(sellerUsername);
             } catch (Exceptions.NoSellerByThisUserNameForProductException ignored) {}
             try {
-                stringBuilder.append("\n\t" + seller.getUserName() + " by " + this.getOff(seller) + "% off");
+                stringBuilder.append("\n\t" + sellerUsername + " by " + this.getOff(seller) + "% off");
             } catch (Exceptions.NoOffForThisProductException e) {
-                stringBuilder.append("\n\t" + seller.getUserName());
+                stringBuilder.append("\n\t" + sellerUsername);
             }
         }
         return stringBuilder.toString();
@@ -202,6 +222,9 @@ public class Product {
     
     public void setComments(ArrayList<Comment> comments) {
         this.comments = comments;
+        try {
+            this.updateResources();
+        } catch (IOException ignored) {}
     }
 
     public void updateResources () throws IOException {

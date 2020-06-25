@@ -46,11 +46,11 @@ public enum Commands {
     SHOW_TOTAL_PRICE("(?i)show\\s+total\\s+price"),
     PURCHASE("(?i)purchase"), 
     //allProduct Page
-    SHOW_PRODUCT_BY_ID("(?i)show\\s+show\\s+product\\s+(\\d)"),
+    SHOW_PRODUCT_BY_ID("(?i)show\\s+product\\s+(\\d)"),
     SHOW_AVALABLE_SORT("(?i)show\\s+available\\s+sort"),
     SET_SORT("(?i)sort\\s+(\\w+)"),
-    FILTERING("(?i)\\s*filtering"),
-    SORTING("(?i)\\s*sorting"),
+    FILTERING("(?i)filtering"),
+    SORTING("(?i)sorting"),
     //filtering prosses
     SHOW_AVALABLE_FILTERS("(?i)\\s*show\\s*avalilable\\s*filters"),
     FILTER_ANAVALAIBLE_FILTER("(?i)filer\\s+(\\w+)"),

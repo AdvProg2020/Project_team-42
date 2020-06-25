@@ -1,0 +1,1 @@
+{"discountCode":"342","begin":{"year":1400,"month":10,"dayOfMonth":4,"hourOfDay":20,"minute":0,"second":0},"end":{"year":1401,"month":10,"dayOfMonth":4,"hourOfDay":20,"minute":0,"second":0},"discountPercent":20.0,"discountAmountLimit":400000,"repeatCountForEachCustomer":2,"effectingCustomersAndUsageCount":{"a":0,"alin":0}}

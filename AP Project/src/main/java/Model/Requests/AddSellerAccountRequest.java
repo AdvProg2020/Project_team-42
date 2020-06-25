@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class AddSellerAccountRequest extends Request {
+
     private String companyOrWorkshopName;
     private String userName;
     private String FirstName;
@@ -61,7 +62,8 @@ public class AddSellerAccountRequest extends Request {
                 '}';
     }
 
-    public AddSellerAccountRequest(String companyOrWorkshopName, String userName, String firstName, String lastName, String email, String phoneNumber, String password, String accountType) {
+    public AddSellerAccountRequest(String userName, String firstName, String lastName, String email, String phoneNumber, String password, String accountType, String companyOrWorkshopName) {
+        super();
         this.companyOrWorkshopName = companyOrWorkshopName;
         this.userName = userName;
         FirstName = firstName;
@@ -74,7 +76,7 @@ public class AddSellerAccountRequest extends Request {
 
     public void updateResources () throws IOException {
         Gson gson = new Gson();
-        FileWriter fileWriter = new FileWriter("src\\main\\resources\\Requests\\AddSellerAccountRequests" + this.requestId + ".txt");
+        FileWriter fileWriter = new FileWriter("src\\main\\resources\\Requests\\AddSellerAccountRequests\\" + this.requestId + ".txt");
 
         gson.toJson(this, fileWriter);
         fileWriter.close();

@@ -101,7 +101,11 @@ public class OffsPage extends Page {
     }
 
     public void showAllCaregories() {
-        controller.showCategories();
+        try {
+            System.out.println(controller.showCategories());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void filteringProsses() {

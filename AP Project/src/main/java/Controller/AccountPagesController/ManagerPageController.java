@@ -50,7 +50,7 @@ public class ManagerPageController extends AccountPageController {
 
     public StringBuilder showAllDiscountsController() throws Exception { return shop.showAllDiscountsMoudel(); }
 
-    public StringBuilder showAllRequestsController(){ return Request.showAllRequestsMoudel(); }
+    public String showAllRequestsController(){ return Request.showAllRequestsMoudel().toString(); }
 
     public void deleteProductController(long id) throws Exceptions.NoProductByThisIdException { shop.deleteProductMoudel(id);}
 
