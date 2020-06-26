@@ -25,7 +25,7 @@ import static Model.Accounts.SellerAccount.getAllSellerAccounts;
 
 public class Shop {
     private static Shop shop = new Shop();
-    private HashMap<Product, Integer> allProductAndCount;
+    private ArrayList<Product> allProducts;
     private HashMap<Product, Integer> allProductOnOffsAndCount;
     private ArrayList<SellLog> allSellLogs;
     private ArrayList<BuyLog> allBuyLogs;
@@ -35,7 +35,7 @@ public class Shop {
     private Category allGoodsCategory;
 
     private Shop() {
-        this.allProductAndCount = new HashMap<>();
+        this.allProducts = new ArrayList<>();
         this.allProductOnOffsAndCount = new HashMap<>();
         this.allSellLogs = new ArrayList<>();
         this.allBuyLogs = new ArrayList<>();
@@ -57,8 +57,12 @@ public class Shop {
         throw new Exception();
     }
 
-    public HashMap<Product, Integer> getAllProductAndCount() {
-        return allProductAndCount;
+    public ArrayList<Product> getAllProducts() {
+        return allProducts;
+    }
+
+    public void addProduct(Product product) {
+        this.allProducts.add(product);
     }
 
     public HashMap<Product, Integer> getAllProductOnOffsAndCount() {
@@ -67,10 +71,10 @@ public class Shop {
 
     public StringBuilder showAllProductsMoudel() throws Exception {
         StringBuilder sallProducts = new StringBuilder();
-        if (allProductAndCount.isEmpty())
+        if (allProducts.isEmpty())
             throw new Exception("there is no product");
-        for (Product product : allProductAndCount.keySet()) {
-            sallProducts.append(product.getProductId() + "   " + product.getName() + "\n");
+        for (Product product : allProducts) {
+            sallProducts.append(product.getProductId() + "   " + product.getName() + "   " + product.getCount() + "\n");
         }
         return sallProducts;
     }
@@ -88,7 +92,6 @@ public class Shop {
 
     public void deleteProductMoudel(long id) throws Exceptions.NoProductByThisIdException {
         Product product = getProductById(id);
-        allProductAndCount.replace(product, 0);
         for (SellerAccount seller : product.getSellers()) {
             seller.removeProduct(product);
         }
@@ -108,7 +111,7 @@ public class Shop {
     }
 
     public Product getProductById(long productId) throws Exceptions.NoProductByThisIdException {
-        for (Product product : allProductAndCount.keySet()) {
+        for (Product product : allProducts) {
             if (product.getProductId() == productId)
                 return product;
         }
@@ -141,14 +144,14 @@ public class Shop {
         this.allSellLogs.add(sellLog);
     }
 
-    public void removeProduct(Product product, int count) {
-        allProductAndCount.replace(product, allProductAndCount.get(product) - count);
+    /*public void removeProduct(Product product, int count) {
+        allProducts.replace(product, allProducts.get(product) - count);
         for (Product productOnOFF : allProductOnOffsAndCount.keySet()) {
             if (product == productOnOFF) {
                 allProductOnOffsAndCount.replace(productOnOFF, allProductOnOffsAndCount.get(productOnOFF) - count);
             }
         }
-    }
+    }*/
 
     public void deleteDiscountMoudel(String code) {
         for (int i = 0; i < allDiscounts.size(); i++) {
@@ -205,7 +208,8 @@ public class Shop {
                 allCategories.remove(category);
                 try {
                     category.updateResources();
-                } catch (IOException ignored) {}
+                } catch (IOException ignored) {
+                }
                 break;
             }
         }
@@ -220,7 +224,7 @@ public class Shop {
     }
 
 
-    public void addCategoryMoudel(String name, String attribute, Category parentCategory, ArrayList<Category> subCategories, HashMap<Product, Integer> productsAndCount) {
+    public void addCategoryMoudel(String name, String attribute, String parentCategory, ArrayList<Category> subCategories, HashMap<Product, Integer> productsAndCount) {
         allCategories.add(new Category(name, attribute, parentCategory, subCategories, productsAndCount));
     }
 
@@ -234,7 +238,7 @@ public class Shop {
     }
 
     public int returnNewId() {
-        return allProductAndCount.keySet().size();
+        return allProducts.size();
     }
 
     public Off getOffById(int id) throws Exceptions.NoOffByThisId {
@@ -246,8 +250,8 @@ public class Shop {
         throw new Exceptions.NoOffByThisId();
     }
 
-    public void setAllProductAndCount(HashMap<Product, Integer> allProductAndCount) {
-        this.allProductAndCount = allProductAndCount;
+    public void setAllProducts(ArrayList<Product> allProducts) {
+        this.allProducts = allProducts;
     }
 
     public String discountView(String discountCode) {
@@ -292,7 +296,7 @@ public class Shop {
     }
 
     public Product getProductByIdd(int id) throws Exception {
-        for (Product product : allProductAndCount.keySet()) {
+        for (Product product : allProducts) {
             if (product.getProductId() == id) {
                 return product;
             }
@@ -301,7 +305,7 @@ public class Shop {
     }
 
     public Integer countOfProduct(Product product) {
-        return allProductAndCount.get(product);
+        return product.getCount();
     }
 
     public boolean isOffById(int id) {

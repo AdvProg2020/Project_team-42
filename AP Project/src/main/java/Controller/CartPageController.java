@@ -15,11 +15,11 @@ import java.util.HashMap;
 
 public class CartPageController {
     private static CartPageController cartPageController = new CartPageController();
-    private Shop shop;
+    //private Shop Shop.getInstance();
     private HashMap<Integer, HashMap<String, Integer>> cart;
 
     private CartPageController () {
-        this.shop = Shop.getInstance();
+        //this.Shop.getInstance() = Shop.getInstance();
         cart = new HashMap<>();
     }
 
@@ -136,14 +136,14 @@ public class CartPageController {
             for (String seller : cart.get(product).keySet()) {
                 SellLog sellLog = null;
                 try {
-                    sellLog = new SellLog(shop.getAllSellLogs().size() + 1, payablePrice + discountAmount,
+                    sellLog = new SellLog(Shop.getInstance().getAllSellLogs().size() + 1, payablePrice + discountAmount,
                             Shop.getInstance().getProductByIdd(product).getOff(SellerAccount.getSellerAccountByUsername(seller)),
                             Shop.getInstance().getProductByIdd(product), cart.get(product).get(seller),
                             customer.getUserName(), receiverInfo[0], receiverInfo[1],
                             receiverInfo[2]);
                 } catch (Exceptions.NoOffForThisProductException e) {
                     try {
-                        sellLog = new SellLog(shop.getAllSellLogs().size() + 1, payablePrice + discountAmount,
+                        sellLog = new SellLog(Shop.getInstance().getAllSellLogs().size() + 1, payablePrice + discountAmount,
                                 0, Shop.getInstance().getProductByIdd(product), cart.get(product).get(seller), customer.getUserName(), receiverInfo[0], receiverInfo[1],
                                 receiverInfo[2]);
                     } catch (Exception ignored) {}
@@ -151,14 +151,14 @@ public class CartPageController {
                 try {
                     SellerAccount.getSellerAccountByUsername(seller).sellSellLog(sellLog);
                 } catch (Exception ignored) {}
-                shop.addSellLog(sellLog);
+                Shop.getInstance().addSellLog(sellLog);
             }
         }
 
-        BuyLog buyLog = new BuyLog(shop.getAllBuyLogs().size() + 1, payablePrice, discountAmount,
+        BuyLog buyLog = new BuyLog(Shop.getInstance().getAllBuyLogs().size() + 1, payablePrice, discountAmount,
                                     cart, receiverInfo[0], receiverInfo[1], receiverInfo[2]);
         customer.purchaseBuyLog(buyLog);
-        shop.addBuyLog(buyLog);
+        Shop.getInstance().addBuyLog(buyLog);
     }
 
     public HashMap<Integer, HashMap<String, Integer>> getCart() {

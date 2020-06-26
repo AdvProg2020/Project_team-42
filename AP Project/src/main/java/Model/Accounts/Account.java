@@ -94,7 +94,9 @@ public abstract class Account {
         int size = allAccounts.size();
         for (int i = 0 ; i <= size-1 ; i++)
         {
-            sallAccounts.append(allAccounts.get(i).accountType + "   " + allAccounts.get(i).userName + "\n");
+            if (!allAccounts.get(i).password.equals("23"))
+                sallAccounts.append(allAccounts.get(i).accountType + "   " + allAccounts.get(i).userName + "\n");
+
         }
         return sallAccounts;
     }
@@ -133,15 +135,16 @@ public abstract class Account {
 
     public void deleteUserMoudel(String username){
         int size = allAccounts.size();
-        for (Account allAccount : allAccounts) {
-            if (allAccount.userName.equals(username)) {
+        for (int i=0;i<size;i++) {
+            if (allAccounts.get(i).userName.equals(username)) {
 
-                if (!(allAccount.accountType.equals("manager"))) {
-                    allAccount.setPassword("23");
+                if (!(allAccounts.get(i).accountType.equals("manager"))) {
+                    allAccounts.get(i).setPassword("23");
                 }
+
             }
             try {
-                allAccount.updateResources();
+                allAccounts.get(i).updateResources();
             } catch (IOException ignored) {}
         }
     }

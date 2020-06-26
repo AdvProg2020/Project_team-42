@@ -21,7 +21,6 @@ import java.util.regex.Matcher;
 
 public class OffsPage extends Page {
     private static OffsPage offsPage = new OffsPage();
-    private Shop shop = Shop.getInstance();
     private AllProductsPageController controller = AllProductsPageController.getInstance();
     private ArrayList<String> allCurrentFiltters= new ArrayList<>();
     private ArrayList<String> allCurrentSorts= new ArrayList<>();
@@ -48,7 +47,7 @@ public class OffsPage extends Page {
                 filteringProsses();
             } else if (Commands.SORTING.getMatcher(input).matches()) {
                 sortingProses();
-            } else if (Commands.SHOW_CATEGORIES.getMatcher(input).matches()) {
+            } else if (Commands.SHOW_PRODUCTS.getMatcher(input).matches()) {
                 showOffsProducts();
             } else if ((matcher =Commands.SHOW_PRODUCT_BY_ID.getMatcher(input)).matches()) {
                 showProductByProductId(Integer.parseInt(matcher.group(1)));
@@ -85,7 +84,7 @@ public class OffsPage extends Page {
     }
 
     public void help() {
-        System.out.println("products\n" +
+        System.out.println(
                 "view categories\n" +
                 "filtering\n" +
                 "sorting\n" +
@@ -111,7 +110,7 @@ public class OffsPage extends Page {
     public void filteringProsses() {
         Matcher matcher;
         String input;
-        while (Commands.BACK.getMatcher(input = scanner.nextLine()).matches()) {
+        while (!Commands.BACK.getMatcher(input = scanner.nextLine()).matches()) {
             if(Commands.SHOW_AVALABLE_FILTERS.getMatcher(input).matches()){
                 controller.showAvailableFilters();
             }if((matcher = Commands.FILTER_ANAVALAIBLE_FILTER.getMatcher(input)).matches()){
@@ -124,7 +123,7 @@ public class OffsPage extends Page {
                 }if(matcher.group(1).equalsIgnoreCase("category")){
                     allCurrentFiltters.add("category");
                     try {
-                        controller.setCategoryForFilterOnOff(shop.getCategoryByName(matcher.group(1)));
+                        controller.setCategoryForFilterOnOff(Shop.getInstance().getCategoryByName(matcher.group(1)));
                     } catch (Exceptions.NoCategoryException e) {
                         System.out.println(e.getMessage());
                     }
@@ -149,6 +148,7 @@ public class OffsPage extends Page {
                         controller.setCategoryZiroForOff();
                     }if(String.valueOf((matcher.group(1))).equals("price")){
                         controller.setMaxPriceZiroForOff();
+                        controller.setMinPriceZiroForOff();
                     }if(String.valueOf((matcher.group(1))).equals("rate")){
                         controller.setRateZiroForOff();
                     }
@@ -169,30 +169,32 @@ public class OffsPage extends Page {
     public void sortingProses() {
         Matcher matcher;
         String input;
-        while (Commands.BACK.getMatcher(input = scanner.nextLine()).matches()) {
+        while (!Commands.BACK.getMatcher(input = scanner.nextLine()).matches()) {
             if(Commands.SHOW_AVALABLE_SORT.getMatcher(input).matches()){
-                controller.showAvailableFilters();
+                controller.showAvailableSort();
             }else if((matcher = Commands.SORT_ANAVALAIBLE_SORT.getMatcher(input)).matches()){
                 if(matcher.group(1).equalsIgnoreCase("visit")){
-                    allCurrentSorts.add( "visit");
-                    controller.sortByVisit(controller.getAllFilteredProductOnOff());
+                    controller.sorting("visit");
+                    allCurrentSorts.add("visit");
                 }if(matcher.group(1).equalsIgnoreCase("max price")){
-                    allCurrentFiltters.add("max");
-                    controller.sortByMaxPrice(controller.getAllFilteredProductOnOff());
+                    controller.sorting("max");
+                    allCurrentSorts.add("max");
                 }if(matcher.group(1).equalsIgnoreCase("min price")){
-                    allCurrentFiltters .add("min");
-                    controller.sortByMinPrice(controller.getAllFilteredProductOnOff());
+                    controller.sorting("min");
+                    allCurrentSorts.add("min");
                 }if(matcher.group(1).equalsIgnoreCase("time")){
-                    allCurrentFiltters.add("time");
-                    controller.sortByTime(controller.getAllFilteredProductOnOff());
+                    controller.sorting("time");
+                    allCurrentSorts.add("time");
                 }if(matcher.group(1).equalsIgnoreCase("rate")){
-                    allCurrentFiltters.add("rate");
-                    controller.sortByRate(controller.getAllFilteredProductOnOff());
+                    allCurrentSorts.add("rate");
+                    controller.sorting("rate");
                 }
             }else if(Commands.CURRENST_SORT.getMatcher(input).matches()){
                 System.out.println(allCurrentFiltters);
             }else if((Commands.DISABLE_SORT.getMatcher(input)).matches()){
-                controller.sortByVisit(controller.getAllFilteredProductOnOff());
+                controller.sorting("visit");
+                allCurrentSorts.clear();
+                allCurrentSorts.add("visit");
             }else if(Commands.HELP.getMatcher(input).matches()){
                 System.out.println("show available sorts\n" +
                         "sort [an available sort]\n" +
@@ -209,10 +211,16 @@ public class OffsPage extends Page {
     }
 
     public void showProductByProductId(int id) {
-        showProductByProductId(id);
+        try {
+            System.out.println(Shop.getInstance().getProductByIdd(id));
+        } catch (Exception e) {
+            System.out.println("wrong id");
+        }
+
     }
 
     public void showOffsProducts(){
-        controller.showOFFProducts();
+        System.out.println(controller.showOFFProducts());
+
     }
 }

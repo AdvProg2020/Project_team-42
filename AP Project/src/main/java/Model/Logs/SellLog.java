@@ -27,7 +27,7 @@ public class SellLog {
     public String toString() {
         return "SellLog{" +
                 "sellLogId=" + sellLogId +
-                ", date=" + date +
+                ", date=" + date.getTime() +
                 ", receivedMoney=" + receivedMoney +
                 ", offPercent=" + offPercent +
                 ", soldProduct=" + soldProduct +

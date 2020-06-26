@@ -39,8 +39,8 @@ public class Off {
                 "offId=" + offId +
                 ", effectingProducts=" + effectingProducts +
                 ", state=" + state +
-                ", begin=" + begin +
-                ", end=" + end +
+                ", begin=" + begin.getTime() +
+                ", end=" + end.getTime() +
                 ", offPercentage=" + offPercentage +
                 '}';
     }

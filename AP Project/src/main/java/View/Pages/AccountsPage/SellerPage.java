@@ -8,7 +8,6 @@ import Controller.Exceptions;
 import Model.Accounts.SellerAccount;
 import Model.Category;
 import Model.Product;
-import Model.Requests.CreateOffRequest;
 import Model.Shop;
 import View.Commands;
 import View.Page;
@@ -24,7 +23,7 @@ import java.util.regex.Matcher;
 public class SellerPage extends Page {
     private static SellerPage sellerPage = new SellerPage();
     private SellerPageController controller;
-    private Shop shop = Shop.getInstance();
+
 
     private SellerPage() {
         this.controller = SellerPageController.getInstance();
@@ -45,7 +44,7 @@ public class SellerPage extends Page {
             if (Commands.VIEW_PERSONAL_INFO.getMatcher(input).matches()) {
                 viewPersonalInfo();
             } else if (Commands.VEIW_COMPANY_INFORMATION.getMatcher(input).matches()) {
-                viewComponyInfo();
+                viewCompanyInfo();
             } else if (Commands.VIEW_SALES_HISTORY.getMatcher(input).matches()) {
                 viewSalesHistory();
             } else if (Commands.MANAGE_PRODUCTS.getMatcher(input).matches()) {
@@ -129,12 +128,12 @@ public class SellerPage extends Page {
         System.out.println(controller.getPersonalInfo());
     }
 
-    private void viewComponyInfo() {
+    private void viewCompanyInfo() {
         System.out.println(controller.getComponyinfo());
     }
 
     private void manageProducts() {
-        controller.showSellerProduct();
+        System.out.println(controller.showSellerProduct());
         String input;
         while (!Commands.BACK.getMatcher(input = scanner.nextLine().trim()).matches()) {
             Matcher matcher;
@@ -159,7 +158,7 @@ public class SellerPage extends Page {
                 String description = null;
                 String attribute = null;
                 try {
-                    shop.getProductById(id);
+                    Shop.getInstance().getProductById(id);
                 } catch (Exceptions.NoProductByThisIdException e) {
                     System.out.println(e.getMessage());
                     return;
@@ -176,7 +175,7 @@ public class SellerPage extends Page {
                 System.out.println("please enter product category");
                 categoryName = scanner.next();
                 try {
-                    category = shop.getCategoryByName(categoryName);
+                    category = Shop.getInstance().getCategoryByName(categoryName);
                 } catch (Exceptions.NoCategoryException e) {
                     System.out.println(e.getMessage());
                     return;
@@ -223,7 +222,7 @@ public class SellerPage extends Page {
         System.out.println("please enter product name");
         name = scanner.nextLine().trim();
 
-        for (Product product : shop.getAllProductAndCount().keySet()) {
+        for (Product product : Shop.getInstance().getAllProducts()) {
             if (product.getName().equals(name)) {
                 System.out.println("a product with this name exists :\n" +
                         product.getProductId() + " | " + product.getDescription() + " | " + product.getAttribute() + " | " +
@@ -232,7 +231,7 @@ public class SellerPage extends Page {
                 if (!scanner.nextLine().trim().equalsIgnoreCase("yes"))
                     return;
                 try {
-                    controller.addProduct(false, sellerAccount, name, id, count, brand, price, shop.getAllGoodsCaregory(), arrtibute,descrption);
+                    controller.addProduct(false, sellerAccount, name, id, count, brand, price, Shop.getInstance().getAllGoodsCaregory(), arrtibute,descrption);
                 } catch (Exceptions.NoCategoryException e) {
                     e.printStackTrace();
                 }
@@ -250,10 +249,10 @@ public class SellerPage extends Page {
         System.out.println("please enter product category");
         categoryName = scanner.nextLine();
         try {
-            category = shop.getCategoryByName(categoryName);
+            category = Shop.getInstance().getCategoryByName(categoryName);
 
         } catch (Exceptions.NoCategoryException e) {
-            category = shop.getAllGoodsCaregory();
+            category = Shop.getInstance().getAllGoodsCaregory();
             System.out.println(e.getMessage());
         }
 
@@ -292,42 +291,44 @@ public class SellerPage extends Page {
     }
 
     private void viewSalesHistory() {
-        controller.showSaleHistory();
+        System.out.println(controller.showSaleHistory());
     }
 
     private void help() {
         System.out.println("view personal information\n" + "view compony information\n" + "manage products\n" +
-                "add product\n" + "remove product\n" + "show categories\n" + "view offs\n" + "view balance\n" + "help\n" +
+                "add product\n" + "remove product\n" + "show categories\n" + "view offs\n" + "view balance\n" + "view sales history\n"+"help\n" +
                 "login page\n" +
                 "log out\n" +
                 "products page\n" +
                 "offs page\n" +
-                "cart page");
+                "cart page"
+
+        );
     }
 
     private void viewOffs() {
         Matcher matcher;
-        String input;
-        controller.showOff();
-        while (!Commands.BACK.getMatcher(input = scanner.nextLine()).matches()) {
-            if ((matcher = Commands.VIEW_OFF.getMatcher(input)).matches()) {
-                try {
-                    System.out.println(shop.getOffById(Integer.parseInt(matcher.group(1))));
-                } catch (Exceptions.NoOffByThisId noOffByThisId) {
-                    System.out.println(noOffByThisId.getMessage());
-                }
-            }
+        String input=new String();
+        while (!Commands.BACK.getMatcher(input).matches()) {
+            System.out.println(controller.showOff());
+            input=scanner.nextLine();
+            if (input.equalsIgnoreCase("help"))
+                System.out.println("add off\nedit off\nback");
             if ((Commands.ADD_OFF.getMatcher(input)).matches()) {
                 ArrayList<Product> listOfProduct = new ArrayList<>();
-                while (Commands.BACK.getMatcher(input = scanner.nextLine()).matches()) {
-                    System.out.println("enter your productId");
-                    while (Commands.BACK.getMatcher(input = scanner.nextLine()).matches()) {
-                        try {
-                            SellerAccount seller = (SellerAccount) AccountPageController.getUser();
-                            listOfProduct.add(seller.hasProduct(Integer.parseInt(input)));
-                        } catch (Exceptions.NoProductByThisIdException e) {
-                            System.out.println(e.getMessage());
-                        }
+                    while (!input.equalsIgnoreCase("done")) {
+                        System.out.println(controller.showSellerProduct());
+                        System.out.println("enter your productsId then done");
+                        input=scanner.nextLine();
+                        if (input.equalsIgnoreCase("done"))
+                            break;
+                            try {
+                                SellerAccount seller = (SellerAccount) AccountPageController.getUser();
+                                listOfProduct.add(seller.hasProduct(Integer.parseInt(input)));
+                            } catch (Exceptions.NoProductByThisIdException e) {
+                                System.out.println(e.getMessage());
+                            }
+
                     }
                     System.out.println("enter start time year");
                     int year = Integer.parseInt(scanner.nextLine());
@@ -355,14 +356,15 @@ public class SellerPage extends Page {
                     System.out.println("enter end time second");
                     second = Integer.valueOf(scanner.nextLine());
                     GregorianCalendar end = new GregorianCalendar(year, month - 1, day, hour, minute, second);
-                    System.out.println("enter persentage");
+                    System.out.println("enter percentage");
                     double persentage = Double.valueOf(scanner.nextLine());
-                    new CreateOffRequest(false, null, listOfProduct, start, end, persentage);
-                }
+                    controller.createOffRequest( listOfProduct, start, end,persentage);
+                    System.out.println("successfully created");
+
             }
             if ((matcher = Commands.EDIT_OFF.getMatcher(input)).matches()) {
                 int id;
-                if (shop.isOffById(id = Integer.valueOf(matcher.group(1)))) {
+                if (Shop.getInstance().isOffById(id = Integer.valueOf(matcher.group(1)))) {
                     ArrayList<Product> listofProduct = new ArrayList<>();
                     while (Commands.BACK.getMatcher(input = scanner.nextLine()).matches()) {
                         System.out.println("enter your productId");
@@ -405,8 +407,8 @@ public class SellerPage extends Page {
                         System.out.println("enter persentage");
                         double persentage = Double.valueOf(scanner.nextLine());
                         try {
-                            new CreateOffRequest(true, shop.getOffById(id), listofProduct, start, end, persentage);
-                            shop.getOffById(id).changeWaitingState();
+                            controller.editOffRequest(id,listofProduct,start,end,persentage);
+                            Shop.getInstance().getOffById(id).changeWaitingState();
                         } catch (Exceptions.NoOffByThisId noOffByThisId) {
                             noOffByThisId.printStackTrace();
                         }

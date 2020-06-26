@@ -14,20 +14,19 @@ public class AllProductsPageController {
 
     private AllProductsPageController() {
         allFilteredProduct = new ArrayList<>();
-        allFilteredProduct.addAll(shop.getAllProductAndCount().keySet());
+        allFilteredProduct.addAll(Shop.getInstance().getAllProducts());
         allProducts = new ArrayList<>();
-        allProducts.addAll(shop.getAllProductAndCount().keySet());
+        allProducts.addAll(Shop.getInstance().getAllProducts());
         allFilteredProductOnOff = new ArrayList<>();
-        allFilteredProductOnOff.addAll(shop.getAllProductOnOffsAndCount().keySet());
+        allFilteredProductOnOff.addAll(Shop.getInstance().getAllProductOnOffsAndCount().keySet());
         allProductsOnOff = new ArrayList<>();
-        allProductsOnOff.addAll(shop.getAllProductOnOffsAndCount().keySet());
+        allProductsOnOff.addAll(Shop.getInstance().getAllProductOnOffsAndCount().keySet());
     }
 
     public static AllProductsPageController getInstance() {
         return allProductsPageController;
     }
 
-    private Shop shop = Shop.getInstance();
     private ArrayList<Product> allFilteredProduct;
     private ArrayList<Product> allProducts;
     private ArrayList<Product> allFilteredProductOnOff;
@@ -146,16 +145,18 @@ public class AllProductsPageController {
         this.categoryForFilterOnOff = null;
     }
 
-    public void showOFFProducts() {
-        for (Product product : shop.getAllProductOnOffsAndCount().keySet()) {
-            System.out.println(product);
+    public String showOFFProducts() {
+        StringBuilder stringBuilder= new StringBuilder();
+        for (Product product : Shop.getInstance().getAllProductOnOffsAndCount().keySet()) {
+            stringBuilder.append(product+"\n");
         }
+        return String.valueOf(stringBuilder);
     }
 
     public String showCategories() throws Exception {
         StringBuilder stringBuilder = new StringBuilder();
-        if (!shop.getAllCategories().isEmpty()) {
-            for (Category category : shop.getAllCategories()) {
+        if (!Shop.getInstance().getAllCategories().isEmpty()) {
+            for (Category category : Shop.getInstance().getAllCategories()) {
                 stringBuilder.append(category.toString() + "\n");
             }
         }
@@ -267,6 +268,14 @@ public class AllProductsPageController {
                 "rate minrate ");
     }
 
+    public void showAvailableSort(){
+        System.out.println("visit " +
+                "max price " +
+                "min price " +
+                "time " +
+                "rate" );
+    }
+
     public ArrayList<Product> getAllFilteredProduct() {
         return allFilteredProduct;
     }
@@ -331,7 +340,46 @@ public class AllProductsPageController {
     }
 
     public Product getProductById (int id) throws Exceptions.NoProductByThisIdException {
-        return shop.getProductById(id);
+        return Shop.getInstance().getProductById(id);
+    }
+
+    public void sorting(String type){
+        switch (type){
+            case "vist":
+                allFilteredProduct = sortByVisit(allFilteredProduct);
+                break;
+                case "time":
+                allFilteredProduct = sortByTime(allFilteredProduct);
+                break;  case
+                    "min":
+                allFilteredProduct = sortByMinPrice(allFilteredProduct);
+                break;  case
+                    "max":
+                allFilteredProduct = sortByMaxPrice(allFilteredProduct);
+                break;
+            case "rate":
+                allFilteredProductOnOff = sortByRate(allFilteredProductOnOff);
+                break;
+        }
+    }
+    public void sortingForOff(String type){
+        switch (type){
+            case "vist":
+                allFilteredProductOnOff = sortByVisit(allFilteredProductOnOff);
+                break;
+                case "time":
+                allFilteredProductOnOff = sortByTime(allFilteredProductOnOff);
+                break;  case
+                    "min":
+                allFilteredProductOnOff = sortByMinPrice(allFilteredProductOnOff);
+                break;
+                case "max":
+                allFilteredProductOnOff = sortByMaxPrice(allFilteredProductOnOff);
+                break;
+                case "rate":
+                allFilteredProductOnOff = sortByRate(allFilteredProductOnOff);
+                break;
+        }
     }
 }
 

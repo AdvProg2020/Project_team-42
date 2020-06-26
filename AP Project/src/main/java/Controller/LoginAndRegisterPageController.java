@@ -6,7 +6,6 @@ import Model.Accounts.CustomerAccount;
 import Model.Accounts.ManagerAccount;
 import Model.Accounts.SellerAccount;
 import Model.Requests.*;
-import View.Pages.AccountsPage.SellerPage;
 import View.Pages.LoginRegisterPage;
 import com.google.gson.Gson;
 
@@ -18,7 +17,7 @@ import static Model.Accounts.Account.getAllAccounts;
 
 public class LoginAndRegisterPageController {
     private static LoginAndRegisterPageController controller = new LoginAndRegisterPageController();
-    private Shop shop = Shop.getInstance();
+    //private Shop Shop.getInstance() = Shop.getInstance();
 
     public static LoginAndRegisterPageController getInstance() {
         return controller;
@@ -28,7 +27,7 @@ public class LoginAndRegisterPageController {
     }
 
     public void createCustomerAccountController(String userName, String firstName, String lastName, String email, String phoneNumber, String password, String accountType) throws Exception {
-        shop.createCustomerAccountMoudel(userName, firstName, lastName, email, phoneNumber, password, accountType);
+        Shop.getInstance().createCustomerAccountMoudel(userName, firstName, lastName, email, phoneNumber, password, accountType);
     }
 
     public void createRegisterRequestSellerAccountController(String userName, String firstName, String lastName, String email, String phoneNumber, String password, String accountType, String companyOrWorkShopName) throws Exception {
@@ -44,20 +43,20 @@ public class LoginAndRegisterPageController {
     }
 
     public CustomerAccount loginCustomerAccountController(String username, String password) throws Exception {
-        return shop.loginCustomerMoudel(username, password);
+        return Shop.getInstance().loginCustomerMoudel(username, password);
     }
 
     public SellerAccount loginSellerAccountController(String username, String password) throws Exception {
-        return shop.loginSellerMoudel(username, password);
+        return Shop.getInstance().loginSellerMoudel(username, password);
     }
 
     public ManagerAccount loginManagerAccountController(String username, String password) throws Exception {
-        return shop.loginManagerMoudel(username, password);
+        return Shop.getInstance().loginManagerMoudel(username, password);
     }
 
     public void CreateFirstManagerAccountController(String userName, String firstName, String lastName, String email, String phoneNumber, String password,
                                                     String accountType) throws Exception {
-        shop.createFirstManagerAccountMoudel(userName, firstName, lastName, email, phoneNumber, password, "manager");
+        Shop.getInstance().createFirstManagerAccountMoudel(userName, firstName, lastName, email, phoneNumber, password, "manager");
     }
 
     public void parseResources() throws FileNotFoundException {
@@ -72,7 +71,7 @@ public class LoginAndRegisterPageController {
             for (String productSource : files) {
                 Reader reader = new BufferedReader(new FileReader("src\\main\\resources\\Products\\" + productSource));
 
-                allProductsAndCount.put(gson.fromJson(reader, Product.class), 0);
+                Shop.getInstance().getAllProducts().add(gson.fromJson(reader, Product.class));
             }
         }
 
@@ -91,7 +90,7 @@ public class LoginAndRegisterPageController {
             for (String discountSource : files) {
                 Reader reader = new BufferedReader(new FileReader("src\\main\\resources\\Discounts\\" + discountSource));
 
-                shop.getAllDiscounts().add(gson.fromJson(reader, Discount.class));
+                Shop.getInstance().getAllDiscounts().add(gson.fromJson(reader, Discount.class));
             }
         }
 
@@ -100,10 +99,10 @@ public class LoginAndRegisterPageController {
             for (String offSource : files) {
                 Reader reader = new BufferedReader(new FileReader("src\\main\\resources\\Offs\\" + offSource));
 
-                shop.getAllOffs().add(gson.fromJson(reader, Off.class));
+                Shop.getInstance().getAllOffs().add(gson.fromJson(reader, Off.class));
             }
-            for (Off off : shop.getAllOffs()) {
-                for (Product product : allProductsAndCount.keySet()) {
+            for (Off off : Shop.getInstance().getAllOffs()) {
+                for (Product product : Shop.getInstance().getAllProducts()) {
                     if (off.hasProductById((int) product.getProductId()))
                         allProductsOnOffAndCount.put(product, 0);
                 }
@@ -171,7 +170,7 @@ public class LoginAndRegisterPageController {
 
                 CustomerAccount.getAllCustomerAccounts().add(account = gson.fromJson(reader, CustomerAccount.class));
                 Account.getAllAccounts().add(account);
-                shop.getAllBuyLogs().addAll(account.getBuyLogs());
+                Shop.getInstance().getAllBuyLogs().addAll(account.getBuyLogs());
             }
         }
 
@@ -193,17 +192,17 @@ public class LoginAndRegisterPageController {
                 if (account.getOffs() == null)
                     account.newOff();
 
-                for (Product product : account.getSellableProductAndCounts().keySet()) {
+                /*for (Product product : account.getSellableProductAndCounts().keySet()) {
                     allProductsAndCount.replace(product, allProductsAndCount.get(product) + account.getCountOfProduct(product));
                     if (allProductsOnOffAndCount.containsKey(product))
                         allProductsOnOffAndCount.replace(product, allProductsOnOffAndCount.get(product) + account.getCountOfProduct(product));
-                }
+                }*/
             }
         }
 
         file = new File("src\\main\\resources\\Accounts\\ManagerAccounts");
         if ((files = file.list()) != null) {
-            LoginRegisterPage.isMainManagerJoined = true;
+            LoginRegisterPage.isMainManagerJoined = files.length != 0;
             for (String accountSource : files) {
                 Reader reader = new BufferedReader(new FileReader("src\\main\\resources\\Accounts\\ManagerAccounts\\" + accountSource));
 
@@ -214,9 +213,8 @@ public class LoginAndRegisterPageController {
             }
         }
 
-        shop.setAllCategories(categories);
-        shop.setAllProductAndCount(allProductsAndCount);
-        shop.setAllProductOnOffsAndCount(allProductsOnOffAndCount);
+        Shop.getInstance().setAllCategories(categories);
+        Shop.getInstance().setAllProductOnOffsAndCount(allProductsOnOffAndCount);
     }
 }
  

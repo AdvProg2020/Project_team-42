@@ -1,1 +1,1 @@
-{"thisSellerAllSellLogs":[],"sallableProductAndCounts":{"0":5},"offs":[],"requests":[2],"userName":"ahmad","firstName":"a","lastName":"s","email":"a","phoneNumber":"s","password":"rrrrrrrrr","accountType":"seller","credit":0.0}
+{"thisSellerAllSellLogs":[],"sallableProductAndCounts":{"0":3423,"1":234,"2":9,"3":46354},"offs":[],"requests":[2,6,7,8,10,11,12,13,14,15,16],"userName":"ahmad","firstName":"a","lastName":"s","email":"a","phoneNumber":"s","password":"rrrrrrrrr","accountType":"seller","credit":0.0}

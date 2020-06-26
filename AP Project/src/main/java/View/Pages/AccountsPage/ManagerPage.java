@@ -16,7 +16,6 @@ import View.Pages.AllProductsPage;
 import View.Pages.CartPage;
 import View.Pages.LoginRegisterPage;
 import View.Pages.OffsPage;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -49,10 +48,12 @@ public class ManagerPage extends Page {
             else if (Commands.VIEW_PERSONAL_INFO.getMatcher(command).matches()) {
                 viewPersonalInfo();
             } else if (Commands.MANAGE_USERS.getMatcher(command).matches()) {
-                System.out.println(mController.getAllAccountsController());
                 while (true) {
-
+                    System.out.println(mController.getAllAccountsController());
                     command = scanner.nextLine();
+                    if (command.equalsIgnoreCase("help")){
+                        System.out.println("delete user [username]\ncreate manager profile\nhelp\nback");
+                    }
                     if ((matcher = Commands.VIEW.getMatcher(command)).matches()) {
                         String username = matcher.group(1);
                         System.out.println(mController.getAccountByUserNameController(username));
@@ -101,7 +102,7 @@ public class ManagerPage extends Page {
             } else if (Commands.MANAGE_ALL_PRODUCTS.getMatcher(command).matches()) {
                 do {
                     try {
-                        System.out.println(mController.showAllProductsController());
+                        System.out.println(String.valueOf(mController.showAllProductsController()));
                     } catch (Exception e) {
                         e.printStackTrace();
                         System.out.println("there is no product");
@@ -319,22 +320,23 @@ public class ManagerPage extends Page {
                         }
                         try {
                             mController.editCategory(mController.getCategoryBynameCategoryTypeMoudel(categoryName), newName, newarrtibute, mController.getCategoryBynameCategoryTypeMoudel(newparentCategoryName));
-                        } catch (Exception ignored) {}
+                        } catch (Exception ignored) {
+                        }
                     } else if ((matcher = Commands.ADD_CATEGORY.getMatcher(command)).matches()) {
                         String name = matcher.group(1);
                         System.out.println("enter  attribute");
                         String arrtibute = scanner.nextLine();
                         System.out.println("enter parent category name");
-                        String parentCategoryName = scanner.nextLine();
+                        String parentCategoryName = scanner.nextLine().trim();
                         try {
                             mController.getCategoryBynameCategoryTypeMoudel(parentCategoryName);
                         } catch (Exception e) {
-                            System.out.println("new parent category not found please try again");
+                            System.out.println("parent category not found please try again");
                             break;
                         }
                         System.out.println("pleas enter sub categories then type done");
                         String sub = "";
-                        ArrayList<Category> subs = null;
+                        ArrayList<Category> subs = new ArrayList<>();
                         while (!sub.equals("done")) {
                             sub = scanner.nextLine();
                             try {
@@ -347,7 +349,7 @@ public class ManagerPage extends Page {
                         }
                         if (Commands.BACK.getMatcher(sub).matches())
                             break;
-                        HashMap<Product, Integer> productIntegerHashMap = null;
+                        HashMap<Product, Integer> productIntegerHashMap = new HashMap<>();
                         System.out.println("enter categorys products then done");
                         int productId;
                         while (true) {
@@ -360,9 +362,9 @@ public class ManagerPage extends Page {
                                 productIntegerHashMap.put(mController.productByName(productId), mController.productCount(mController.productByName(productId)));
                             } catch (Exception e) {
                                 System.out.println("product not found please try again");
-                                break;
                             }
                         }
+                        mController.addCategoryController(name, arrtibute, parentCategoryName, subs, productIntegerHashMap);
 
                     } else if ((matcher = Commands.REMOVE_CATEGORY.getMatcher(command)).matches()) {
 

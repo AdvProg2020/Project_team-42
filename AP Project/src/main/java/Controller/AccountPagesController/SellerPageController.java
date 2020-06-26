@@ -6,10 +6,13 @@ import Model.Logs.SellLog;
 import Model.Off;
 import Model.Product;
 import Model.Requests.AddProductRequest;
+import Model.Requests.CreateOffRequest;
 import Model.Requests.Request;
 import Model.Shop;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 public class SellerPageController extends AccountPageController {
@@ -42,17 +45,21 @@ public class SellerPageController extends AccountPageController {
          return user.getBalance();
     }
 
-    public void showSaleHistory(){
+    public String showSaleHistory(){
+        StringBuilder stringBuilder = new StringBuilder();
         for (SellLog thisSellerAllSellLog : user.getThisSellerAllSellLogs()) {
-            System.out.println(thisSellerAllSellLog);
+            stringBuilder.append(thisSellerAllSellLog + "\n");
         }
+        return String.valueOf(stringBuilder);
     }
 
-    public void showSellerProduct(){
+    public String showSellerProduct(){
+        StringBuilder stringBuilder = new StringBuilder();
         HashMap<Product, Integer> sellableProductAndCounts = user.getSellableProductAndCounts();
         for (Product product : sellableProductAndCounts.keySet()) {
-            System.out.println("" + product.getProductId() + "    " + product.getName());
+            stringBuilder.append("" + product.getProductId() + "    " + product.getName()+"\n");
         }
+        return String.valueOf(stringBuilder);
     }
 
     public void viewBuyers(int productId) throws Exceptions.NoProductByThisIdException {
@@ -77,12 +84,14 @@ public class SellerPageController extends AccountPageController {
         }
     }
 
-    public void showOff(){
+    public String showOff(){
+        StringBuilder stringBuilder = new StringBuilder();
         for (Integer offId : user.getOffs()) {
             try {
-                System.out.println(shop.getOffById(offId));
+                stringBuilder.append(shop.getOffById(offId)+ "\n");
             } catch (Exceptions.NoOffByThisId noOffByThisId) {}
         }
+        return String.valueOf(stringBuilder);
     }
 
     public void addProduct(boolean isNew ,SellerAccount sellerAccount,String name,int id,int count ,String brand,double price,Category category,String descrption,String arrtibute)throws Exceptions.NoCategoryException{
@@ -113,8 +122,15 @@ public class SellerPageController extends AccountPageController {
 
     public void removeProduct(int id) throws Exceptions.NoProductByThisIdException {
         user.removeProduct(shop.getProductById(id));
-        shop.removeProduct(shop.getProductById(id),user.getCountOfProduct(shop.getProductById(id)));
     }
 
+    public void createOffRequest(ArrayList<Product> listOfProduct, GregorianCalendar start,GregorianCalendar end, double persentage){
+        CreateOffRequest request = new CreateOffRequest(this.user.getUserName(),false, null, listOfProduct, start, end, persentage);
+
+    }
+    public void editOffRequest(int id,ArrayList<Product> listofProduct,GregorianCalendar start, GregorianCalendar end, double persentage) throws Exceptions.NoOffByThisId {
+        new CreateOffRequest(this.user.getUserName(),true, shop.getOffById(id), listofProduct, start, end, persentage);
+
+    }
 }
 

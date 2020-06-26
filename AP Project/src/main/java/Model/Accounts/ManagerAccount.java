@@ -19,7 +19,7 @@ public class ManagerAccount extends Account {
         super(userName, firstName, lastName, email, phoneNumber, password, accountType);
     }
 
-    private Shop shop = Shop.getInstance();
+    //private final Shop Shop.getInstance() = Shop.getInstance();
 
     public void checkUsernameIsUsedMoudel(String username) throws Exception {
         for (int i = 0; i < allAccounts.size() - 1; i++) {
@@ -106,8 +106,8 @@ public class ManagerAccount extends Account {
                 AddProductRequest request = (AddProductRequest) Request.getUnAnsweredRequests().get(i);
                 if (!request.isForEdit()) {
                     if (request.isNewProduct()) {
-                        Product product = new Product(shop.returnNewId(), request.getName(), request.getBrand(), request.getPrice(), request.getCategory(), request.getAttribute(), request.getDescription(), request.getSeller());
-                        shop.getAllProductAndCount().put(product , request.getCount());
+                        Product product = new Product(Shop.getInstance().returnNewId(), request.getName(), request.getBrand(), request.getPrice(), request.getCategory(), request.getAttribute(), request.getDescription(), request.getSeller());
+                        Shop.getInstance().getAllProducts().add(product);
                         request.getSeller().addToSellableProducts((int) product.getProductId(), request.getCount());
                         request.setAnswerDate(new GregorianCalendar());
                         request.setRequestState(RequestState.ACCEPTED);
@@ -116,15 +116,15 @@ public class ManagerAccount extends Account {
                     } else {
                         Product existProduct = null;
                         long existId;
-                        for (Product product : shop.getAllProductAndCount().keySet()) {
+                        for (Product product : Shop.getInstance().getAllProducts()) {
                             if (product.getName().equals(request.getName())) {
                                 existId = product.getProductId();
                                 existProduct = product;
                             }
                         }
-                        int count = shop.getAllProductAndCount().get(existProduct);
+                        /*int count = shop.getAllProducts().get(existProduct);
                         count = count + request.getCount();
-                        shop.getAllProductAndCount().replace(existProduct, count);
+                        shop.getAllProducts().replace(existProduct, count);*/
                         ((AddProductRequest) Request.getUnAnsweredRequests().get(i)).getSeller().addToSellableProducts((int) existProduct.getProductId(), request.getCount());
                         Request.getUnAnsweredRequests().get(i).setAnswerDate(new GregorianCalendar());
                         Request.getUnAnsweredRequests().get(i).setRequestState(RequestState.ACCEPTED);
@@ -132,14 +132,14 @@ public class ManagerAccount extends Account {
                         Request.getUnAnsweredRequests().remove(Request.getUnAnsweredRequests().get(i));
                     }
                 } else {
-                    Product product = shop.getProductByIdd(request.getProductId());
+                    Product product = Shop.getInstance().getProductByIdd(request.getProductId());
                     product.setName(request.getName());
                     product.setCategory(request.getCategory());
                     product.setAttribute(request.getAttribute());
                     product.setBrand(request.getBrand());
                     product.setDescription(request.getDescription());
                     product.setPrice(request.getPrice());
-                    shop.getAllProductOnOffsAndCount().replace(product, shop.getAllProductAndCount().get(product), request.getCount());
+                    Shop.getInstance().getAllProductOnOffsAndCount().replace(product, request.getCount());
 
                 }
             } else if (Request.getUnAnsweredRequests().get(i).getClass().equals(CommentRequest.class)) {
@@ -159,8 +159,11 @@ public class ManagerAccount extends Account {
                     request.getPrevious().setState(OffOrProductState.ACCEPTED);
                 } else {
                     Off off;
-                    shop.getAllOffs().add(off = new Off(shop.getAllOffs().size(), request.getEffectingProducts(), OffOrProductState.ACCEPTED, request.getBegin(), request.getEnd(), (int) request.getOffPercentage()));
+                    Shop.getInstance().getAllOffs().add(off = new Off(Shop.getInstance().getAllOffs().size(), request.getEffectingProducts(), OffOrProductState.ACCEPTED, request.getBegin(), request.getEnd(), (int) request.getOffPercentage()));
                     request.getSeller().getOffs().add((int) off.getOffId());
+                    Request.getUnAnsweredRequests().get(i).setRequestState(RequestState.ACCEPTED);
+                    Request.getAnsweredRequests().add(Request.getUnAnsweredRequests().get(i));
+                    Request.getUnAnsweredRequests().remove(Request.getUnAnsweredRequests().get(i));
                 }
             }
         }
@@ -178,12 +181,12 @@ public class ManagerAccount extends Account {
     }
 
     public void createDiscountCodeMoudel(String discountCode, GregorianCalendar begin, GregorianCalendar end, double discountPercent, int discountAmountLimit, int repeatCountForEachCustomer, HashMap<CustomerAccount, Integer> effectingCustomersAndUsageCount) {
-        shop.getAllDiscounts().add(new Discount(discountCode, begin, end, discountPercent, discountAmountLimit, repeatCountForEachCustomer, effectingCustomersAndUsageCount));
+        Shop.getInstance().getAllDiscounts().add(new Discount(discountCode, begin, end, discountPercent, discountAmountLimit, repeatCountForEachCustomer, effectingCustomersAndUsageCount));
     }
 
     public void checkValidationOfDiscountCodeMoudel(String code) throws Exception {
-        for (int i = 0; i < shop.getAllDiscounts().size(); i++) {
-            if (shop.getAllDiscounts().get(i).getDiscountCode().equals(code))
+        for (int i = 0; i < Shop.getInstance().getAllDiscounts().size(); i++) {
+            if (Shop.getInstance().getAllDiscounts().get(i).getDiscountCode().equals(code))
                 throw new Exception("code is used");
         }
 

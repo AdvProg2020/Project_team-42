@@ -47,12 +47,12 @@ public enum Commands {
     PURCHASE("(?i)purchase"), 
     //allProduct Page
     SHOW_PRODUCT_BY_ID("(?i)show\\s+product\\s+(\\d)"),
-    SHOW_AVALABLE_SORT("(?i)show\\s+available\\s+sort"),
+    SHOW_AVALABLE_SORT("(?i)show\\s+available\\s+sorts"),
     SET_SORT("(?i)sort\\s+(\\w+)"),
     FILTERING("(?i)filtering"),
     SORTING("(?i)sorting"),
     //filtering prosses
-    SHOW_AVALABLE_FILTERS("(?i)\\s*show\\s*avalilable\\s*filters"),
+    SHOW_AVALABLE_FILTERS("(?i)\\s*show\\s*available\\s*filters"),
     FILTER_ANAVALAIBLE_FILTER("(?i)filer\\s+(\\w+)"),
     CURRENST_FILTERS("(?i)current\\s+filters"),
     DISABLE_FILTERS("(?i)disable\\s+filter+(\\w+)"),

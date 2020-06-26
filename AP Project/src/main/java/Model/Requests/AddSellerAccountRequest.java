@@ -66,7 +66,7 @@ public class AddSellerAccountRequest extends Request {
         super();
         this.companyOrWorkshopName = companyOrWorkshopName;
         this.userName = userName;
-        FirstName = firstName;
+        this.FirstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;

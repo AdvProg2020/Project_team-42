@@ -216,7 +216,7 @@ public class CartPage extends Page {
     private int getDiscountAmount (CustomerAccount customer) throws Exceptions.StopPurchaseException {
         System.out.println("In order to use a discount code enter it if not just enter a white space.");
         String input;
-        while ((input = scanner.nextLine().trim()).equalsIgnoreCase("")) {
+        while (!(input = scanner.nextLine().trim()).equalsIgnoreCase("")) {
             if (Commands.BACK.getMatcher(input).matches())
                 throw new Exceptions.StopPurchaseException();
             try {

@@ -8,11 +8,11 @@ import Model.Shop;
 
 public class ProductPageController {
     private static ProductPageController productPageController = new ProductPageController();
-    private Shop shop;
+    //private Shop Shop.getInstance();
     private Product selectedProduct;
 
     private ProductPageController() {
-        this.shop = Shop.getInstance();
+        //this.Shop.getInstance() = Shop.getInstance();
     }
 
     public void setSelectedProduct(Product SelectedProduct) {
@@ -28,7 +28,7 @@ public class ProductPageController {
     }
 
     public Product getProductById (long productId) throws Exceptions.NoProductByThisIdException {
-        return shop.getProductById(productId);
+        return Shop.getInstance().getProductById(productId);
     }
 
     public void addComment (Account user, String title, String content) {

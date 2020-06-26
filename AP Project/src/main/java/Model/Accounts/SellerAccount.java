@@ -183,5 +183,14 @@ public class SellerAccount extends Account {
             throw new Exceptions.NoProductByThisIdException(productId);
         }
     }
+
+    public String sellersName(ArrayList<SellerAccount> sellers){
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0 ; i< sellers.size();i++)
+        {
+            stringBuilder.append(sellers.get(i).userName+"   ");
+        }
+        return String.valueOf(stringBuilder);
+    }
 }
 

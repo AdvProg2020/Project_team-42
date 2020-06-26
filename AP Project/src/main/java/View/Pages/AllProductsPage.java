@@ -116,7 +116,7 @@ public class AllProductsPage extends Page {
     public void filteringProsses() {
         Matcher matcher;
         String input;
-        while (Commands.BACK.getMatcher(input = scanner.nextLine()).matches()) {
+        while (!Commands.BACK.getMatcher(input = scanner.nextLine()).matches()) {
             if(Commands.SHOW_AVALABLE_FILTERS.getMatcher(input).matches()){
                 controller.showAvailableFilters();
             }if((matcher = Commands.FILTER_ANAVALAIBLE_FILTER.getMatcher(input)).matches()){
@@ -154,6 +154,7 @@ public class AllProductsPage extends Page {
                         controller.setCategoryZiro();
                     }if(String.valueOf((matcher.group(1))).equals("price")){
                         controller.setMaxPriceZiro();
+                        controller.setMinPriceZiro();
                     }if(String.valueOf((matcher.group(1))).equals("rate")){
                         controller.setRateZiro();
                     }
@@ -174,30 +175,34 @@ public class AllProductsPage extends Page {
     public void sortingProsses() {
         Matcher matcher;
         String input;
-        while ((matcher = Commands.BACK.getMatcher(input = scanner.nextLine())).matches()) {
+        while (!(matcher = Commands.BACK.getMatcher(input = scanner.nextLine())).matches()) {
             if(Commands.SHOW_AVALABLE_SORT.getMatcher(input).matches()){
-                controller.showAvailableFilters();
+                controller.showAvailableSort();
             }else if((matcher = Commands.SORT_ANAVALAIBLE_SORT.getMatcher(input)).matches()){
+
                 if(matcher.group(1).equalsIgnoreCase("visit")){
                     allCurrentSorts.add( "visit");
-                    controller.sortByVisit(controller.getAllFilteredProduct());
+                    controller.sortingForOff("visit");
                 }if(matcher.group(1).equalsIgnoreCase("max price")){
-                    allCurrentFiltters.add("max");
+                    controller.sortingForOff("max");
                     controller.sortByMaxPrice(controller.getAllFilteredProduct());
                 }if(matcher.group(1).equalsIgnoreCase("min price")){
                     allCurrentFiltters .add("min");
+                    controller.sortingForOff("min");
                     controller.sortByMinPrice(controller.getAllFilteredProduct());
                 }if(matcher.group(1).equalsIgnoreCase("time")){
                     allCurrentFiltters.add("time");
-                    controller.sortByTime(controller.getAllFilteredProduct());
+                    controller.sortingForOff("time");
                 }if(matcher.group(1).equalsIgnoreCase("rate")){
                     allCurrentFiltters.add("rate");
-                    controller.sortByRate(controller.getAllFilteredProduct());
+                    controller.sortingForOff("rate");
                 }
             }else if(Commands.CURRENST_SORT.getMatcher(input).matches()){
                 System.out.println(allCurrentFiltters);
             }else if((Commands.DISABLE_SORT.getMatcher(input)).matches()){
                 controller.sortByVisit(controller.getAllFilteredProduct());
+                allCurrentSorts.clear();
+                allCurrentSorts.add("visit");
             }else if(Commands.HELP.getMatcher(input).matches()){
                 System.out.println("show available sorts\n" +
                         "sort [an available sort]\n" +

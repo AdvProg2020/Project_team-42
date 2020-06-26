@@ -1,1 +1,1 @@
-{"isMain":false,"shop":{"allProductAndCount":{},"allProductOnOffsAndCount":{},"allSellLogs":[],"allBuyLogs":[],"allDiscounts":[],"allCategories":[],"allOffs":[]},"userName":"hasan","firstName":"sayedhasan","lastName":"a","email":"a","phoneNumber":"a","password":"aaaaa","accountType":"manager","credit":0.0}
+{"isMain":false,"userName":"hasan","firstName":"awdfgb","lastName":"wfsdsdgf","email":"asfdgh","phoneNumber":"wdswfg","password":"aaaaa","accountType":"manager","credit":0.0}

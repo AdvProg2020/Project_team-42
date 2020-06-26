@@ -21,7 +21,9 @@ public class CreateOffRequest extends Request {
     private GregorianCalendar end;
     private double offPercentage;
     
-     public CreateOffRequest(boolean forEdit, Off previous, ArrayList<Product> effectingProducts, GregorianCalendar start, GregorianCalendar end, double offPercentage) {
+     public CreateOffRequest(String seller ,boolean forEdit, Off previous, ArrayList<Product> effectingProducts, GregorianCalendar start, GregorianCalendar end, double offPercentage) {
+         super();
+         this.seller =seller;
         this.forEdit = forEdit;
         this.previous = previous;
         this.effectingProducts = new ArrayList<>();

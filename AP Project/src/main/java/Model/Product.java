@@ -192,7 +192,8 @@ public class Product {
                                "\nAttribute    : " + this.attribute +
                                "\nAverage rate : " + this.averageRate +
                                "\nPrice        : " + this.price +
-                               "\nSellers      : ");
+                               "\nSellers      : " + this.getSellers().get(0).sellersName(this.getSellers())+
+                               "\nid           : " + this.getProductId());
         } catch (Exceptions.NoCategoryException e) {
             return null;
         }
@@ -233,5 +234,15 @@ public class Product {
 
         gson.toJson(this, fileWriter);
         fileWriter.close();
+    }
+
+    public int getCount () {
+        int count = 0;
+        for (String s : sellersAndOff.keySet()) {
+            try {
+                count += SellerAccount.getSellerAccountByUsername(s).getCountOfProduct(this);
+            } catch (Exception ignored) {}
+        }
+        return count;
     }
 }

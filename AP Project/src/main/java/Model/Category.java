@@ -14,7 +14,7 @@ public class Category {
     private String parentCategory;
     private ArrayList<String> subCategories;
     private HashMap<Integer, Integer> productsAndCount;
-
+    static Shop shop = Shop.getInstance();
     public String getName() {
         return name;
     }
@@ -45,7 +45,7 @@ public class Category {
         return productsAndCount;
     }
 
-    public HashMap<Integer, Integer> getProductIdAndCount () {
+    public HashMap<Integer, Integer> getProductIdAndCount() {
         return productsAndCount;
     }
 
@@ -93,20 +93,20 @@ public class Category {
         }
     }
 
-    public Category(String name, String attribute, Category parentCategory, ArrayList<Category> subCategories, HashMap<Product, Integer> productsAndCount) {
+    public Category(String name, String attribute, String parentCategory, ArrayList<Category> subCategories, HashMap<Product, Integer> productsAndCount) {
         this.name = name;
         this.attribute = attribute;
-        if (parentCategory != null)
-            this.parentCategory = parentCategory.getName();
+        this.parentCategory = parentCategory;
         this.subCategories = new ArrayList<>();
         for (Category subCategory : subCategories) {
             this.subCategories.add(subCategory.name);
         }
-        this.productsAndCount = new HashMap<>();
-        for (Product product : productsAndCount.keySet()) {
-            this.productsAndCount.put((int) product.getProductId(), productsAndCount.get(product));
+        this.productsAndCount = new HashMap<Integer, Integer>();
+        if (productsAndCount.keySet().size()!=0) {
+            for (Product product : productsAndCount.keySet()) {
+                this.productsAndCount.put((int) product.getProductId(), product.getCount());
+            }
         }
-
         try {
             updateResources();
         } catch (IOException ignored) {
