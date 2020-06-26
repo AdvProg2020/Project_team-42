@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AddCategoriesController">
+   <children>
+
+       <Label layoutX="45.0" layoutY="93.0" text="name" textFill="#2dd99a" />
+       <TextField fx:id="nameLabel" layoutX="152.0" layoutY="89.0" />
+       <Label layoutX="45.0" layoutY="127.0" text="attribute" textFill="#2dd99a" />
+       <TextField fx:id="attributeLabel" layoutX="152.0" layoutY="123.0" />
+       <Label layoutX="41.0" layoutY="237.0" text="product" textFill="#2dd99a" />
+       <TextField fx:id="productLabel" layoutX="152.0" layoutY="233.0" />
+       <Label layoutX="42.0" layoutY="199.0" text="subs category" textFill="#2dd99a" />
+       <TextField fx:id="subsCategoryLabel" layoutX="152.0" layoutY="195.0" />
+       <Label layoutX="45.0" layoutY="162.0" text="Parent category" textFill="#2dd99a" />
+       <TextField fx:id="parentCategoryLabel" layoutX="152.0" layoutY="158.0" />
+      <Button layoutX="323.0" layoutY="233.0" mnemonicParsing="false" onAction="#addProductButton" text="add this product" textFill="#2dd99a" />
+      <Button layoutX="323.0" layoutY="195.0" mnemonicParsing="false" onAction="#addSubCategoriesButton" prefHeight="25.0" prefWidth="104.0" text="add this sub" textFill="#2dd99a" />
+      <Label layoutX="467.0" layoutY="199.0" prefHeight="17.0" prefWidth="104.0" text="..." />
+      <Label layoutX="467.0" layoutY="249.0" prefHeight="17.0" prefWidth="104.0" text="..." />
+      <Button layoutX="233.0" layoutY="332.0" mnemonicParsing="false" onAction="#saveButton" prefHeight="25.0" prefWidth="104.0" text="save" textFill="#dea41e" />
+      <Button defaultButton="true" layoutY="2.0" mnemonicParsing="false" onAction="#back" text="back" />
+   </children>
+</AnchorPane>

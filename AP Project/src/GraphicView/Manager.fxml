@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GraphicView.ManagerSceneController">
+    <stylesheets>
+        <URL value="@style.css" />
+    </stylesheets>
+    <children>
+        <Button id="back" mnemonicParsing="false" onAction="#back" prefHeight="26.0" prefWidth="100.0" />
+        <Button id="exit" layoutX="900.0" layoutY="1.0" mnemonicParsing="false" onAction="#exit" prefHeight="26.0" prefWidth="100.0" />
+        <Button layoutX="100" minWidth="160" mnemonicParsing="false" onAction="#mainMenu" text="Main Menu" />
+        <Button layoutX="260" minWidth="160" mnemonicParsing="false" onAction="#loginMenu" text="Login Menu" />
+        <Button layoutX="420" minWidth="160" mnemonicParsing="false" onAction="#userPanel" text="User Panel" />
+        <Button layoutX="580" minWidth="160" mnemonicParsing="false" onAction="#ProductsPage" text="Products Page" />
+        <Button layoutX="740" minWidth="160" mnemonicParsing="false" onAction="#OffsPage" text="Offs Page" />
+        <Button layoutX="710.0" layoutY="255.0" mnemonicParsing="false" onAction="#viewDiscountCodes" prefHeight="26.0" prefWidth="200.0" text="view discount codes" />
+        <Button layoutX="709.0" layoutY="99.0" mnemonicParsing="false" onAction="#manageCategories" prefHeight="26.0" prefWidth="200.0" text="manage categories" />
+        <Button layoutX="710.0" layoutY="64.0" mnemonicParsing="false" onAction="#manageAllProducts" prefHeight="26.0" prefWidth="200.0" text="manage all products" />
+        <Button layoutX="710.0" layoutY="138.0" mnemonicParsing="false" onAction="#manageUsers" prefHeight="26.0" prefWidth="200.0" text="manage users" />
+        <Button layoutX="710.0" layoutY="177.0" mnemonicParsing="false" onAction="#createDiscoutCode" prefHeight="26.0" prefWidth="200.0" text="create discount code" />
+        <Button layoutX="710.0" layoutY="216.0" mnemonicParsing="false" onAction="#manageRequests" prefHeight="26.0" prefWidth="200.0" text="manage requests" />
+        <ImageView fitHeight="98.0" fitWidth="71.0" layoutX="16.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true" />
+        <Button layoutX="87.0" layoutY="170.0" mnemonicParsing="false" onAction="#logOut" prefHeight="26.0" prefWidth="200.0" text="log out" />
+        <Button layoutX="87.0" layoutY="131.0" mnemonicParsing="false" onAction="#editInformation" prefWidth="200.0" text="edit info" />
+      <Label fx:id="username" layoutX="462.0" layoutY="55.0" text="Label" />
+      <Label fx:id="name" layoutX="462.0" layoutY="90.0" text="Label" />
+      <Label fx:id="email" layoutX="462.0" layoutY="130.0" text="Label" />
+      <Label fx:id="phone" layoutX="462.0" layoutY="169.0" text="Label" />
+    </children>
+</AnchorPane>

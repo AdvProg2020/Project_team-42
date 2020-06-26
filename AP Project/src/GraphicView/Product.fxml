@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="GraphicView.ProductSceneController"
+            prefHeight="700.0" prefWidth="1000.0">
+    <stylesheets>
+        <URL value="@style.css"/>
+    </stylesheets>
+    <Button id="back" mnemonicParsing="false" onAction="#back" prefHeight="26.0" prefWidth="100.0"/>
+    <Button id="exit" layoutX="900.0" mnemonicParsing="false" onAction="#exit" prefHeight="26.0" prefWidth="100.0"/>
+    <Button mnemonicParsing="false" layoutX="100" minWidth="160" onAction="#mainMenu" text="Main Menu"/>
+    <Button mnemonicParsing="false" layoutX="260" onAction="#loginMenu" minWidth="160" text="Login Menu"/>
+    <Button mnemonicParsing="false" layoutX="420" onAction="#userPanel" text="User Panel" minWidth="160"/>
+    <Button mnemonicParsing="false" layoutX="580" onAction="#ProductsPage" text="Products Page" minWidth="160"/>
+    <Button mnemonicParsing="false" layoutX="740" onAction="#OffsPage" text="Offs Page" minWidth="160"/>
+
+</AnchorPane>

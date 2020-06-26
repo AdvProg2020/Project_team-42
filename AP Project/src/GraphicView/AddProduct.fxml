@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AddProductController">
+   <children>
+      <Label layoutX="109.0" layoutY="80.0" text="name" textFill="#62b9f4" />
+      <TextField fx:id="nameLabel" layoutX="180.0" layoutY="76.0" promptText="name" />
+      <Label layoutX="109.0" layoutY="112.0" text="brand" textFill="#62b9f4" />
+      <TextField fx:id="bradLabel" layoutX="180.0" layoutY="108.0" promptText="barnd" />
+      <Label layoutX="109.0" layoutY="146.0" text="category" textFill="#62b9f4" />
+      <TextField fx:id="categoryLabel" layoutX="180.0" layoutY="142.0" promptText="category" />
+      <Label layoutX="109.0" layoutY="178.0" text="price" textFill="#62b9f4" />
+      <TextField fx:id="priceLabel" layoutX="180.0" layoutY="174.0" promptText="price" />
+      <Label layoutX="109.0" layoutY="210.0" text="count" textFill="#62b9f4" />
+      <TextField fx:id="countLabel" layoutX="180.0" layoutY="206.0" promptText="count" />
+      <Label layoutX="109.0" layoutY="242.0" text="description" textFill="#62b9f4" />
+      <Label layoutX="356.0" layoutY="80.0" text="attribute" textFill="#62b9f4" />
+      <Label layoutX="187.0" layoutY="14.0" text="Add Product" textFill="#2dba98">
+         <font>
+            <Font name="Bank Gothic Medium BT" size="28.0" />
+         </font>
+         <effect>
+            <Reflection />
+         </effect>
+      </Label>
+      <TextArea fx:id="descrioptionLabel" layoutX="180.0" layoutY="242.0" prefHeight="115.0" prefWidth="200.0" promptText="..." />
+      <TextArea fx:id="attributeLabel" layoutX="413.0" layoutY="79.0" prefHeight="115.0" prefWidth="170.0" promptText="..." />
+      <Button layoutY="2.0" mnemonicParsing="false" onAction="#backButton" text="back" textFill="#727504" />
+      <Button layoutX="413.0" layoutY="344.0" mnemonicParsing="false" onAction="#saveButton" text="save" textFill="#338cc7" />
+   </children>
+</AnchorPane>

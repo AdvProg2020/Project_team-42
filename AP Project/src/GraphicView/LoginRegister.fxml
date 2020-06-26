@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<AnchorPane accessibleRole="COMBO_BOX" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GraphicView.LoginPageSceneController">
+    <stylesheets>
+        <URL value="@style.css" />
+    </stylesheets>
+    <Button id="back" mnemonicParsing="false" onAction="#back" prefHeight="26.0" prefWidth="100.0" />
+    <Button id="exit" layoutX="900.0" mnemonicParsing="false" onAction="#exit" prefHeight="26.0" prefWidth="100.0" />
+    <Button layoutX="100" minWidth="160" mnemonicParsing="false" onAction="#mainMenu" text="Main Menu" />
+    <Button layoutX="260" minWidth="160" mnemonicParsing="false" onAction="#loginMenu" text="Login Menu" />
+    <Button layoutX="420" minWidth="160" mnemonicParsing="false" onAction="#userPanel" text="User Panel" />
+    <Button layoutX="580" minWidth="160" mnemonicParsing="false" onAction="#ProductsPage" text="Products Page" />
+    <Button layoutX="740" minWidth="160" mnemonicParsing="false" onAction="#OffsPage" text="Offs Page" />
+    <Button layoutX="111.0" layoutY="193.0" maxWidth="200.0" minWidth="200.0" mnemonicParsing="false" onAction="#loginAction" prefHeight="26.0" prefWidth="61.0" text="Login" />
+    <Button layoutX="533.0" layoutY="421.0" maxWidth="200.0" minWidth="200.0" mnemonicParsing="false" onAction="#registerAction" text="Register" />
+    <Label layoutX="549.0" layoutY="83.0" prefHeight="18.0" text="Account type" />
+    <TextField fx:id="loginUserName" layoutX="211.0" layoutY="111.0" />
+    <Label layoutX="111.0" layoutY="153.0" prefHeight="18.0" text="Password" />
+    <Label layoutX="549.0" layoutY="116.0" prefHeight="18.0" text="User name" />
+    <PasswordField fx:id="loginPassword" layoutX="211.0" layoutY="149.0" />
+    <TextField fx:id="registerUserName" layoutX="693.0" layoutY="108.0" />
+    <Label layoutX="551.0" layoutY="152.0" prefHeight="18.0" text="password" />
+    <PasswordField fx:id="registerPassword" layoutX="693.0" layoutY="144.0" />
+    <Label layoutX="550.0" layoutY="189.0" prefHeight="18.0" text="First name" />
+    <TextField fx:id="firstName" layoutX="693.0" layoutY="181.0" />
+    <Label layoutX="550.0" layoutY="228.0" prefHeight="18.0" text="Last name" />
+    <TextField fx:id="lastName" layoutX="693.0" layoutY="220.0" />
+    <Label layoutX="550.0" layoutY="271.0" prefHeight="18.0" text="Email" />
+    <TextField fx:id="email" layoutX="693.0" layoutY="263.0" />
+    <Label layoutX="550.0" layoutY="310.0" prefHeight="18.0" text="Phone number" />
+    <TextField fx:id="phoneNumber" layoutX="693.0" layoutY="302.0" />
+    <Line endY="500" layoutX="450.0" layoutY="35" />
+    <Label layoutX="195.0" layoutY="41.0" prefHeight="18.0" prefWidth="31.0" text="Login" textAlignment="CENTER" />
+    <Label layoutX="695.0" layoutY="32.0" prefHeight="18.0" prefWidth="48.0" text="Register" textAlignment="CENTER" />
+    <Label fx:id="warningText" layoutX="14.0" layoutY="360.0" prefHeight="33.0" prefWidth="567.0" />
+   <TextField fx:id="accountType" layoutX="693.0" layoutY="75.0" />
+   <Label layoutX="549.0" layoutY="360.0" text="Company (for sellers)" />
+   <TextField fx:id="companyName" layoutX="693.0" layoutY="356.0" />
+</AnchorPane>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ManageProductController">
+   <children>
+      <ListView layoutX="26.0" layoutY="100.0" prefHeight="274.0" prefWidth="200.0" />
+      <Label layoutX="79.0" layoutY="70.0" text="Products" textFill="#28631e" />
+      <Label layoutX="202.0" layoutY="25.0" text="Manage Products" textFill="#4cc366">
+         <font>
+            <Font name="System Bold Italic" size="19.0" />
+         </font>
+         <effect>
+            <Reflection />
+         </effect>
+      </Label>
+      <Label layoutX="237.0" layoutY="101.0" prefHeight="201.0" prefWidth="167.0" text="chose product to show details" />
+      <Button layoutX="488.0" layoutY="164.0" mnemonicParsing="false" onAction="#editButton" prefHeight="25.0" prefWidth="104.0" text="Edit" textFill="#29aab6" />
+      <Button layoutX="486.0" layoutY="211.0" mnemonicParsing="false" onAction="#viewBuyersButton" prefHeight="25.0" prefWidth="104.0" text="View buyers" textFill="#29aab6" />
+      <Button defaultButton="true" layoutY="2.0" mnemonicParsing="false" onAction="#back" text="back" />
+      <Button layoutX="486.0" layoutY="266.0" mnemonicParsing="false" onAction="#removeProductButton" text="Remove product" textFill="#ce0e0e" />
+   </children>
+</AnchorPane>

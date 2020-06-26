@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ManageUsersController">
+   <children>
+      <ListView layoutX="37.0" layoutY="35.0" prefHeight="335.0" prefWidth="185.0" />
+      <Label layoutX="86.0" layoutY="14.0" prefHeight="22.0" prefWidth="87.0" text="List of users" textFill="#1aa231">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="278.0" layoutY="14.0" prefHeight="25.0" prefWidth="126.0" text="User information" textFill="#1aa231">
+         <font>
+            <Font size="15.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="WAIT" />
+         </cursor>
+         <effect>
+            <Reflection />
+         </effect>
+      </Label>
+      <Button layoutX="296.0" layoutY="280.0" mnemonicParsing="false" onAction="#deleteUser" text="Delete user" textFill="#be1111" />
+      <Button defaultButton="true" layoutY="2.0" mnemonicParsing="false" onAction="#back" text="Back" />
+      <Label fx:id="informationLable" layoutX="246.0" layoutY="50.0" prefHeight="216.0" prefWidth="185.0" text="chose user to see his information" />
+   </children>
+</AnchorPane>

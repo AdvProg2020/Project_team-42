@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GraphicView.CartSceneController">
+    <stylesheets>
+        <URL value="@style.css"/>
+    </stylesheets>
+    <Button id="back" mnemonicParsing="false" onAction="#back" prefHeight="26.0" prefWidth="90.0" />
+    <Button id="exit" layoutX="509.0" layoutY="1.0" mnemonicParsing="false" onAction="#exit" prefHeight="26.0" prefWidth="90.0" />
+    <Button mnemonicParsing="false" layoutX="100" minWidth="160" onAction="#mainMenu" text="Main Menu"/>
+    <Button mnemonicParsing="false" layoutX="260" onAction="#loginMenu" minWidth="160" text="Login Menu"/>
+    <Button mnemonicParsing="false" layoutX="420" onAction="#userPanel" text="User Panel" minWidth="160"/>
+    <Button mnemonicParsing="false" layoutX="580" onAction="#ProductsPage" text="Products Page" minWidth="160"/>
+    <Button mnemonicParsing="false" layoutX="740" onAction="#OffsPage" text="Offs Page" minWidth="160"/>
+   <TreeTableView layoutX="92.0" layoutY="30.0" prefHeight="370.0" prefWidth="419.0">
+     <columns>
+       <TreeTableColumn prefWidth="75.0" text="Product id" />
+       <TreeTableColumn prefWidth="126.20002746582031" text="Seller Username" />
+         <TreeTableColumn prefWidth="71.79998779296875" text="Count" />
+     </columns>
+   </TreeTableView>
+</AnchorPane>

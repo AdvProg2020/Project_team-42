@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="createDisCountCodeController">
+   <children>
+      <Label layoutX="172.0" layoutY="5.0" prefHeight="5.0" prefWidth="226.0" text="Create discount code" textFill="#a0d79f">
+         <font>
+            <Font size="22.0" />
+         </font></Label>
+      <Label layoutX="44.0" layoutY="222.0" text="start hour" textFill="#3ab99f" />
+      <TextField fx:id="startHourLable" layoutX="129.0" layoutY="218.0" />
+      <Label layoutX="327.0" layoutY="49.0" text="end year" textFill="#3ab99f" />
+      <TextField fx:id="endYearLable" layoutX="389.0" layoutY="45.0" />
+      <Label layoutX="327.0" layoutY="90.0" text="end month" textFill="#3ab99f" />
+      <TextField fx:id="endMonthLable" layoutX="389.0" layoutY="86.0" />
+      <Label layoutX="327.0" layoutY="129.0" text="end day" textFill="#3ab99f" />
+      <TextField fx:id="endDayLable" layoutX="389.0" layoutY="125.0" />
+      <Label layoutX="44.0" layoutY="59.0" text="discount code" textFill="#3ab99f" />
+      <TextField fx:id="discountcodeLable" layoutX="129.0" layoutY="55.0" />
+      <Label layoutX="42.0" layoutY="102.0" text="start year" textFill="#3ab99f" />
+      <TextField fx:id="startYearLable" layoutX="129.0" layoutY="94.0" />
+      <Label layoutX="45.0" layoutY="141.0" text="start month" textFill="#3ab99f" />
+      <TextField fx:id="startYearLable" layoutX="129.0" layoutY="135.0" />
+      <Label layoutX="44.0" layoutY="178.0" text="start day" textFill="#3ab99f" />
+      <TextField fx:id="startYearLable" layoutX="129.0" layoutY="174.0" />
+      <Label layoutX="12.0" layoutY="303.0" text="customer username" textFill="#3ab99f" />
+      <TextField fx:id="customerLable" layoutX="127.0" layoutY="299.0" />
+      <ListView fx:id="customersListView" layoutX="298.0" layoutY="237.0" prefHeight="154.0" prefWidth="200.0" />
+      <Label layoutX="327.0" layoutY="165.0" text="end hour" textFill="#3ab99f" />
+      <TextField fx:id="endHourLabel" layoutX="389.0" layoutY="161.0" />
+      <Button layoutX="147.0" layoutY="348.0" mnemonicParsing="false" onAction="#create" text="Create" textFill="#3b47b8" />
+      <Button layoutY="1.0" mnemonicParsing="false" onAction="#back" text="back" />
+      <Label layoutX="44.0" layoutY="263.0" text="start minute" textFill="#3ab99f" />
+      <TextField fx:id="startMonthLable" layoutX="129.0" layoutY="259.0" />
+      <Label layoutX="327.0" layoutY="203.0" text="end minute" textFill="#3ab99f" />
+      <TextField fx:id="endMinuteLable" layoutX="389.0" layoutY="199.0" />
+   </children>
+</AnchorPane>

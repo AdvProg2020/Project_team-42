@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GraphicView.SellerSceneController">
+   <children>
+       <Button id="back" mnemonicParsing="false" onAction="#back" prefHeight="26.0" prefWidth="90.0" />
+       <Button id="exit" layoutX="509.0" layoutY="1.0" mnemonicParsing="false" onAction="#exit" prefHeight="26.0" prefWidth="90.0" />      <MenuBar layoutX="90.0" layoutY="1.0" prefHeight="26.0" prefWidth="419.0">
+        <menus>
+          <Menu mnemonicParsing="false" onAction="#mainMenu" text="Main Menu">
+          </Menu>
+          <Menu mnemonicParsing="false" onAction="#loginMenu" text="Login Menu" />
+          <Menu mnemonicParsing="false" onAction="#userPanel" text="User Panel" />
+            <Menu mnemonicParsing="false" onAction="#ProductsPage" text="Products Page" />
+            <Menu mnemonicParsing="false" onAction="#OffsPage" text="Offs Page" />
+        </menus>
+      </MenuBar>
+      <Button layoutX="429.0" layoutY="251.0" mnemonicParsing="false" onAction="#addProduct" prefHeight="26.0" prefWidth="110.0" text="add product" />
+      <Button layoutX="428.0" layoutY="95.0" mnemonicParsing="false" onAction="#viewSalesHistory" prefHeight="26.0" prefWidth="110.0" text="view sales history" />
+      <Button layoutX="429.0" layoutY="60.0" mnemonicParsing="false" onAction="#manageProducts" prefHeight="26.0" prefWidth="110.0" text="manage products" />
+      <Button layoutX="429.0" layoutY="134.0" mnemonicParsing="false" onAction="#removeProduct" prefHeight="26.0" prefWidth="110.0" text="remove product" />
+      <Button layoutX="429.0" layoutY="173.0" mnemonicParsing="false" onAction="#showCategories" prefHeight="26.0" prefWidth="110.0" text="show categories" />
+      <Button layoutX="429.0" layoutY="212.0" mnemonicParsing="false" onAction="#viewOffs" prefHeight="26.0" prefWidth="110.0" text="view offs" />
+      <ImageView fitHeight="98.0" fitWidth="71.0" layoutX="16.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true" />
+      <Button layoutX="24.0" layoutY="186.0" mnemonicParsing="false" onAction="#logOut" text="log out" />
+      <Label layoutX="23.0" layoutY="138.0" text="balance : 0" />
+      <Button layoutX="17.0" layoutY="160.0" mnemonicParsing="false" onAction="#editInformation" text="edit info s" />
+   </children>
+</AnchorPane>

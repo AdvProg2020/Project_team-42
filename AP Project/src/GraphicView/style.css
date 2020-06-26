@@ -1,0 +1,15 @@
+AnchorPane{
+    -fx-background-image: url("icons/background.png");
+    -fx-background-size: 1000, 700;
+}
+
+#exit {
+    -fx-background-image: url("icons/exit.jpg");
+    -fx-background-size: 90, 50;
+}
+
+#back {
+    -fx-background-image: url("icons/back.jpg");
+    -fx-background-size: 90, 50;
+
+}

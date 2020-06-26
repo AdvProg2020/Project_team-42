@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #eeeeee; -fx-border-color: blue" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GraphicView.EditPersonalInformationController">
+   <Button defaultButton="true" mnemonicParsing="false" onAction="#backButton" text="Back" />
+   <Label layoutX="143.0" layoutY="26.0" prefHeight="33.0" prefWidth="204.0" text="Edit Personal information" textFill="#65baac">
+      <font>
+         <Font size="17.0" />
+      </font>
+      <effect>
+         <Lighting>
+            <bumpInput>
+               <Reflection bottomOpacity="0.18" />
+            </bumpInput>
+            <light>
+               <Light.Distant />
+            </light>
+         </Lighting>
+      </effect>
+      <cursor>
+         <Cursor fx:constant="WAIT" />
+      </cursor>
+   </Label>
+   <Label layoutX="49.0" layoutY="103.0" text="First name" textFill="#c52509" />
+   <TextField fx:id="firstNameText" layoutX="143.0" layoutY="99.0" promptText="first name">
+      <effect>
+         <Reflection />
+      </effect>
+   </TextField>
+   <Label layoutX="44.0" layoutY="147.0" text="Family name" textFill="#c52509" />
+   <TextField fx:id="lastNameText" layoutX="143.0" layoutY="143.0" promptText="last name">
+      <effect>
+         <Reflection />
+      </effect>
+   </TextField>
+   <Label layoutX="63.0" layoutY="219.0" text="Email" textFill="#c52509" />
+   <TextField fx:id="email" layoutX="143.0" layoutY="215.0" promptText="team42@gmail.com">
+      <effect>
+         <Reflection />
+      </effect>
+   </TextField>
+   <Label layoutX="38.0" layoutY="259.0" text="phone number" textFill="#c52509" />
+   <TextField fx:id="phoneNumber" layoutX="143.0" layoutY="255.0" promptText="0912123123">
+      <effect>
+         <Reflection />
+      </effect>
+   </TextField>
+   <Button layoutX="195.0" layoutY="344.0" mnemonicParsing="false" onAction="#saveButton" text="Save " textFill="#0a6cc4">
+      <cursor>
+         <Cursor fx:constant="WAIT" />
+      </cursor>
+      <effect>
+         <Glow />
+      </effect>
+   </Button>
+   <Label layoutX="52.0" layoutY="184.0" text="Password" textFill="#c52509" />
+   <PasswordField fx:id="password" layoutX="143.0" layoutY="180.0" promptText="password">
+      <effect>
+         <Reflection />
+      </effect>
+   </PasswordField>
+   <ImageView fx:id="image" fitHeight="150.0" fitWidth="200.0" layoutX="324.0" layoutY="93.0" pickOnBounds="true" preserveRatio="true" />
+   <Label fx:id="warning" layoutX="158.0" layoutY="312.0" prefHeight="18.0" prefWidth="194.0" />
+</AnchorPane>

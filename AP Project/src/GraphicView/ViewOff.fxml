@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ViewOffController">
+   <children>
+      <Label layoutX="228.0" layoutY="27.0" prefHeight="42.0" prefWidth="103.0" text="View Offs" textFill="#3bd9c9">
+         <font>
+            <Font name="Agency FB" size="32.0" />
+         </font>
+         <effect>
+            <Reflection />
+         </effect>
+      </Label>
+      <ListView fx:id="ListViewOffs" layoutX="39.0" layoutY="137.0" prefHeight="220.0" prefWidth="200.0" />
+      <Label layoutX="72.0" layoutY="112.0" text="offs" />
+      <Label fx:id="offLabel" layoutX="266.0" layoutY="138.0" prefHeight="220.0" prefWidth="137.0" text="details of choses off" />
+      <Button layoutY="2.0" mnemonicParsing="false" onAction="#back" text="back" textFill="#9b6f23" />
+      <Button layoutX="300.0" layoutY="332.0" mnemonicParsing="false" onAction="#editButton" prefHeight="25.0" prefWidth="54.0" text="edit" textFill="#3167d4" />
+      <Button layoutX="497.0" layoutY="99.0" mnemonicParsing="false" onAction="#addOffButton" text="add off" textFill="#3167d4" />
+   </children>
+</AnchorPane>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CartPageController">
+   <children>
+      <ListView layoutX="14.0" layoutY="106.0" prefHeight="200.0" prefWidth="200.0" />
+      <Label layoutX="58.0" layoutY="71.0" text="Products" textFill="#b55656">
+         <font>
+            <Font name="Vineta BT" size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="223.0" layoutY="106.0" prefHeight="161.0" prefWidth="145.0" text="details of product" />
+      <Button layoutX="32.0" layoutY="316.0" mnemonicParsing="false" text="Show total price" textFill="#22ba40" />
+      <Button layoutX="509.0" layoutY="303.0" mnemonicParsing="false" text="Purchase" textFill="#1f25d7" />
+      <Label layoutX="160.0" layoutY="320.0" prefHeight="17.0" prefWidth="47.0" text="price" />
+      <Button layoutX="232.0" layoutY="293.0" mnemonicParsing="false" text="decrease" textFill="#3e8898" />
+      <Button layoutX="324.0" layoutY="293.0" mnemonicParsing="false" text="increase" textFill="#3e8898" />
+   </children>
+</AnchorPane>

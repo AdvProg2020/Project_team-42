@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GraphicView.CustomerSceneController">
+    <stylesheets>
+        <URL value="@style.css"/>
+    </stylesheets>
+    <children>
+        <Button id="back" mnemonicParsing="false" onAction="#back" prefHeight="26.0" prefWidth="90.0" />
+        <Button id="exit" layoutX="509.0" layoutY="1.0" mnemonicParsing="false" onAction="#exit" prefHeight="26.0" prefWidth="90.0" />
+        <Button mnemonicParsing="false" layoutX="100" minWidth="160" onAction="#mainMenu" text="Main Menu"/>
+        <Button mnemonicParsing="false" layoutX="260" onAction="#loginMenu" minWidth="160" text="Login Menu"/>
+        <Button mnemonicParsing="false" layoutX="420" onAction="#userPanel" text="User Panel" minWidth="160"/>
+        <Button mnemonicParsing="false" layoutX="580" onAction="#ProductsPage" text="Products Page" minWidth="160"/>
+        <Button mnemonicParsing="false" layoutX="740" onAction="#OffsPage" text="Offs Page" minWidth="160"/>
+        <Button layoutX="428.0" layoutY="95.0" mnemonicParsing="false" onAction="#viewSalesHistory" prefHeight="26.0" prefWidth="110.0" text="add credit" />
+        <Button layoutX="429.0" layoutY="60.0" mnemonicParsing="false" onAction="#manageProducts" prefHeight="26.0" prefWidth="110.0" text="show cart" />
+        <ImageView fitHeight="98.0" fitWidth="71.0" layoutX="16.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true" />
+        <Button layoutX="17.0" layoutY="195.0" mnemonicParsing="false" onAction="#logOut" prefHeight="26.0" prefWidth="61.0" text="log out" />
+        <Label layoutX="23.0" layoutY="138.0" text="balance : 0" />
+        <Button layoutX="17.0" layoutY="160.0" mnemonicParsing="false" onAction="#editInformation" text="edit info" />
+      <Button layoutX="429.0" layoutY="133.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="110.0" text="buy history" />
+    </children>
+</AnchorPane>

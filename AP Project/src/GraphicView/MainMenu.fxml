@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<AnchorPane accessibleRole="COMBO_BOX" prefHeight="700.0" prefWidth="1000.0"
+            xmlns="http://javafx.com/javafx/10.0.2-internal"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="GraphicView.MainMenuSceneController">
+    <stylesheets>
+        <URL value="@style.css"/>
+    </stylesheets>
+    <Button id="exit" layoutX="910.0" mnemonicParsing="false" onAction="#exit" prefHeight="26.0"
+            minWidth="90.0" maxWidth="90"/>
+    <Button id="back" mnemonicParsing="false" onAction="#back" prefHeight="26.0" prefWidth="90.0"/>
+    <Button layoutX="36.0" layoutY="102.0" mnemonicParsing="false" onAction="#productsPageAction" prefHeight="26.0"
+            minWidth="200.0" maxWidth="200" text="Producs page"/>
+    <Button layoutX="36.0" layoutY="201.0" mnemonicParsing="false" onAction="#loginPage" text="Login and register"
+            minWidth="200" maxWidth="200"/>
+    <Button layoutX="36.0" layoutY="150.0" mnemonicParsing="false" onAction="#offPage" prefHeight="26.0"
+            minWidth="200.0" maxWidth="200" text="Offs page"/>
+    <Button layoutX="36.0" layoutY="254.0" mnemonicParsing="false" onAction="#userPage" prefHeight="26.0"
+            minWidth="200" maxWidth="200.0" text="User page"/>
+    <CheckBox layoutX="900.0" layoutY="650.0" mnemonicParsing="false" text="music"/>
+</AnchorPane>
+
